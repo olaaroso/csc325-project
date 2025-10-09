@@ -1,8 +1,9 @@
 # MacroManager
 Online Calorie/Macronutrient Tracker
 
-Names: Pablo Orellana, Olamide Aroso, Josh Iehle
 Group: 4
+
+Names: Pablo Orellana, Olamide Aroso, Josh Iehle, and Japneet Singh
 
 Our group project is an online calorie and macronutrient tracker that gives people a convenient way to keep track of what they eat every day. The platform will be a web based application where users can make a personal profile, set their daily calorie and macro targets, and log foods or meals either from a searchable database or by entering custom values.
 
