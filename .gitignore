@@ -12,6 +12,9 @@ target/
 *.iml
 *.ipr
 
+### Firebase ###
+/src/main/resources/firebase-key.json
+
 ### Eclipse ###
 .apt_generated
 .classpath

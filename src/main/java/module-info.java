@@ -8,6 +8,15 @@ module csc.project.csc325_project {
     requires net.synedra.validatorfx;
     requires eu.hansolo.tilesfx;
 
-    opens csc.project.csc325_project to javafx.fxml;
-    exports csc.project.csc325_project;
+    requires firebase.admin;
+    requires com.google.auth;
+    requires com.google.auth.oauth2;
+    requires google.cloud.firestore;
+    requires google.cloud.core;
+    requires com.google.api.apicommon;
+
+    opens com.group4.macromanager to javafx.fxml;
+    exports com.group4.macromanager;
+    exports com.group4.macromanager.controller;
+    opens com.group4.macromanager.controller to javafx.fxml;
 }
