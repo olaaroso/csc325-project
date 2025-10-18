@@ -44,7 +44,7 @@
                 <TextField fx:id="emailField" promptText="Email" styleClass="text-input" />
                 <PasswordField fx:id="passwordField" promptText="Password" styleClass="text-input" />
 
-                <Button fx:id="loginButton" prefHeight="37.0" prefWidth="536.0" styleClass="login-button" text="Login" textAlignment="CENTER">
+                <Button fx:id="loginButton" onAction="#handleLoginButtonClick" prefHeight="37.0" prefWidth="536.0" styleClass="login-button" text="Login" textAlignment="CENTER">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
