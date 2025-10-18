@@ -1,0 +1,174 @@
+.border-pane {
+    -fx-background-color: -background-color-2;
+}
+
+.dashboard-scroll-pane {
+    -fx-background-color: -background-color-2;
+}
+
+.dashboard-vbox {
+    -fx-background-color: -background-color-2;
+}
+
+/* Cards */
+.card {
+    -fx-background-color: #ffffff;
+    -fx-padding: 15;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+.section-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #222;
+}
+
+/* Stat cards */
+.stat-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-padding: 10;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+.stat-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: -font-color-1;
+}
+
+.stat-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -accent-color-1;
+}
+
+.stat-sub {
+    -fx-font-size: 12px;
+    -fx-text-fill: -font-color-2;
+}
+
+/* Meal rows */
+.meal-row {
+    -fx-background-color: transparent;
+    -fx-padding: 5 10;
+    -fx-background-radius: 8;
+    -fx-border-color: -background-color-2;
+    -fx-border-radius: 25;
+    -fx-border-width: 2;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.meal-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: -font-color-1;
+}
+
+.circle-btn {
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+    -fx-background-radius: 50;
+    -fx-font-weight: bold;
+    -fx-pref-width: 25;
+    -fx-pref-height: 25;
+    -fx-cursor: hand;
+}
+
+.circle-btn:hover {
+    -fx-background-color: -accent-color-2;
+}
+
+.add-entry-btn {
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 5 10;
+    -fx-cursor: hand;
+}
+
+.add-entry-btn:hover {
+    -fx-background-color: -accent-color-2;
+}
+
+/* ListView container */
+.list-view {
+    -fx-background-color: -background-color-1;
+    -fx-border-color: -background-color-2;
+}
+
+/* Individual list items */
+.list-cell:filled {
+    -fx-background-color: transparent;
+    -fx-padding: 5 10;
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-size: 14px;
+    -fx-text-fill: -font-color-1;
+    -fx-cursor: hand;
+}
+
+/* Hover and selection effects */
+.list-cell:filled:hover {
+    -fx-background-color: -background-color-2;
+}
+
+.list-cell:empty {
+    -fx-background-color: transparent;
+}
+
+/* Pie Chart */
+.chart-pie {
+    -fx-pie-label-visible: true;
+    -fx-label-line-length: 8px;
+}
+
+.chart-pie-label {
+    -fx-font-size: 11px;
+    -fx-fill: -font-color-1;
+    -fx-font-weight: bold;
+}
+
+.default-color0.chart-pie { -fx-pie-color: -accent-color-1; } /* Protein */
+.default-color1.chart-pie { -fx-pie-color: -accent-color-2; } /* Carbs */
+.default-color2.chart-pie { -fx-pie-color: -accent-color-3; } /* Fats */
+
+.chart-legend {
+    -fx-background-color: transparent;
+    -fx-padding: 5 0 0 0;
+}
+
+.chart-legend-item-symbol {
+    -fx-background-radius: 50%;
+}
+
+/* Bar chart */
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-vertical-grid-lines,
+.chart-horizontal-grid-lines {
+    -fx-stroke: -background-color-2;
+}
+
+.chart-bar {
+    -fx-bar-fill: -accent-color-1;
+}
+
+.axis {
+    -fx-tick-label-fill: -font-color-1;
+    -fx-font-size: 11px;
+}
+
+.axis-label {
+    -fx-text-fill: -font-color-1;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.chart-title {
+    -fx-text-fill: -font-color-1;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}

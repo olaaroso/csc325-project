@@ -16,3 +16,59 @@
     -font-color-1: #303030;
     -font-color-2: #9F9F9F;
 }
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: -background-color-1;
+    -fx-padding: 20;
+    -fx-alignment: TOP_CENTER;
+    -fx-border-color: #ddd;
+    -fx-border-width: 0 1 0 0;
+}
+
+.app-title {
+    -fx-font-size: 18px;
+    -fx-text-fill: -accent-color-1;
+    -fx-font-weight: bold;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -font-color-1;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 15 20;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-background-color: -background-color-2;
+}
+
+.nav-button-active {
+    -fx-background-color: transparent;
+    -fx-text-fill: -accent-color-1;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 15 20;
+    -fx-cursor: hand;
+    -fx-border-color: -accent-color-1;
+    -fx-border-width: 0 3 0 0;
+}
+
+.nav-button-active:hover {
+    -fx-background-color: -background-color-2;
+}
+
+.profile-button {
+    -fx-background-color: -accent-color-1;
+    -fx-padding: 10 20;
+    -fx-background-radius: 50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.profile-button:hover {
+    -fx-background-color: -accent-color-2;
+}

@@ -1,5 +1,6 @@
 package com.group4.macromanager.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import java.io.IOException;
@@ -22,5 +23,13 @@ public class SignupController {
                 ex.printStackTrace();
             }
         });
+    }
+
+    @FXML
+    public void handleSignupButtonClick(ActionEvent event) throws IOException {
+        // This handler will process the signup and registration logic
+
+        // FOR NOW: this button navigates directly to the login page
+        PageNavigationManager.switchTo("loginPage.fxml");
     }
 }
