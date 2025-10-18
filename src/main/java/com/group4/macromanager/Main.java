@@ -2,6 +2,7 @@ package com.group4.macromanager;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.auth.FirebaseAuth;
+import com.group4.macromanager.controller.PageNavigationManager;
 import com.group4.macromanager.model.FirestoreContext;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -26,10 +27,18 @@ public class Main extends Application {
         // Init fxml loader
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/loginPage.fxml"));
 
+        // Init the scene
         Scene scene = new Scene(fxmlLoader.load());
+
+        // Add main.css to the scene (root css file)
+        scene.getStylesheets().add(getClass().getResource("/css/main.css").toExternalForm());
+
         stage.setTitle("MacroManager");
         stage.setScene(scene);
         stage.show();
+
+        // Make stage available to PageNavigationManager
+        PageNavigationManager.setStage(stage);
     }
 
     public static void main(String[] args) {
