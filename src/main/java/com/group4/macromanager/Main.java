@@ -2,6 +2,7 @@ package com.group4.macromanager;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.auth.FirebaseAuth;
+import com.group4.macromanager.controller.PageNavigationManager;
 import com.group4.macromanager.model.FirestoreContext;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +36,9 @@ public class Main extends Application {
         stage.setTitle("MacroManager");
         stage.setScene(scene);
         stage.show();
+
+        // Make stage available to PageNavigationManager
+        PageNavigationManager.setStage(stage);
     }
 
     public static void main(String[] args) {
