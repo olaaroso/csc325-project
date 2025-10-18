@@ -1,16 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.group4.macromanager.controller.LoginController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+<AnchorPane prefHeight="600" prefWidth="900" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.group4.macromanager.controller.LoginController">
+
+    <HBox prefHeight="600" prefWidth="900" styleClass="root-hbox">
+        <!-- LEFT PANEL -->
+        <VBox fx:id="leftPane" alignment="CENTER" prefWidth="300" spacing="20" styleClass="left-pane">
+            <VBox alignment="CENTER" spacing="10">
+                <Label styleClass="app-title" text="MacroManager" />
+                <Label styleClass="app-subtitle" text="Track Smarter. Eat Better." />
+            </VBox>
+            <ImageView fitHeight="195.0" fitWidth="218.0" preserveRatio="true">
+                <image>
+                    <Image url="@../images/hero-img.png" />
+                </image>
+            </ImageView>
+        </VBox>
+
+        <!-- RIGHT PANEL -->
+        <VBox fx:id="rightPane" alignment="CENTER_LEFT" prefWidth="600" spacing="20" styleClass="right-pane">
+            <padding>
+                <Insets bottom="40" left="40" right="40" top="40" />
+            </padding>
+
+            <Label styleClass="welcome-title" text="Welcome Back!" />
+
+            <VBox prefWidth="400" spacing="15">
+                <TextField fx:id="emailField" promptText="Email" styleClass="text-input" />
+                <PasswordField fx:id="passwordField" promptText="Password" styleClass="text-input" />
+
+                <Button fx:id="loginButton" prefHeight="37.0" prefWidth="536.0" styleClass="login-button" text="Login" textAlignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <effect>
+                  <DropShadow offsetY="4.0">
+                     <color>
+                        <Color opacity="0.25" />
+                     </color>
+                  </DropShadow>
+               </effect></Button>
+
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="Don’t have an account?" />
+                    <Hyperlink fx:id="signupLink" text="Sign up" styleClass="signup-link" underline="true" />
+                </HBox>
+
+                <HBox alignment="CENTER" prefWidth="400" spacing="10">
+                    <Pane maxHeight="-Infinity" prefHeight="1.0" style="-fx-background-color: -font-color-1;" HBox.hgrow="ALWAYS" />
+                    <Label text="or" />
+                    <Pane maxHeight="-Infinity" prefHeight="1" style="-fx-background-color: -font-color-1;" HBox.hgrow="ALWAYS" />
+                </HBox>
+
+                <Button fx:id="googleButton" prefWidth="564.0" styleClass="google-button" text="Login with Google">
+                    <graphic>
+                        <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/google_icon.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+               <effect>
+                  <DropShadow offsetY="4.0">
+                     <color>
+                        <Color opacity="0.25" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            </VBox>
+        </VBox>
+    </HBox>
+
+</AnchorPane>

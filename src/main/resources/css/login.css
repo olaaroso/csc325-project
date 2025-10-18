@@ -1,0 +1,76 @@
+.root {
+    -fx-font-family: "Poppins", sans-serif;
+    -fx-text-fill: -font-color-1;
+}
+
+.root-hbox {
+    -fx-background-color: -accent-color-1;
+}
+
+.left-pane {
+    -fx-background-color: -accent-color-1;
+    -fx-alignment: center;
+    -fx-spacing: 20;
+    -fx-padding: 40;
+}
+
+.app-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.app-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+.right-pane {
+    -fx-background-color: -background-color-1;
+    -fx-border-radius: 40 0 0 40;
+    -fx-background-radius: 40 0 0 40;
+}
+
+.welcome-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -font-color-1;
+}
+
+.text-input {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: -font-color-1;
+    -fx-padding: 10;
+}
+
+.login-button {
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 10 0;
+}
+
+.login-button:hover {
+    -fx-background-color: -accent-color-2;
+}
+
+.signup-link {
+    -fx-text-fill: -accent-color-1;
+}
+
+.google-button {
+    -fx-border-color: -font-color-1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-background-color: -background-color-1;
+    -fx-text-fill: -font-color-1;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0;
+    -fx-graphic-text-gap: 10;
+}
+
+.google-button:hover {
+    -fx-background-color: -background-color-2;
+}

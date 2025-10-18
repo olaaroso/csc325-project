@@ -26,7 +26,12 @@ public class Main extends Application {
         // Init fxml loader
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/loginPage.fxml"));
 
+        // Init the scene
         Scene scene = new Scene(fxmlLoader.load());
+
+        // Add main.css to the scene (root css file)
+        scene.getStylesheets().add(getClass().getResource("/css/main.css").toExternalForm());
+
         stage.setTitle("MacroManager");
         stage.setScene(scene);
         stage.show();

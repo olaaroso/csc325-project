@@ -1,0 +1,18 @@
+.root {
+    /* Boilerplate styles */
+    -fx-font-family: "Poppins", sans-serif;
+    -fx-text-fill: -font-color-1;
+
+    /* Accent color variables */
+    -accent-color-1: #7DB6F6;
+    -accent-color-2: #659fea;
+    -accent-color-3: #6694ce;
+
+    /* Background color variables */
+    -background-color-1: #fff;
+    -background-color-2: #E8E8E8;
+
+    /* Font color variables */
+    -font-color-1: #303030;
+    -font-color-2: #9F9F9F;
+}
