@@ -30,7 +30,7 @@ public class Main extends Application {
         // Init the scene
         Scene scene = new Scene(fxmlLoader.load());
 
-        // Add main.css to the scene (root css file)
+        // Add main.css and sidebar.css to the scene (root css files)
         scene.getStylesheets().add(getClass().getResource("/css/main.css").toExternalForm());
 
         stage.setTitle("MacroManager");
