@@ -1,6 +1,10 @@
 package com.group4.macromanager.model;
 // Handles signup/login
 
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
@@ -91,6 +95,15 @@ public class AuthManager {
             // Create and return the session if successful
             SignResponse response = gson.fromJson(res.body(), SignResponse.class);
             currentSession = new Session(response.idToken, response.refreshToken, response.localId, response.email);
+
+            // Create user document in Firestore
+            Firestore db = FirestoreContext.getDb();
+            DocumentReference userRef = db.collection("users").document(response.localId);
+
+            // Create user record
+            User newUser = new User(response.localId,  response.email);
+            userRef.set(newUser).get(); // Waits fore Firestore to complete
+
             // DEBUG PRINT: System.out.println("Registered user: " + response.email);
             return currentSession;
         }
@@ -117,6 +130,19 @@ public class AuthManager {
             // Create and return the session if successful
             SignResponse response = gson.fromJson(res.body(), SignResponse.class);
             currentSession = new Session(response.idToken, response.refreshToken, response.localId, response.email);
+
+            // Fetch existing user document from Firestore
+            Firestore db = FirestoreContext.getDb();
+            DocumentSnapshot snapshot = db.collection("users").document(response.localId).get().get();
+
+            if (snapshot.exists()) {
+                User user = snapshot.toObject(User.class);
+                System.out.println("Fetched user: " + user);
+            }
+            else {
+                System.out.println("Fetched user not found for " + response.email);
+            }
+
             // DEBUG PRINT: System.out.println("Logged In: " + response.email);
             return currentSession;
         }
@@ -129,11 +155,6 @@ public class AuthManager {
     public void logout() {
         currentSession = null; // Set session to null
         // DEBUG PRINT: System.out.println("Logged out");
-    }
-
-    // Get current session method
-    public Session getCurrentSession() {
-        return currentSession;
     }
 }
 
