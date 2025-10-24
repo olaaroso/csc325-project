@@ -82,14 +82,14 @@ public class SignupController {
                 // Use runLater() method because only the JavaFX thread can modify the UI
                 // This means: once the background thread is done, schedule this UI update to run on JavaFX thread
                 Platform.runLater(() -> {
-                    showAlert("Success", "Signed up successfully.");
+                    showAlert("Success", "Redirecting to login...");
 
-                    // Set session
-                    SessionManager.setCurrentSession(session);
+                    // DO NOT Set session, the user will be redirected to log in first
+                    // SessionManager.setCurrentSession(session);
 
                     // Navigate to dashboard
                     try {
-                        PageNavigationManager.switchTo("dashboardPage.fxml");
+                        PageNavigationManager.switchTo("loginPage.fxml");
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
