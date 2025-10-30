@@ -1,0 +1,174 @@
+/* Main content */
+.main-content {
+    -fx-background-color: -background-color-2;
+}
+
+/* Searchbar */
+.search-bar {
+    -fx-background-color: -background-color-1;
+    -fx-background-radius: 30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
+}
+
+.meal-type-combo-box,
+.search-field,
+.search-button {
+    -fx-pref-height: 42px;
+    -fx-font-size: 15px;
+    -fx-border-width: 0;
+}
+
+.meal-type-combo-box {
+    -fx-background-radius: 25 0 0 25;
+    -fx-border-radius: 25 0 0 25;
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+    -fx-padding: 0 14;
+}
+
+.meal-type-combo-box .list-cell {
+    -fx-text-fill: white;
+}
+.meal-type-combo-box .list-view {
+    -fx-background-color: -background-color-1;
+    -fx-background-radius: 8;
+}
+.meal-type-combo-box .list-view .list-cell {
+    -fx-text-fill: -font-color-1;
+}
+
+.meal-type-combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+.meal-type-combo-box .arrow {
+    -fx-background-color: white;
+}
+
+.search-field {
+    -fx-background-color: -background-color-1;
+    -fx-text-fill: -font-color-1;
+    -fx-prompt-text-fill: -font-color-2;
+    -fx-padding: 0 14;
+}
+
+.search-button {
+    -fx-background-radius: 0 25 25 0;
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-padding: 0 18;
+    -fx-cursor: hand;
+    -fx-effect: none;
+}
+
+.search-button:hover {
+    -fx-background-color: -accent-color-2;
+}
+
+/* Tabs */
+/* Remove blue focus outline from TabPane and Tabs */
+.tab-pane:focused,
+.tab-pane *.tab:focused,
+.tab-pane *.tab-header-area:focused,
+.tab-pane *.tab-header-background:focused,
+.tab-pane *.tab-label:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-effect: none;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+/* Removes white content background */
+.tab-pane .tab-content-area {
+    -fx-background-color: transparent;
+}
+
+/* Also fix ScrollPane inside tabs */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Optional — if FlowPane inherits white bg */
+.flow-pane {
+    -fx-background-color: transparent;
+}
+
+.food-tab-pane {
+    -fx-background-color: -background-color-2;
+}
+
+.tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.food-tab {
+    -fx-background-radius: 8 8 0 0;
+    -fx-padding: 8 16;
+    -fx-font-weight: 600;
+    -fx-background-color: -background-color-1;
+    -fx-text-fill: -font-color-1;
+    -fx-border-radius: 8 8 0 0;
+    -fx-cursor: hand;
+}
+
+.tab-pane .tab:selected {
+    -fx-border-color: -accent-color-1;
+    -fx-border-width: 0 0 3 0;
+}
+
+/* Scrollable containers */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.flow-pane {
+    -fx-background-color: transparent;
+}
+
+/* Food cards */
+.food-card {
+    -fx-background-color: -background-color-1;
+    -fx-background-radius: 10;
+    -fx-padding: 10 15;
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 5, 0, 0, 2);
+}
+
+.food-name {
+    -fx-text-fill: -font-color-1;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+
+.food-macros {
+    -fx-text-fill: -font-color-2;
+    -fx-font-size: 13px;
+}
+
+.add-button {
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-padding: 5 10;
+}
+
+.add-button:hover {
+    -fx-background-color: -accent-color-2;
+}
+
+/* No results label */
+.no-results-label {
+    -fx-text-fill: -font-color-2;
+    -fx-font-size: 16px;
+    -fx-font-weight: 500;
+    -fx-alignment: center;
+    -fx-padding: 40 0 0 0;
+}

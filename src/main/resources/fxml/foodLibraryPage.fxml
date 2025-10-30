@@ -1,14 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane prefHeight="600" prefWidth="1000" styleClass="root-pane" stylesheets="@../css/foodLibrary.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.group4.macromanager.controller.FoodLibraryController">
 
-</AnchorPane>
+    <!-- Sidebar -->
+    <left>
+        <VBox fx:id="sidebar" alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefWidth="180.0" spacing="20.0" styleClass="sidebar">
+            <Label alignment="CENTER" prefHeight="27.0" prefWidth="192.0" styleClass="app-title" text="MacroManager" />
+            <Pane VBox.vgrow="ALWAYS" />
+            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="211.0" prefWidth="180.0" styleClass="nav-links">
+                <Button prefHeight="36.0" prefWidth="181.0" styleClass="nav-button" text="Dashboard" />
+                <Button prefHeight="36.0" prefWidth="181.0" styleClass="nav-button-active" text="Food Library" />
+                <Button prefHeight="36.0" prefWidth="185.0" styleClass="nav-button" text="Custom Foods" />
+                <Button prefHeight="36.0" prefWidth="180.0" styleClass="nav-button" text="Meal Builder" />
+                <Button prefHeight="36.0" prefWidth="186.0" styleClass="nav-button" text="History &amp; Reports" />
+                <Button prefHeight="36.0" prefWidth="182.0" styleClass="nav-button" text="Settings" />
+                <VBox.margin>
+                    <Insets />
+                </VBox.margin>
+            </VBox>
+            <Pane VBox.vgrow="ALWAYS" />
+            <StackPane alignment="CENTER" prefHeight="60">
+                <Button styleClass="profile-button" text="FSC Student" />
+            </StackPane>
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
+        </VBox>
+    </left>
+
+    <!-- Main Food Library Content -->
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20" styleClass="main-content">
+            <padding>
+                <Insets bottom="30" left="30" right="30" top="30" />
+            </padding>
+            <Label prefHeight="35.0" prefWidth="833.0" styleClass="page-title" text="Food Library">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font></Label>
+
+            <!-- Search & Filter Bar -->
+            <HBox fx:id="searchBar" alignment="CENTER" spacing="0" styleClass="search-bar" HBox.hgrow="ALWAYS">
+                <ComboBox fx:id="mealTypeComboBox" prefWidth="150" promptText="Meal Type" styleClass="meal-type-combo-box" />
+                <TextField fx:id="searchField" promptText="Search for foods..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleSearch" styleClass="search-button" text="🔍" />
+            </HBox>
+
+            <!-- Tabs for Custom / Recommendations / Favorites -->
+            <TabPane fx:id="foodTabPane" prefHeight="600" prefWidth="800" styleClass="food-tab-pane" tabClosingPolicy="UNAVAILABLE">
+
+                <!-- Custom Foods Tab -->
+                <Tab styleClass="food-tab" text="Custom Foods">
+                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                        <FlowPane fx:id="customFoodsContainer" hgap="15" vgap="15">
+                            <padding>
+                                <Insets bottom="15" left="15" right="15" top="15" />
+                            </padding>
+                        </FlowPane>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- Recommendations Tab -->
+                <Tab styleClass="food-tab" text="Recommendations">
+                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                        <FlowPane fx:id="recommendationsContainer" hgap="15" vgap="15">
+                            <padding>
+                                <Insets bottom="15" left="15" right="15" top="15" />
+                            </padding>
+                        </FlowPane>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- Favorites Tab -->
+                <Tab styleClass="food-tab" text="Favorites">
+                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                        <FlowPane fx:id="favoritesContainer" hgap="15" vgap="15">
+                            <padding>
+                                <Insets bottom="15" left="15" right="15" top="15" />
+                            </padding>
+                        </FlowPane>
+                    </ScrollPane>
+                </Tab>
+
+            </TabPane>
+        </VBox>
+    </center>
+</BorderPane>
