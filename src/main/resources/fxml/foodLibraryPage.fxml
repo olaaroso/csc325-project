@@ -9,35 +9,14 @@
 
     <!-- Sidebar -->
     <left>
-        <VBox fx:id="sidebar" alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefWidth="180.0" spacing="20.0" styleClass="sidebar">
-            <Label alignment="CENTER" prefHeight="27.0" prefWidth="192.0" styleClass="app-title" text="MacroManager" />
-            <Pane VBox.vgrow="ALWAYS" />
-            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="211.0" prefWidth="180.0" styleClass="nav-links">
-                <Button prefHeight="36.0" prefWidth="181.0" styleClass="nav-button" text="Dashboard" />
-                <Button prefHeight="36.0" prefWidth="181.0" styleClass="nav-button-active" text="Food Library" />
-                <Button prefHeight="36.0" prefWidth="185.0" styleClass="nav-button" text="Custom Foods" />
-                <Button prefHeight="36.0" prefWidth="180.0" styleClass="nav-button" text="Meal Builder" />
-                <Button prefHeight="36.0" prefWidth="186.0" styleClass="nav-button" text="History &amp; Reports" />
-                <Button prefHeight="36.0" prefWidth="182.0" styleClass="nav-button" text="Settings" />
-                <VBox.margin>
-                    <Insets />
-                </VBox.margin>
-            </VBox>
-            <Pane VBox.vgrow="ALWAYS" />
-            <StackPane alignment="CENTER" prefHeight="60">
-                <Button styleClass="profile-button" text="FSC Student" />
-            </StackPane>
-            <BorderPane.margin>
-                <Insets />
-            </BorderPane.margin>
-        </VBox>
+        <fx:include source="./sidebar.fxml" fx:id="sidebarInclude" />
     </left>
 
     <!-- Main Food Library Content -->
     <center>
         <VBox alignment="TOP_CENTER" spacing="20" styleClass="main-content">
             <padding>
-                <Insets bottom="30" left="30" right="30" top="30" />
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
             <Label prefHeight="35.0" prefWidth="833.0" styleClass="page-title" text="Food Library">
                 <font>
