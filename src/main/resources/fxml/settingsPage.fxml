@@ -5,13 +5,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="600" prefWidth="1000" styleClass="root-pane" stylesheets="@../css/foodLibrary.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.group4.macromanager.controller.SettingsController">
+<BorderPane
+        prefHeight="600"
+        prefWidth="1000"
+        styleClass="root-pane"
+        stylesheets="@../css/foodLibrary.css"
+        xmlns="http://javafx.com/javafx/17.0.12"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.group4.macromanager.controller.SettingsController"
+>
 
     <!-- Sidebar -->
     <left>
         <fx:include source="./sidebar.fxml" fx:id="sidebarInclude" />
     </left>
 
-    <!-- Main Custom Food Form Content -->
+    <!-- Main Settings Content -->
 
 </BorderPane>

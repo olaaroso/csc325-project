@@ -5,7 +5,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="600" prefWidth="1000" styleClass="root-pane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.group4.macromanager.controller.MealBuilderController">
+<BorderPane
+        prefHeight="600"
+        prefWidth="1000"
+        styleClass="root-pane"
+        xmlns="http://javafx.com/javafx/17.0.12"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.group4.macromanager.controller.MealBuilderController"
+>
 
     <!-- Sidebar -->
     <left>

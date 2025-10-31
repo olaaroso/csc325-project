@@ -10,6 +10,7 @@ import java.util.Map;
 
 public class SidebarController {
 
+    // FXML elements
     @FXML private VBox navLinks;
     @FXML private Button dashboardButton;
     @FXML private Button foodLibraryButton;

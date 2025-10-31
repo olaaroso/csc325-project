@@ -16,7 +16,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 
-<AnchorPane prefHeight="600" prefWidth="900" stylesheets="@../css/signup.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.group4.macromanager.controller.SignupController">
+<AnchorPane
+        prefHeight="600"
+        prefWidth="900"
+        stylesheets="@../css/signup.css"
+        xmlns="http://javafx.com/javafx/25"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.group4.macromanager.controller.SignupController"
+>
 
     <HBox prefHeight="600" prefWidth="900" styleClass="root-hbox">
         <!-- LEFT PANEL -->
