@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="sidebar"
+      alignment="TOP_CENTER"
+      minHeight="-Infinity" minWidth="-Infinity" prefWidth="180.0"
+      spacing="20"
+      styleClass="sidebar"
+      xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.group4.macromanager.controller.SidebarController">
+
+    <Label alignment="CENTER"
+           prefHeight="27.0"
+           prefWidth="192.0"
+           styleClass="app-title"
+           text="MacroManager" />
+
+    <Pane VBox.vgrow="ALWAYS"/>
+
+    <VBox fx:id="navLinks" styleClass="nav-links" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="211.0" prefWidth="180.0">
+        <Button prefHeight="36.0" prefWidth="181.0" fx:id="dashboardButton" text="Dashboard" styleClass="nav-button" onAction="#goToDashboard"/>
+        <Button prefHeight="36.0" prefWidth="181.0" fx:id="foodLibraryButton" text="Food Library" styleClass="nav-button" onAction="#goToFoodLibrary"/>
+        <Button prefHeight="36.0" prefWidth="181.0" fx:id="customFoodsButton" text="Custom Foods" styleClass="nav-button" onAction="#goToCustomFoods"/>
+        <Button prefHeight="36.0" prefWidth="181.0" fx:id="mealBuilderButton" text="Meal Builder" styleClass="nav-button" onAction="#goToMealBuilder"/>
+        <Button prefHeight="36.0" prefWidth="181.0" fx:id="historyButton" text="History &amp; Reports" styleClass="nav-button" onAction="#goToHistory"/>
+        <Button prefHeight="36.0" prefWidth="181.0" fx:id="settingsButton" text="Settings" styleClass="nav-button" onAction="#goToSettings"/>
+    </VBox>
+
+    <Pane VBox.vgrow="ALWAYS"/>
+
+    <StackPane alignment="CENTER" prefHeight="60">
+        <Button fx:id="profileButton" text="FSC Student" styleClass="profile-button" onAction="#handleLogout"/>
+    </StackPane>
+</VBox>

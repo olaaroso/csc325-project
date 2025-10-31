@@ -20,6 +20,7 @@ public class FoodLibraryController {
     @FXML private FlowPane customFoodsContainer;
     @FXML private FlowPane recommendationsContainer;
     @FXML private FlowPane favoritesContainer;
+    @FXML private SidebarController sidebarIncludeController;
 
     // Initialize foodService instance for making calls to the backend
     private final FoodService foodService = new FoodService();
@@ -27,6 +28,9 @@ public class FoodLibraryController {
     // Initialize function
     @FXML
     public void initialize() {
+        // Highlight current page in the sidebar
+        sidebarIncludeController.setActivePage("foodLibrary");
+
         // Setup filters for search
         mealTypeComboBox.getItems().addAll("All", "Breakfast", "Lunch", "Dinner", "Snack");
         mealTypeComboBox.setValue("All"); // Set to "All" by default

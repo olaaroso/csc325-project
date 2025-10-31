@@ -17,9 +17,13 @@ public class DashboardController {
     @FXML private ListView<String> recentEntries;
     @FXML private PieChart macroPieChart;
     @FXML private BarChart<String, Number> barChart;
+    @FXML private SidebarController sidebarIncludeController;
 
     @FXML
     public void initialize() {
+        // Highlight current page in the sidebar
+        sidebarIncludeController.setActivePage("dashboard");
+
         // Placeholder recent entries
         recentEntries.getItems().addAll("Protein Shake", "Grilled Chicken", "Rice", "Broccoli");
 
@@ -43,13 +47,5 @@ public class DashboardController {
         calorieSeries.getData().add(new XYChart.Data<>("Sat", 1950));
 
         barChart.getData().add(calorieSeries);
-    }
-
-    // Event handler functions
-    public void handleLogout(ActionEvent event) throws IOException {
-        // This handler will contain logout functionality
-
-        // FOR NOW: redirects straight to the login page
-        PageNavigationManager.switchTo("loginPage.fxml");
     }
 }
