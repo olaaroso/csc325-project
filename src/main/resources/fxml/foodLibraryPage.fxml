@@ -57,11 +57,22 @@
                 <!-- Custom Foods Tab -->
                 <Tab styleClass="food-tab" text="Custom Foods">
                     <ScrollPane fitToHeight="true" fitToWidth="true">
-                        <FlowPane fx:id="customFoodsContainer" hgap="15" vgap="15">
+                        <VBox>
                             <padding>
                                 <Insets bottom="15" left="15" right="15" top="15" />
                             </padding>
-                        </FlowPane>
+                            <Button
+                                    text="Add New Food"
+                                    onAction="#handleAddNewFood"
+                                    styleClass="add-food-button"
+                                    maxWidth="200"
+                            />
+                            <FlowPane fx:id="customFoodsContainer" hgap="15" vgap="15">
+                                <padding>
+                                    <Insets top="15" />
+                                </padding>
+                            </FlowPane>
+                        </VBox>
                     </ScrollPane>
                 </Tab>
 

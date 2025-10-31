@@ -137,7 +137,7 @@
     -fx-padding: 10 15;
     -fx-spacing: 10;
     -fx-alignment: center-left;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 5, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
 }
 
 .food-name {
@@ -151,16 +151,17 @@
     -fx-font-size: 13px;
 }
 
-.add-button {
+.add-button, .add-food-button {
     -fx-background-color: -accent-color-1;
     -fx-text-fill: white;
     -fx-background-radius: 8;
     -fx-font-weight: 600;
     -fx-cursor: hand;
     -fx-padding: 5 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
 }
 
-.add-button:hover {
+.add-button:hover, .add-food-button:hover {
     -fx-background-color: -accent-color-2;
 }
 

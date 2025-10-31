@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 
+import java.io.IOException;
 import java.util.List;
 
 public class FoodLibraryController {
@@ -20,8 +21,10 @@ public class FoodLibraryController {
     @FXML private FlowPane recommendationsContainer;
     @FXML private FlowPane favoritesContainer;
 
+    // Initialize foodService instance for making calls to the backend
     private final FoodService foodService = new FoodService();
 
+    // Initialize function
     @FXML
     public void initialize() {
         // Setup filters for search
@@ -44,6 +47,9 @@ public class FoodLibraryController {
         });
     }
 
+    // Handler functions - for button clicks
+
+    // HandleSearch - handler for search button
     @FXML
     private void handleSearch() {
         String query = searchField.getText().trim();
@@ -102,6 +108,18 @@ public class FoodLibraryController {
         foodTabPane.getSelectionModel().select(searchTab); // Select the search tab automatically after searching
     }
 
+    // HandleAddNewFood - handler for clicking add food button under the custom foods tab
+    @FXML
+    private void handleAddNewFood() {
+        try {
+            PageNavigationManager.switchTo("customFoodFormPage.fxml");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Loader functions - fetches food data for each category
     private void loadCustomFoods() {
         List<Food> customFoods = foodService.getCustomFoods();
         renderFoods(customFoods, customFoodsContainer);
@@ -117,6 +135,7 @@ public class FoodLibraryController {
         renderFoods(favs, favoritesContainer);
     }
 
+    // Render functions - renders each food item as a foodCard and dynamically adds them to their respective container
     private void renderFoods(List<Food> foods, FlowPane container) {
         container.getChildren().clear();
         for (Food food : foods) {
