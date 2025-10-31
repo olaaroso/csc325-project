@@ -11,9 +11,10 @@ public class Food {
     private double fat;
     private String imageUrl;
     private String mealType;
+    private boolean isFavorite;
 
     // Constructor
-    public Food(String id, String name, double servingSize, String servingUnit, double calories, double protein, double carbs, double fat, String imageUrl, String mealType) {
+    public Food(String id, String name, double servingSize, String servingUnit, double calories, double protein, double carbs, double fat, String imageUrl, String mealType, boolean isFavorite) {
         this.id = id;
         this.name = name;
         this.servingSize = servingSize;
@@ -24,6 +25,7 @@ public class Food {
         this.fat = fat;
         this.imageUrl = imageUrl;
         this.mealType = mealType;
+        this.isFavorite = isFavorite;
     }
 
     // Getters and setters
@@ -105,5 +107,13 @@ public class Food {
 
     public void setMealType(String mealType) {
         this.mealType = mealType;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }
