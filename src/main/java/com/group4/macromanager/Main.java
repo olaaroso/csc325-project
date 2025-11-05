@@ -25,7 +25,7 @@ public class Main extends Application {
         firebaseAuth = FirebaseAuth.getInstance();
 
         // Init fxml loader
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/customFoodFormPage.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/loginPage.fxml"));
 
         // Init the scene
         Scene scene = new Scene(fxmlLoader.load());
