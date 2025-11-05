@@ -12,7 +12,7 @@
 
 /* Cards */
 .card {
-    -fx-background-color: #ffffff;
+    -fx-background-color: -background-color-1;
     -fx-padding: 15;
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
@@ -21,12 +21,12 @@
 .section-title {
     -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: #222;
+    -fx-text-fill: -font-color-1;
 }
 
 /* Stat cards */
 .stat-card {
-    -fx-background-color: #ffffff;
+    -fx-background-color: -background-color-1;
     -fx-background-radius: 12;
     -fx-padding: 10;
     -fx-alignment: center;
