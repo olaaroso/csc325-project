@@ -35,15 +35,8 @@ public class CustomFoodFormController {
         // Default placeholder image
         foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm()));
 
-        // Pre-fill static demo values for now
-        nameField.setText("Sample Oatmeal");
-        servingField.setText("100");
+        // Pre-fill unit combo box so validation doesn't initially fail
         unitComboBox.setValue("grams");
-        caloriesField.setText("120");
-        proteinField.setText("5");
-        carbsField.setText("20");
-        fatField.setText("2");
-        favoriteCheckBox.setSelected(false);
     }
 
     // Handler functions
@@ -66,19 +59,74 @@ public class CustomFoodFormController {
     // HandleSave - handler for when the user saves the entered form data
     @FXML
     private void handleSave() {
-        // For this sprint, just print the sample data
+        // Trimmed field values
+        String name = nameField.getText().trim();
+        String serving = servingField.getText().trim();
+        String unit = unitComboBox.getValue();
+        String calories = caloriesField.getText().trim();
+        String protein = proteinField.getText().trim();
+        String carbs = carbsField.getText().trim();
+        String fat = fatField.getText().trim();
+
+        // Reset previous
+        resetFieldStyles();
+
+        // Validation flag
+        boolean isValid = true;
+
+        // Check for empty required fields
+        if (name.isEmpty()) {
+            markInvalid(nameField);
+            isValid = false;
+        }
+        if (serving.isEmpty()) {
+            markInvalid(servingField);
+            isValid = false;
+        }
+        if (unit == null || unit.isEmpty()) {
+            unitComboBox.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            isValid = false;
+        }
+        if (calories.isEmpty()) {
+            markInvalid(caloriesField);
+            isValid = false;
+        }
+        if (protein.isEmpty()) {
+            markInvalid(proteinField);
+            isValid = false;
+        }
+        if (carbs.isEmpty()) {
+            markInvalid(carbsField);
+            isValid = false;
+        }
+        if (fat.isEmpty()) {
+            markInvalid(fatField);
+            isValid = false;
+        }
+
+        // Stop submission if invalid
+        if (!isValid) {
+            System.out.println("Please fill in all required fields before saving.");
+            return;
+        }
+
+        // If valid, proceed
+        // For this sprint, just print the data
         // LATER: data will be sent to service function to send it to firestore
         System.out.printf(
                 "Food saved: %s (%s %s) - %s cal | P:%sg | C:%sg | F:%sg | Favorite: %s\n",
-                nameField.getText(), // food name
-                servingField.getText(), // food serving size
-                unitComboBox.getValue(), // food serving unit
-                caloriesField.getText(), // food cals
-                proteinField.getText(), // food protein
-                carbsField.getText(), // food carbs
-                fatField.getText(), // food fat
+                name, // food name
+                serving, // food serving size
+                unit, // food serving unit
+                calories, // food cals
+                protein, // food protein
+                carbs, // food carbs
+                fat, // food fat
                 favoriteCheckBox.isSelected() ? "Yes" : "No" // food is marked as a favorite
         );
+
+        // Clear fields after successful save
+        handleCancel();
     }
 
     // HandleCancel - handler for when the user cancels the entered data
@@ -87,12 +135,30 @@ public class CustomFoodFormController {
         // Clear all the fields
         nameField.clear();
         servingField.clear();
-        unitComboBox.setValue(null);
+        unitComboBox.setValue("grams"); // grams by default
         caloriesField.clear();
         proteinField.clear();
         carbsField.clear();
         fatField.clear();
         favoriteCheckBox.setSelected(false);
         foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm()));
+    }
+
+    // Helper functions
+
+    // Highlights invalid text fields
+    private void markInvalid(TextField field) {
+        field.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+    }
+
+    // Clears validation styling before new checks
+    private void resetFieldStyles() {
+        TextField[] fields = {
+                nameField, servingField, caloriesField, proteinField, carbsField, fatField
+        };
+        for (TextField field : fields) {
+            field.setStyle(""); // Resets to default CSS
+        }
+        unitComboBox.setStyle(""); // reset combo box style
     }
 }
