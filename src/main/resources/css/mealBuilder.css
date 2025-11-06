@@ -8,6 +8,7 @@
     -fx-text-fill: -font-color-1;
 }
 
+/* Cards */
 .form-card, .side-card {
     -fx-background-color: -background-color-1;
     -fx-background-radius: 12;
@@ -15,21 +16,105 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
 }
 
+/* Card Section Titles */
 .section-title {
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-text-fill: -font-color-1;
 }
 
+/* ---------- Labels ---------- */
+.input-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #555;
+}
+
+/* ---------- Inputs ---------- */
+.text-field, .combo-box {
+    -fx-pref-height: 38;
+    -fx-font-size: 14px;
+    -fx-background-color: -background-color-1;
+    -fx-background-radius: 6;
+    -fx-border-color: -font-color-1;
+    -fx-border-radius: 6;
+    -fx-padding: 0 10 0 10;
+    -fx-prompt-text-fill: -font-color-2;
+}
+
+.text-field:focused, .combo-box:focused {
+    -fx-border-color: -accent-color-1;
+    -fx-background-color: -background-color-1;
+}
+
+/* ---------- Buttons ---------- */
 .primary-button {
     -fx-background-color: -accent-color-1;
     -fx-text-fill: white;
     -fx-background-radius: 8;
-    -fx-font-weight: bold;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-padding: 5 25;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-border-color: -accent-color-1;
+}
+
+.primary-button:hover {
+    -fx-background-color: -accent-color-2;
+    -fx-border-color: -accent-color-2;
 }
 
 .secondary-button {
-    -fx-background-color: transparent;
+    -fx-background-color: -background-color-2;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
     -fx-border-color: -font-color-2;
     -fx-text-fill: -font-color-1;
+    -fx-background-radius: 8;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-padding: 5 25;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+.secondary-button:hover {
+    -fx-border-color: -accent-color-1;
+    -fx-text-fill: -accent-color-1;
+}
+
+/* ---------- Upload Button ---------- */
+.upload-button {
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-padding: 5 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
     -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-border-color: -accent-color-1;
+}
+
+.upload-button:hover {
+    -fx-background-color: -accent-color-2;
+    -fx-border-color: -accent-color-2;
+}
+
+/* ---------- CheckBox ---------- */
+.check-box {
+    -fx-font-size: 14px;
+    -fx-text-fill: -font-color-1;
+}
+
+.check-box .box {
+    -fx-border-color: -font-color-1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.check-box:selected .box {
+    -fx-background-color: -accent-color-1;
+    -fx-border-color: -accent-color-1;
 }

@@ -36,14 +36,14 @@
                     <!-- Meal Info Card -->
                     <VBox spacing="10" styleClass="form-card">
                         <Label text="Meal Info" styleClass="section-title"/>
-                        <GridPane hgap="15" vgap="10">
+                        <GridPane hgap="20" vgap="15">
                             <columnConstraints>
-                                <ColumnConstraints prefWidth="120"/>
-                                <ColumnConstraints prefWidth="250"/>
+                                <ColumnConstraints halignment="LEFT" prefWidth="120"/>
+                                <ColumnConstraints halignment="LEFT" prefWidth="250"/>
                             </columnConstraints>
 
-                            <Label text="Meal Type *" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                            <ComboBox fx:id="mealTypeCombo" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                            <Label styleClass="input-label" text="Meal Type" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                            <ComboBox fx:id="mealTypeCombo" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Breakfast">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
                                         <String fx:value="Breakfast"/>
@@ -54,10 +54,10 @@
                                 </items>
                             </ComboBox>
 
-                            <Label text="Meal Name *" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                            <Label styleClass="input-label" text="Meal Name *" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
                             <TextField fx:id="mealNameField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                            <Label text="Notes (Optional)" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                            <Label styleClass="input-label" text="Notes (Optional)" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
                             <TextArea fx:id="notesField" prefRowCount="2" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
                         </GridPane>
                     </VBox>
@@ -93,7 +93,10 @@
                     <VBox spacing="10" styleClass="side-card">
                         <Label text="Additional Info" styleClass="section-title"/>
                         <CheckBox fx:id="favoriteCheckBox" text="Add to Favorites"/>
-                        <Button fx:id="attachImageButton" text="Attach Image" onAction="#handleUploadImage"/>
+                        <VBox alignment="CENTER" minWidth="-Infinity" prefHeight="137.0" prefWidth="180.0" spacing="10">
+                            <ImageView fx:id="foodImage" fitHeight="100" fitWidth="100" preserveRatio="true" style="-fx-background-color: rgba(255,255,255,0.1); -fx-border-color: #666; -fx-border-radius: 10; -fx-background-radius: 10;" />
+                            <Button fx:id="uploadButton" onAction="#handleUploadImage" styleClass="upload-button" text="Upload Image" />
+                        </VBox>
                     </VBox>
 
                     <!-- Save/Cancel -->
