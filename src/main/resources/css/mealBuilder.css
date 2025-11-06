@@ -1,0 +1,35 @@
+.root-pane {
+    -fx-background-color: -background-color-2;
+}
+
+.page-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -font-color-1;
+}
+
+.form-card, .side-card {
+    -fx-background-color: -background-color-1;
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+.section-title {
+    -fx-font-weight: bold;
+    -fx-text-fill: -font-color-1;
+}
+
+.primary-button {
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-weight: bold;
+}
+
+.secondary-button {
+    -fx-background-color: transparent;
+    -fx-border-color: -font-color-2;
+    -fx-text-fill: -font-color-1;
+    -fx-border-radius: 8;
+}
