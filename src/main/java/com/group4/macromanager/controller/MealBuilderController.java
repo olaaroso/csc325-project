@@ -1,6 +1,9 @@
 package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.Food;
+import com.group4.macromanager.service.IFoodService;
+import com.group4.macromanager.service.InMemoryFoodService;
+import com.group4.macromanager.util.ValidationUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,10 +14,9 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 
-public class MealBuilderController {
+public class MealBuilderController extends BaseController {
 
     // FXML elements
-    @FXML private SidebarController sidebarIncludeController;
     @FXML private ComboBox<String> mealTypeCombo;
     @FXML private TextField mealNameField;
     @FXML private TextField notesField;
@@ -22,25 +24,24 @@ public class MealBuilderController {
     @FXML private ListView<Food> foodsListView;
     @FXML private Label caloriesLabel, proteinLabel, carbsLabel, fatLabel;
     @FXML private CheckBox favoriteCheckBox;
-    @FXML private ImageView foodImage;
 
-    private ObservableList<Food> foods = FXCollections.observableArrayList();
-    private File selectedImageFile;
+    private ObservableList<Food> foodEntries = FXCollections.observableArrayList();
 
     // Initialize function
     @FXML
     public void initialize() {
         // Highlight current page in the sidebar
-        sidebarIncludeController.setActivePage("mealBuilder");
+        initializePage("mealBuilder"); // from BaseController
 
         // Default placeholder image
-        foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm()));
+        // BaseController handles this:
+        // foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm()));
 
-        // Pre-fill meal type combo box so validation doesn't initially fail
+        // Setup meal type combo box
         mealTypeCombo.setValue("Breakfast"); // Default value
 
-        // Initialize foodListView with list of foods
-        foodsListView.setItems(foods);
+        // Setup ListView
+        foodsListView.setItems(foodEntries);
         foodsListView.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(Food food, boolean empty) {
@@ -52,111 +53,112 @@ public class MealBuilderController {
                 }
             }
         });
+
+        updateTotals();
     }
 
     // Handler functions
 
-    // handleAddFood - adds a food item based on search input
     @FXML
     private void handleAddFood() {
-        String name = searchFoodField.getText().trim();
-        if (name.isEmpty()) return;
+        // Search for food and add the first matching result
+        String query = searchFoodField.getText().trim();
+        if (ValidationUtil.isEmpty(query)) return;
 
-        // Simple placeholder food item
-        Food item = new Food("11", name, 5, "grams", 230, 21, 25, 4, "/images/hero-img.png", "Snack", false);
-        foods.add(item);
-        searchFoodField.clear();
-        updateTotals();
+        // Search for food
+        var results = foodService.searchFoods(query, mealTypeCombo.getValue());
+        if (!results.isEmpty()) {
+            foodEntries.add(results.get(0));
+            updateTotals();
+        } else {
+            showAlert("No foods found matching: " + query);
+        }
+        searchFoodField.clear(); // Clear search field after adding
     }
 
-    // handleClearFoods - clears all food items from the meal
+    // HandleClearFoods - clears all food entries from the meal
     @FXML
     private void handleClearFoods() {
-        foods.clear();
-        updateTotals();
+        foodEntries.clear(); // Clear all food entries
+        updateTotals(); // Update totals display
     }
 
-    // Handle Upload - handles uploaded pictures
-    @FXML
-    private void handleUpload() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
-        );
-
-        selectedImageFile = fileChooser.showOpenDialog(null);
-        if (selectedImageFile != null) {
-            // foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm()));
-            foodImage.setImage(new Image(selectedImageFile.toURI().toString()));
-        }
-    }
-
-    // Handle Save - handler for when the user saves the entered form data
+    // HandleSave - handler for when the user saves the entered meal data
     @FXML
     private void handleSave() {
-        // Trimmed field values
-        String mealName = mealNameField.getText().trim();
-        String mealType = mealTypeCombo.getValue();
-        String notes = notesField.getText().trim();
+        // Validate form
+        if (!validateForm()) {
+            showAlert("Please fill out all the required fields.");
+            return;
+        }
 
-        // Reset previous
+        // Simulate saving meal (in a real app, save to database or service)
+        System.out.printf(
+                "Saved meal: %s (%s) with %d food items. Favorite: %s%n",
+                mealNameField.getText(),
+                mealTypeCombo.getValue(),
+                foodEntries.size(),
+                favoriteCheckBox.isSelected() ? "Yes" : "No"
+        );
+
+        showSuccessAlert("Meal saved successfully!"); // from BaseController
+        handleCancel(); // Clear form after saving
+    }
+
+    // HandleCancel - handler for when the user cancels the entered data
+    @FXML
+    private void handleCancel() {
+        clearForm(); // Clear form fields
+        resetImageToPlaceholder(); // from BaseController
+    }
+
+    // Helper functions
+    private boolean validateForm() {
+        // Reset Previous styles
         resetFieldStyles();
 
         // Validation flag
         boolean isValid = true;
 
-        // Check for empty required fields
-        if (mealName.isEmpty()) {
-            markInvalid(mealNameField);
+        if (ValidationUtil.isEmpty(mealNameField.getText())) {
+            ValidationUtil.markInvalid(mealNameField);
             isValid = false;
         }
-        if (mealType == null || mealType.isEmpty()) {
-            mealTypeCombo.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+        if (ValidationUtil.isComboBoxEmpty(mealTypeCombo)) {
+            ValidationUtil.markInvalid(mealTypeCombo);
             isValid = false;
         }
-        // At least one food item must be added
-        if (foods.isEmpty()) {
+        // No validation for notes (optional)
+
+        // Validate that at least one food item is added
+        if (foodEntries.isEmpty()) {
             showAlert("Please add at least one food item to the meal.");
             isValid = false;
         }
 
-        // Stop processing if validation failed
-        if (!isValid) {
-            showAlert("Please fill out all the required fields.");
-            return;
-        }
-
-        System.out.printf(
-                "Saved meal: %s (%s) with %d foods. Favorite: %s%n",
-                mealNameField.getText(),
-                mealTypeCombo.getValue(),
-                foods.size(),
-                favoriteCheckBox.isSelected() ? "Yes" : "No"
-        );
-
-        // Clear form after saving
-        handleCancel();
+        return isValid; // Return overall validation result
     }
 
-    // Handle Cancel - clears the form inputs
-    @FXML
-    private void handleCancel() {
+    // Clear form fields
+    private void clearForm() {
         mealTypeCombo.setValue("Breakfast"); // Reset to default
-        mealNameField.clear();
-        notesField.clear();
-        favoriteCheckBox.setSelected(false);
-        foods.clear();
-        selectedImageFile = null;
-        updateTotals(); // Reset totals
-        foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm())); // Reset image
+        mealNameField.clear(); // Clear meal name
+        notesField.clear(); // Clear notes
+        favoriteCheckBox.setSelected(false); // Uncheck favorite
+        foodEntries.clear(); // Clear food entries
+        updateTotals(); // Update totals display
     }
 
-    // Utility functions
+    // Reset field styles
+    private void resetFieldStyles() {
+        ValidationUtil.resetFieldStyles(mealNameField);
+        ValidationUtil.resetFieldStyles(mealTypeCombo);
+    }
 
-    // updateTotals - updates the nutritional totals based on current foods
+    // Update total nutritional values
     private void updateTotals() {
         double totalCalories = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
-        for (Food f : foods) {
+        for (Food f : foodEntries) {
             totalCalories += f.getCalories();
             totalProtein += f.getProtein();
             totalCarbs += f.getCarbs();
@@ -166,29 +168,5 @@ public class MealBuilderController {
         proteinLabel.setText("Protein (g): " + (int) totalProtein);
         carbsLabel.setText("Carbs (g): " + (int) totalCarbs);
         fatLabel.setText("Fats (g): " + (int) totalFat);
-    }
-
-    // showAlert - shows an alert dialog with the given message
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    // markInvalid - marks a TextField as invalid with red border
-    private void markInvalid(TextField field) {
-        field.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
-    }
-
-    // resetFieldStyles - clears validation styling before new checks
-    private void resetFieldStyles() {
-        TextField[] fields = {
-                mealNameField,
-        };
-        for (TextField field : fields) {
-            field.setStyle("");
-        }
-        mealTypeCombo.setStyle(""); // Reset combo box style
     }
 }
