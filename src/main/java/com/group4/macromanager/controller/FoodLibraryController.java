@@ -1,8 +1,7 @@
 package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.Food;
-import com.group4.macromanager.service.IFoodService;
-import com.group4.macromanager.service.InMemoryFoodService;
+import com.group4.macromanager.util.ValidationUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -13,7 +12,7 @@ import javafx.scene.layout.HBox;
 import java.io.IOException;
 import java.util.List;
 
-public class FoodLibraryController {
+public class FoodLibraryController extends BaseController {
 
     @FXML private ComboBox<String> mealTypeComboBox;
     @FXML private TextField searchField;
@@ -21,16 +20,12 @@ public class FoodLibraryController {
     @FXML private FlowPane customFoodsContainer;
     @FXML private FlowPane recommendationsContainer;
     @FXML private FlowPane favoritesContainer;
-    @FXML private SidebarController sidebarIncludeController;
-
-    // Initialize foodService instance for making calls to the backend
-    private IFoodService foodService = new InMemoryFoodService();
 
     // Initialize function
     @FXML
     public void initialize() {
         // Highlight current page in the sidebar
-        sidebarIncludeController.setActivePage("foodLibrary");
+        initializePage("foodLibrary"); // from BaseController
 
         // Setup filters for search
         mealTypeComboBox.getItems().addAll("All", "Breakfast", "Lunch", "Dinner", "Snack");
@@ -58,13 +53,12 @@ public class FoodLibraryController {
     @FXML
     private void handleSearch() {
         String query = searchField.getText().trim();
+        if (ValidationUtil.isEmpty(query)) return; // Return if empty
+
         String type = mealTypeComboBox.getValue();
 
-        // Return out of the handler if the entered query is empty
-        if (query.isEmpty()) return;
-
         // Search for foods using searchFoods() method
-        List<Food> results = foodService.searchFoods(query, type);
+        List<Food> results = foodService.searchFoods(query, type); // uses inherited foodService from BaseController
 
         // Check if a tab already exists
         Tab searchTab = foodTabPane.getTabs().stream()
@@ -105,9 +99,8 @@ public class FoodLibraryController {
 
         // If there are no results, show message
         if (results.isEmpty()) {
-            Label noResults = new Label("No results found");
-            noResults.getStyleClass().add("no-results-label");
-            searchContainer.getChildren().add(noResults);
+            // Show "No results found" message
+            showAlert("No results found for: " + query); // inherited alert method from BaseController
         }
 
         foodTabPane.getSelectionModel().select(searchTab); // Select the search tab automatically after searching
