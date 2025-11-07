@@ -41,7 +41,15 @@
     -fx-prompt-text-fill: -font-color-2;
 }
 
-.text-field:focused, .combo-box:focused {
+.text-area {
+    -fx-font-size: 14px;
+    -fx-background-color: -background-color-1;
+    -fx-background-radius: 6;
+    -fx-border-color: -font-color-1;
+    -fx-border-radius: 6;
+}
+
+.text-field:focused, .combo-box:focused, .text-area:focused {
     -fx-border-color: -accent-color-1;
     -fx-background-color: -background-color-1;
 }

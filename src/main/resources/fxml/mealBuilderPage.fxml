@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.collections.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<?import java.lang.String?>
-<BorderPane prefHeight="600" prefWidth="1000" styleClass="root-pane"
-            stylesheets="@../css/mealBuilder.css"
-            xmlns="http://javafx.com/javafx/17.0.12"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.group4.macromanager.controller.MealBuilderController">
+<BorderPane prefHeight="600" prefWidth="1000" styleClass="root-pane" stylesheets="@../css/mealBuilder.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.group4.macromanager.controller.MealBuilderController">
 
     <!-- Sidebar -->
     <left>
@@ -21,88 +16,94 @@
 
     <!-- Center Content -->
     <center>
-        <VBox spacing="20" alignment="TOP_LEFT" styleClass="main-content">
+        <VBox alignment="TOP_LEFT" spacing="20" styleClass="main-content">
             <padding>
-                <Insets top="20" left="20" right="20" bottom="20" />
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
             <!-- Title -->
-            <Label text="Meal Builder" styleClass="page-title" />
+            <Label styleClass="page-title" text="Meal Builder" />
 
-            <HBox spacing="20" alignment="TOP_LEFT">
+            <HBox alignment="TOP_LEFT" spacing="20">
                 <!-- Left Column -->
-                <VBox spacing="20" alignment="TOP_LEFT" HBox.hgrow="ALWAYS">
+                <VBox alignment="TOP_LEFT" spacing="20" HBox.hgrow="ALWAYS">
 
                     <!-- Meal Info Card -->
                     <VBox spacing="10" styleClass="form-card">
-                        <Label text="Meal Info" styleClass="section-title"/>
-                        <GridPane hgap="20" vgap="15">
+                        <Label styleClass="section-title" text="Meal Info" />
+                        <GridPane hgap="20" vgap="10">
                             <columnConstraints>
-                                <ColumnConstraints halignment="LEFT" prefWidth="120"/>
-                                <ColumnConstraints halignment="LEFT" prefWidth="250"/>
+                                <ColumnConstraints halignment="LEFT" prefWidth="120" />
+                                <ColumnConstraints halignment="LEFT" prefWidth="250" />
                             </columnConstraints>
 
-                            <Label styleClass="input-label" text="Meal Type" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                            <ComboBox fx:id="mealTypeCombo" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Breakfast">
+                            <Label styleClass="input-label" text="Meal Type:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                            <ComboBox fx:id="mealTypeCombo" minHeight="-Infinity" promptText="Breakfast" GridPane.columnIndex="1" GridPane.rowIndex="0">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Breakfast"/>
-                                        <String fx:value="Lunch"/>
-                                        <String fx:value="Dinner"/>
-                                        <String fx:value="Snack"/>
+                                        <String fx:value="Breakfast" />
+                                        <String fx:value="Lunch" />
+                                        <String fx:value="Dinner" />
+                                        <String fx:value="Snack" />
                                     </FXCollections>
                                 </items>
                             </ComboBox>
 
-                            <Label styleClass="input-label" text="Meal Name *" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                            <TextField fx:id="mealNameField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                            <Label styleClass="input-label" text="Meal Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                            <TextField fx:id="mealNameField" minHeight="-Infinity" promptText="e.g. Steak and Potatoes" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                            <Label styleClass="input-label" text="Notes (Optional)" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                            <TextArea fx:id="notesField" prefRowCount="2" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                            <Label styleClass="input-label" text="Notes (Optional):" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                            <TextField fx:id="notesField" minHeight="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
+
                         </GridPane>
                     </VBox>
 
                     <!-- Add Foods Card -->
                     <VBox spacing="10" styleClass="form-card">
-                        <Label text="Add Foods" styleClass="section-title"/>
+                        <Label styleClass="section-title" text="Add Foods" />
 
                         <HBox spacing="10">
-                            <TextField fx:id="searchFoodField" promptText="Search/Add Food" HBox.hgrow="ALWAYS"/>
-                            <Button text="Add" onAction="#handleAddFood"/>
+                            <TextField fx:id="searchFoodField" minHeight="-Infinity" promptText="Search/Add Food" HBox.hgrow="ALWAYS" />
+                            <Button onAction="#handleAddFood" styleClass="primary-button" text="Add" />
                         </HBox>
 
-                        <ListView fx:id="foodsListView" prefHeight="200"/>
+                        <ListView fx:id="foodsListView" prefHeight="200" />
 
-                        <Button text="Clear Foods" onAction="#handleClearFoods" styleClass="secondary-button"/>
+                        <Button onAction="#handleClearFoods" styleClass="secondary-button" text="Clear Foods" />
                     </VBox>
                 </VBox>
 
                 <!-- Right Column -->
-                <VBox spacing="20" alignment="TOP_CENTER" prefWidth="300" HBox.hgrow="NEVER">
+                <VBox alignment="TOP_CENTER" prefWidth="300" spacing="20" HBox.hgrow="NEVER">
 
                     <!-- Macro Totals Card -->
                     <VBox spacing="10" styleClass="side-card">
-                        <Label text="Macro Totals" styleClass="section-title"/>
-                        <Label fx:id="caloriesLabel" text="Calories: 0"/>
-                        <Label fx:id="proteinLabel" text="Protein (g): 0"/>
-                        <Label fx:id="carbsLabel" text="Carbs (g): 0"/>
-                        <Label fx:id="fatLabel" text="Fats (g): 0"/>
+                        <Label styleClass="section-title" text="Macro Totals" />
+                        <Label fx:id="caloriesLabel" text="Calories: 0" />
+                        <Label fx:id="proteinLabel" text="Protein (g): 0" />
+                        <Label fx:id="carbsLabel" text="Carbs (g): 0" />
+                        <Label fx:id="fatLabel" text="Fats (g): 0" />
                     </VBox>
 
                     <!-- Additional Info Card -->
                     <VBox spacing="10" styleClass="side-card">
-                        <Label text="Additional Info" styleClass="section-title"/>
-                        <CheckBox fx:id="favoriteCheckBox" text="Add to Favorites"/>
+                        <Label styleClass="section-title" text="Additional Info" />
+                        <CheckBox fx:id="favoriteCheckBox" text="Add to Favorites" />
                         <VBox alignment="CENTER" minWidth="-Infinity" prefHeight="137.0" prefWidth="180.0" spacing="10">
                             <ImageView fx:id="foodImage" fitHeight="100" fitWidth="100" preserveRatio="true" style="-fx-background-color: rgba(255,255,255,0.1); -fx-border-color: #666; -fx-border-radius: 10; -fx-background-radius: 10;" />
-                            <Button fx:id="uploadButton" onAction="#handleUploadImage" styleClass="upload-button" text="Upload Image" />
+                            <Button fx:id="uploadButton" onAction="#handleUpload" styleClass="upload-button" text="Upload Image" />
                         </VBox>
                     </VBox>
 
                     <!-- Save/Cancel -->
-                    <HBox spacing="10" alignment="CENTER">
-                        <Button fx:id="saveButton" text="Save" styleClass="primary-button" onAction="#handleSave"/>
-                        <Button fx:id="cancelButton" text="Cancel" styleClass="secondary-button" onAction="#handleCancel"/>
+                    <HBox alignment="CENTER" spacing="10">
+                        <Button fx:id="saveButton" onAction="#handleSave" styleClass="primary-button" text="Save" />
+                        <Button fx:id="cancelButton" onAction="#handleCancel" styleClass="secondary-button" text="Cancel" />
                     </HBox>
                 </VBox>
             </HBox>

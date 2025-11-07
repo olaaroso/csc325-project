@@ -5,6 +5,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -15,20 +17,27 @@ public class MealBuilderController {
     @FXML private SidebarController sidebarIncludeController;
     @FXML private ComboBox<String> mealTypeCombo;
     @FXML private TextField mealNameField;
-    @FXML private TextArea notesField;
+    @FXML private TextField notesField;
     @FXML private TextField searchFoodField;
     @FXML private ListView<Food> foodsListView;
     @FXML private Label caloriesLabel, proteinLabel, carbsLabel, fatLabel;
     @FXML private CheckBox favoriteCheckBox;
+    @FXML private ImageView foodImage;
 
     private ObservableList<Food> foods = FXCollections.observableArrayList();
-    private File attachedImage;
+    private File selectedImageFile;
 
     // Initialize function
     @FXML
     public void initialize() {
         // Highlight current page in the sidebar
         sidebarIncludeController.setActivePage("mealBuilder");
+
+        // Default placeholder image
+        foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm()));
+
+        // Pre-fill meal type combo box so validation doesn't initially fail
+        mealTypeCombo.setValue("Breakfast"); // Default value
 
         // Initialize foodListView with list of foods
         foodsListView.setItems(foods);
@@ -45,7 +54,9 @@ public class MealBuilderController {
         });
     }
 
-    // Handlers
+    // Handler functions
+
+    // handleAddFood - adds a food item based on search input
     @FXML
     private void handleAddFood() {
         String name = searchFoodField.getText().trim();
@@ -58,25 +69,60 @@ public class MealBuilderController {
         updateTotals();
     }
 
+    // handleClearFoods - clears all food items from the meal
     @FXML
     private void handleClearFoods() {
         foods.clear();
         updateTotals();
     }
 
+    // Handle Upload - handles uploaded pictures
     @FXML
-    private void handleUploadImage() {
+    private void handleUpload() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
         );
-        attachedImage = fileChooser.showOpenDialog(null);
+
+        selectedImageFile = fileChooser.showOpenDialog(null);
+        if (selectedImageFile != null) {
+            // foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm()));
+            foodImage.setImage(new Image(selectedImageFile.toURI().toString()));
+        }
     }
 
+    // Handle Save - handler for when the user saves the entered form data
     @FXML
     private void handleSave() {
-        if (mealTypeCombo.getValue() == null || mealNameField.getText().isEmpty()) {
-            showAlert("Please fill out Meal Type and Meal Name before saving.");
+        // Trimmed field values
+        String mealName = mealNameField.getText().trim();
+        String mealType = mealTypeCombo.getValue();
+        String notes = notesField.getText().trim();
+
+        // Reset previous
+        resetFieldStyles();
+
+        // Validation flag
+        boolean isValid = true;
+
+        // Check for empty required fields
+        if (mealName.isEmpty()) {
+            markInvalid(mealNameField);
+            isValid = false;
+        }
+        if (mealType == null || mealType.isEmpty()) {
+            mealTypeCombo.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            isValid = false;
+        }
+        // At least one food item must be added
+        if (foods.isEmpty()) {
+            showAlert("Please add at least one food item to the meal.");
+            isValid = false;
+        }
+
+        // Stop processing if validation failed
+        if (!isValid) {
+            showAlert("Please fill out all the required fields.");
             return;
         }
 
@@ -88,21 +134,26 @@ public class MealBuilderController {
                 favoriteCheckBox.isSelected() ? "Yes" : "No"
         );
 
-        // Clear form
+        // Clear form after saving
         handleCancel();
     }
 
+    // Handle Cancel - clears the form inputs
     @FXML
     private void handleCancel() {
-        mealTypeCombo.setValue(null);
+        mealTypeCombo.setValue("Breakfast"); // Reset to default
         mealNameField.clear();
         notesField.clear();
         favoriteCheckBox.setSelected(false);
         foods.clear();
-        attachedImage = null;
-        updateTotals();
+        selectedImageFile = null;
+        updateTotals(); // Reset totals
+        foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm())); // Reset image
     }
 
+    // Utility functions
+
+    // updateTotals - updates the nutritional totals based on current foods
     private void updateTotals() {
         double totalCalories = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
         for (Food f : foods) {
@@ -117,10 +168,27 @@ public class MealBuilderController {
         fatLabel.setText("Fats (g): " + (int) totalFat);
     }
 
+    // showAlert - shows an alert dialog with the given message
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    // markInvalid - marks a TextField as invalid with red border
+    private void markInvalid(TextField field) {
+        field.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+    }
+
+    // resetFieldStyles - clears validation styling before new checks
+    private void resetFieldStyles() {
+        TextField[] fields = {
+                mealNameField,
+        };
+        for (TextField field : fields) {
+            field.setStyle("");
+        }
+        mealTypeCombo.setStyle(""); // Reset combo box style
     }
 }
