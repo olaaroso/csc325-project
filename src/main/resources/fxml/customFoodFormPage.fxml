@@ -36,7 +36,6 @@
 
                     <GridPane alignment="CENTER_LEFT" hgap="20" vgap="15">
                         <columnConstraints>
-                            <!-- Split labels and inputs 25/75 -->
                             <ColumnConstraints halignment="LEFT" percentWidth="20" />
                             <ColumnConstraints halignment="LEFT" percentWidth="80" />
                         </columnConstraints>
