@@ -1,7 +1,8 @@
 package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.Food;
-import com.group4.macromanager.model.FoodService;
+import com.group4.macromanager.service.IFoodService;
+import com.group4.macromanager.service.InMemoryFoodService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -23,7 +24,7 @@ public class FoodLibraryController {
     @FXML private SidebarController sidebarIncludeController;
 
     // Initialize foodService instance for making calls to the backend
-    private final FoodService foodService = new FoodService();
+    private IFoodService foodService = new InMemoryFoodService();
 
     // Initialize function
     @FXML
@@ -125,8 +126,8 @@ public class FoodLibraryController {
 
     // Loader functions - fetches food data for each category
     private void loadCustomFoods() {
-        List<Food> customFoods = foodService.getCustomFoods();
-        renderFoods(customFoods, customFoodsContainer);
+        List<Food> customFoodEntries = foodService.getCustomFoods("123"); // Temporary userId
+        renderFoods(customFoodEntries, customFoodsContainer);
     }
 
     private void loadRecommendations() {
@@ -135,14 +136,14 @@ public class FoodLibraryController {
     }
 
     private void loadFavorites() {
-        List<Food> favs = foodService.getFavorites();
+        List<Food> favs = foodService.getFavorites("123"); // Temporary userId
         renderFoods(favs, favoritesContainer);
     }
 
     // Render functions - renders each food item as a foodCard and dynamically adds them to their respective container
-    private void renderFoods(List<Food> foods, FlowPane container) {
+    private void renderFoods(List<Food> foodEntries, FlowPane container) {
         container.getChildren().clear();
-        for (Food food : foods) {
+        for (Food food : foodEntries) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/foodCard.fxml"));
                 HBox card = loader.load();

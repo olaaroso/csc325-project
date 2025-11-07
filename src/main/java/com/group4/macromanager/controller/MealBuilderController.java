@@ -1,6 +1,8 @@
 package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.Food;
+import com.group4.macromanager.service.IFoodService;
+import com.group4.macromanager.service.InMemoryFoodService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,8 +26,11 @@ public class MealBuilderController {
     @FXML private CheckBox favoriteCheckBox;
     @FXML private ImageView foodImage;
 
-    private ObservableList<Food> foods = FXCollections.observableArrayList();
+    private ObservableList<Food> foodEntries = FXCollections.observableArrayList();
     private File selectedImageFile;
+
+    // Initialize FoodService instance (used for adding foods to the meal)
+    private IFoodService foodService = new InMemoryFoodService();
 
     // Initialize function
     @FXML
@@ -39,8 +44,8 @@ public class MealBuilderController {
         // Pre-fill meal type combo box so validation doesn't initially fail
         mealTypeCombo.setValue("Breakfast"); // Default value
 
-        // Initialize foodListView with list of foods
-        foodsListView.setItems(foods);
+        // Initialize foodListView with list of foodEntries
+        foodsListView.setItems(foodEntries);
         foodsListView.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(Food food, boolean empty) {
@@ -62,17 +67,19 @@ public class MealBuilderController {
         String name = searchFoodField.getText().trim();
         if (name.isEmpty()) return;
 
-        // Simple placeholder food item
-        Food item = new Food("11", name, 5, "grams", 230, 21, 25, 4, "/images/hero-img.png", "Snack", false);
-        foods.add(item);
+        // Simple search example; real search would query a database or service
+        var results = foodService.searchFoods(name, mealTypeCombo.getValue());
+        if (!results.isEmpty()) {
+            foodEntries.add(results.get(0));
+            updateTotals();
+        }
         searchFoodField.clear();
-        updateTotals();
     }
 
     // handleClearFoods - clears all food items from the meal
     @FXML
     private void handleClearFoods() {
-        foods.clear();
+        foodEntries.clear();
         updateTotals();
     }
 
@@ -115,7 +122,7 @@ public class MealBuilderController {
             isValid = false;
         }
         // At least one food item must be added
-        if (foods.isEmpty()) {
+        if (foodEntries.isEmpty()) {
             showAlert("Please add at least one food item to the meal.");
             isValid = false;
         }
@@ -127,10 +134,10 @@ public class MealBuilderController {
         }
 
         System.out.printf(
-                "Saved meal: %s (%s) with %d foods. Favorite: %s%n",
+                "Saved meal: %s (%s) with %d foodEntries. Favorite: %s%n",
                 mealNameField.getText(),
                 mealTypeCombo.getValue(),
-                foods.size(),
+                foodEntries.size(),
                 favoriteCheckBox.isSelected() ? "Yes" : "No"
         );
 
@@ -145,7 +152,7 @@ public class MealBuilderController {
         mealNameField.clear();
         notesField.clear();
         favoriteCheckBox.setSelected(false);
-        foods.clear();
+        foodEntries.clear();
         selectedImageFile = null;
         updateTotals(); // Reset totals
         foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm())); // Reset image
@@ -153,10 +160,10 @@ public class MealBuilderController {
 
     // Utility functions
 
-    // updateTotals - updates the nutritional totals based on current foods
+    // updateTotals - updates the nutritional totals based on current foodEntries
     private void updateTotals() {
         double totalCalories = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
-        for (Food f : foods) {
+        for (Food f : foodEntries) {
             totalCalories += f.getCalories();
             totalProtein += f.getProtein();
             totalCarbs += f.getCarbs();
