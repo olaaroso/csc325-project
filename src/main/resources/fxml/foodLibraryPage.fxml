@@ -34,7 +34,7 @@
             <!-- Search & Filter Bar -->
             <HBox fx:id="searchBar" alignment="CENTER" spacing="0" styleClass="search-bar" HBox.hgrow="ALWAYS">
                 <ComboBox fx:id="mealTypeComboBox" prefWidth="150" promptText="Meal Type" styleClass="meal-type-combo-box" />
-                <TextField fx:id="searchField" promptText="Search for foodEntries..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+                <TextField fx:id="searchField" promptText="Search for foods..." styleClass="search-field" HBox.hgrow="ALWAYS" />
                 <Button onAction="#handleSearch" styleClass="search-button" text="🔍" />
             </HBox>
 
