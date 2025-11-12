@@ -3,7 +3,9 @@ package com.group4.macromanager.controller;
 // This is a base controller class for shared functionality among controllers.
 
 import com.group4.macromanager.service.IFoodService;
+import com.group4.macromanager.service.IMealService;
 import com.group4.macromanager.service.InMemoryFoodService;
+import com.group4.macromanager.service.InMemoryMealService;
 import com.group4.macromanager.util.AlertUtil;
 import com.group4.macromanager.util.ImageUtil;
 import javafx.fxml.FXML;
@@ -19,6 +21,7 @@ public abstract class BaseController {
 
     // Services
     protected IFoodService foodService = new InMemoryFoodService();
+    protected IMealService mealService = new InMemoryMealService();
     protected File selectedImageFile;
 
     // Initialize page with active sidebar highlighting and placeholder image

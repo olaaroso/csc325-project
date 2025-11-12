@@ -1,5 +1,7 @@
 package com.group4.macromanager.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Meal {
@@ -10,6 +12,8 @@ public class Meal {
     private List<Food> foods;
     private boolean isFavorite;
     private String imageUrl;
+    private LocalDateTime createdDate; // Add this field
+    private String userId; // Add this field for tracking
 
     public Meal(String id, String name, String mealType, String notes, List<Food> foods, boolean isFavorite, String imageUrl) {
         this.id = id;
@@ -19,9 +23,31 @@ public class Meal {
         this.foods = foods;
         this.isFavorite = isFavorite;
         this.imageUrl = imageUrl;
+        this.createdDate = LocalDateTime.now(); // Default to now
+    }
+
+    public double getTotalCalories() {
+        return foods != null ? foods.stream().mapToDouble(Food::getCalories).sum() : 0;
+    }
+
+    public double getTotalProtein() {
+        return foods != null ? foods.stream().mapToDouble(Food::getProtein).sum() : 0;
+    }
+
+    public double getTotalCarbs() {
+        return foods != null ? foods.stream().mapToDouble(Food::getCarbs).sum() : 0;
+    }
+
+    public double getTotalFat() {
+        return foods != null ? foods.stream().mapToDouble(Food::getFat).sum() : 0;
+    }
+
+    public LocalDate getDateOnly() {
+        return createdDate != null ? createdDate.toLocalDate() : LocalDate.now();
     }
 
     // Getters and Setters
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -42,4 +68,10 @@ public class Meal {
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public LocalDateTime getCreatedDate() { return createdDate; }
+    public void setCreatedDate(LocalDateTime createdDate) { this.createdDate = createdDate; }
+
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
 }

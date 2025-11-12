@@ -1,6 +1,7 @@
 package com.group4.macromanager.service;
 
 import com.group4.macromanager.model.Food;
+
 import java.util.List;
 
 public interface IFoodService {
