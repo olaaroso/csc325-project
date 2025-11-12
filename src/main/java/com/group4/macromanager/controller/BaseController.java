@@ -2,16 +2,25 @@ package com.group4.macromanager.controller;
 
 // This is a base controller class for shared functionality among controllers.
 
+import com.group4.macromanager.model.Meal;
 import com.group4.macromanager.service.IFoodService;
 import com.group4.macromanager.service.IMealService;
 import com.group4.macromanager.service.InMemoryFoodService;
 import com.group4.macromanager.service.InMemoryMealService;
 import com.group4.macromanager.util.AlertUtil;
 import com.group4.macromanager.util.ImageUtil;
+import com.group4.macromanager.util.TableUtil;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 
 public abstract class BaseController {
 
@@ -31,6 +40,59 @@ public abstract class BaseController {
         }
         if (foodImage != null) {
             ImageUtil.setPlaceholderImage(foodImage);
+        }
+    }
+
+    // Common meal data loading method
+    protected List<Meal> loadMealsForDate(LocalDate date) {
+        try {
+            return mealService.getMealsForDate("123", date);
+        } catch (Exception e) {
+            showAlert("Failed to load meals for " + date + ": " + e.getMessage());
+            return List.of();
+        }
+    }
+
+    // Common method to update summary labels
+    protected void updateSummaryLabels(List<Meal> meals, Label caloriesLabel, Label proteinLabel,
+                                       Label carbsLabel, Label fatLabel) {
+        TableUtil.NutritionalSummary summary = TableUtil.calculateDailySummary(meals);
+
+
+        caloriesLabel.setText(String.format("%.0f", summary.calories));
+        proteinLabel.setText(String.format("%.1f", summary.protein));
+        carbsLabel.setText(String.format("%.1f", summary.carbs));
+        fatLabel.setText(String.format("%.1f", summary.fat));
+
+    }
+
+    // Common meal deletion method
+    protected void deleteMealWithConfirmation(Meal meal, ObservableList<Meal> dataList, Runnable refreshCallback) {
+        if (meal == null) return;
+
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Delete Meal");
+        confirmAlert.setHeaderText("Are you sure you want to delete this meal?");
+        confirmAlert.setContentText("This action cannot be undone.");
+
+        if (confirmAlert.showAndWait().get() == ButtonType.OK) {
+            try {
+                mealService.deleteMeal(meal.getId());
+                dataList.remove(meal);
+                refreshCallback.run();
+                showSuccessAlert("Meal deleted successfully");
+            } catch (Exception e) {
+                showAlert("Failed to delete meal: " + e.getMessage());
+            }
+        }
+    }
+
+    // Common navigation to meal builder
+    protected void navigateToMealBuilder() {
+        try {
+            PageNavigationManager.switchTo("mealBuilderPage.fxml");
+        } catch (IOException e) {
+            showAlert("Failed to open meal builder: " + e.getMessage());
         }
     }
 
