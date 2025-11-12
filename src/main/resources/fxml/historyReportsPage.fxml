@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -9,17 +10,125 @@
         prefHeight="600"
         prefWidth="1000"
         styleClass="root-pane"
-        stylesheets="@../css/foodLibrary.css"
-        xmlns="http://javafx.com/javafx/17.0.12"
+        stylesheets="@../css/dashboard.css"
+        xmlns="http://javafx.com/javafx/17.0.2-ea"
         xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="com.group4.macromanager.controller.HistoryReportsController"
->
+        fx:controller="com.group4.macromanager.controller.HistoryReportsController">
 
-    <!-- Sidebar -->
     <left>
-        <fx:include source="./sidebar.fxml" fx:id="sidebarInclude" />
+        <fx:include source="sidebar.fxml" fx:id="sidebarInclude" />
     </left>
 
-    <!-- Main History & Reports Content -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="dashboard-scroll-pane">
+            <VBox spacing="20" styleClass="dashboard-vbox">
+                <padding>
+                    <Insets bottom="20" left="20" right="20" top="20" />
+                </padding>
 
+                <!-- Header -->
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <Label styleClass="page-title" text="History &amp; Reports">
+                        <font>
+                            <Font name="System Bold" size="24.0" />
+                        </font>
+                    </Label>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button fx:id="exportCsvButton" onAction="#handleExportCsv" styleClass="add-entry-btn" text="Export CSV" />
+                </HBox>
+
+                <!-- Date Selection Card -->
+                <VBox spacing="10" styleClass="card">
+                    <Label styleClass="section-title" text="Select Date" />
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <DatePicker fx:id="datePicker" />
+                        <Button fx:id="todayButton" onAction="#handleTodayButton" styleClass="add-entry-btn" text="Today" />
+                    </HBox>
+                </VBox>
+
+                <!-- Daily Summary Stats Grid -->
+                <GridPane hgap="20.0" vgap="15.0">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="25" />
+                        <ColumnConstraints percentWidth="25" />
+                        <ColumnConstraints percentWidth="25" />
+                        <ColumnConstraints percentWidth="25" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints />
+                    </rowConstraints>
+
+                    <StackPane styleClass="stat-card">
+                        <VBox alignment="CENTER">
+                            <Label styleClass="stat-label" text="Total Calories" />
+                            <Label fx:id="totalCaloriesLabel" styleClass="stat-value" text="0" />
+                            <Label styleClass="stat-sub" text="kcal" />
+                        </VBox>
+                    </StackPane>
+
+                    <StackPane styleClass="stat-card" GridPane.columnIndex="1">
+                        <VBox alignment="CENTER">
+                            <Label styleClass="stat-label" text="Total Protein" />
+                            <Label fx:id="totalProteinLabel" styleClass="stat-value" text="0" />
+                            <Label styleClass="stat-sub" text="grams" />
+                        </VBox>
+                    </StackPane>
+
+                    <StackPane styleClass="stat-card" GridPane.columnIndex="2">
+                        <VBox alignment="CENTER">
+                            <Label styleClass="stat-label" text="Total Carbs" />
+                            <Label fx:id="totalCarbsLabel" styleClass="stat-value" text="0" />
+                            <Label styleClass="stat-sub" text="grams" />
+                        </VBox>
+                    </StackPane>
+
+                    <StackPane styleClass="stat-card" GridPane.columnIndex="3">
+                        <VBox alignment="CENTER">
+                            <Label styleClass="stat-label" text="Total Fat" />
+                            <Label fx:id="totalFatLabel" styleClass="stat-value" text="0" />
+                            <Label styleClass="stat-sub" text="grams" />
+                        </VBox>
+                    </StackPane>
+                </GridPane>
+
+                <!-- Daily Entries Table -->
+                <VBox spacing="10" styleClass="card">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label styleClass="section-title" text="Daily Entries" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="editEntryButton" disable="true" onAction="#handleEditEntry" styleClass="add-entry-btn" text="Edit" />
+                        <Button fx:id="deleteEntryButton" disable="true" onAction="#handleDeleteEntry" styleClass="danger-btn" text="Delete" />
+                    </HBox>
+
+                    <TableView fx:id="dailyEntriesTable" prefHeight="250">
+                        <columns>
+                            <TableColumn fx:id="foodNameColumn" prefWidth="200.0" text="Meal Name" />
+                            <TableColumn fx:id="mealTypeColumn" prefWidth="100.0" text="Type" />
+                            <TableColumn fx:id="servingColumn" prefWidth="80.0" text="Foods" />
+                            <TableColumn fx:id="caloriesColumn" prefWidth="80.0" text="Calories" />
+                            <TableColumn fx:id="proteinColumn" prefWidth="80.0" text="Protein (g)" />
+                            <TableColumn fx:id="carbsColumn" prefWidth="80.0" text="Carbs (g)" />
+                            <TableColumn fx:id="fatColumn" prefWidth="80.0" text="Fat (g)" />
+                        </columns>
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                        </columnResizePolicy>
+                    </TableView>
+                </VBox>
+
+                <!-- Weekly Chart -->
+                <VBox spacing="10" styleClass="card">
+                    <Label styleClass="section-title" text="Weekly Overview" />
+                    <BarChart fx:id="weeklyChart" prefHeight="250">
+                        <xAxis>
+                            <CategoryAxis fx:id="xAxis" label="Day" />
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis fx:id="yAxis" label="Calories" />
+                        </yAxis>
+                    </BarChart>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
 </BorderPane>

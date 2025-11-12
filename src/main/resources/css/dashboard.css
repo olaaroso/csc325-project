@@ -172,3 +172,23 @@
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
+
+/*  Styles for danger btn in history and reports page */
+.danger-btn {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 5 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 4, 0, 0, 2);
+}
+
+.danger-btn:hover {
+    -fx-background-color: #c82333;
+}
+
+.danger-btn:disabled {
+    -fx-background-color: #6c757d;
+    -fx-opacity: 0.6;
+}
