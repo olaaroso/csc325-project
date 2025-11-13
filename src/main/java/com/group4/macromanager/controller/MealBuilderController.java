@@ -1,18 +1,26 @@
 package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.Food;
+import com.group4.macromanager.model.Meal;
 import com.group4.macromanager.service.IFoodService;
 import com.group4.macromanager.service.InMemoryFoodService;
+import com.group4.macromanager.session.MealBuilderSession;
+import com.group4.macromanager.util.ImageUtil;
 import com.group4.macromanager.util.ValidationUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class MealBuilderController extends BaseController {
 
@@ -20,12 +28,10 @@ public class MealBuilderController extends BaseController {
     @FXML private ComboBox<String> mealTypeCombo;
     @FXML private TextField mealNameField;
     @FXML private TextField notesField;
-    @FXML private TextField searchFoodField;
-    @FXML private ListView<Food> foodsListView;
     @FXML private Label caloriesLabel, proteinLabel, carbsLabel, fatLabel;
     @FXML private CheckBox favoriteCheckBox;
-
-    private ObservableList<Food> foodEntries = FXCollections.observableArrayList();
+    @FXML private FlowPane selectedFoodsContainer;
+    @FXML private Button selectFoodsButton;
 
     // Initialize function
     @FXML
@@ -33,54 +39,52 @@ public class MealBuilderController extends BaseController {
         // Highlight current page in the sidebar
         initializePage("mealBuilder"); // from BaseController
 
+        // Setup meal type combo box with options (but don't set default value yet)
+        mealTypeCombo.getItems().addAll("Breakfast", "Lunch", "Dinner", "Snack");
+
+        // Initialize session
+        // BaseController handles this:
+        // session = MealBuilderSession.getInstance();
+
+        // Restore form data from session
+        restoreFromSession();
+
         // Default placeholder image
         // BaseController handles this:
         // foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm()));
 
-        // Setup meal type combo box
-        mealTypeCombo.setValue("Breakfast"); // Default value
+        // If no session data exists, set defaults AFTER restoration
+        if (mealTypeCombo.getValue() == null || mealTypeCombo.getValue().isEmpty()) {
+            mealTypeCombo.setValue("Breakfast");
+        }
 
-        // Setup ListView
-        foodsListView.setItems(foodEntries);
-        foodsListView.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Food food, boolean empty) {
-                super.updateItem(food, empty);
-                if (empty || food == null) {
-                    setText(null);
-                } else {
-                    setText(food.getName() + " — " + food.getServingSize() + " " + food.getServingUnit());
-                }
-            }
+        // Setup auto-save on form changes
+        setupAutoSave();
+
+        // Listen for changes to selected foods
+        session.getSelectedFoods().addListener((javafx.collections.ListChangeListener<Food>) change -> {
+            updateFoodsDisplay();
+            updateTotals();
         });
 
+        updateFoodsDisplay();
         updateTotals();
     }
 
     // Handler functions
 
+    // HandleSelectFoods - handler for when the user wants to select foods
     @FXML
-    private void handleAddFood() {
-        // Search for food and add the first matching result
-        String query = searchFoodField.getText().trim();
-        if (ValidationUtil.isEmpty(query)) return;
+    private void handleSelectFoods() {
+        // Save current form data to session before navigating
+        saveToSession();
 
-        // Search for food
-        var results = foodService.searchFoods(query, mealTypeCombo.getValue());
-        if (!results.isEmpty()) {
-            foodEntries.add(results.get(0));
-            updateTotals();
-        } else {
-            showAlert("No foods found matching: " + query);
+        try {
+            PageNavigationManager.switchTo("foodLibraryPage.fxml");
         }
-        searchFoodField.clear(); // Clear search field after adding
-    }
-
-    // HandleClearFoods - clears all food entries from the meal
-    @FXML
-    private void handleClearFoods() {
-        foodEntries.clear(); // Clear all food entries
-        updateTotals(); // Update totals display
+        catch (IOException e) {
+            showAlert("Failed to navigate to Food Library: " + e.getMessage());
+        }
     }
 
     // HandleSave - handler for when the user saves the entered meal data
@@ -92,24 +96,87 @@ public class MealBuilderController extends BaseController {
             return;
         }
 
-        // Simulate saving meal (in a real app, save to database or service)
-        System.out.printf(
-                "Saved meal: %s (%s) with %d food items. Favorite: %s%n",
+
+        // Get image path safely - handle null case
+        String imagePath = null;
+        if (selectedImageFile != null) {
+            imagePath = selectedImageFile.getAbsolutePath();
+        }
+
+        // Create Meal object
+        Meal meal = new Meal(
+                null, // ID will be generated by service
                 mealNameField.getText(),
                 mealTypeCombo.getValue(),
-                foodEntries.size(),
-                favoriteCheckBox.isSelected() ? "Yes" : "No"
+                notesField.getText(),
+                new ArrayList<>(session.getSelectedFoods()), // Selected foods from session
+                favoriteCheckBox.isSelected(),
+                imagePath // safely handles null
         );
 
-        showSuccessAlert("Meal saved successfully!"); // from BaseController
-        handleCancel(); // Clear form after saving
+        try {
+            mealService.saveMeal(meal);
+            showAlert("Meal saved successfully!");
+            handleCancel(); // Clear form after saving
+        }
+        catch (Exception e) {
+            showAlert("Failed to save meal: " + e.getMessage());
+        }
     }
 
     // HandleCancel - handler for when the user cancels the entered data
     @FXML
     private void handleCancel() {
+        session.clearSession(); // Clear session data
         clearForm(); // Clear form fields
         resetImageToPlaceholder(); // from BaseController
+    }
+
+    // Save current form data to session
+    @Override
+    protected void saveToSession() {
+        session.saveFormData(
+                mealNameField.getText(),
+                mealTypeCombo.getValue(),
+                notesField.getText(),
+                favoriteCheckBox.isSelected(),
+                selectedImageFile
+        );
+    }
+
+    // Restore form data from session
+    @Override
+    protected void restoreFromSession() {
+        mealNameField.setText(session.getMealName());
+        mealTypeCombo.setValue(session.getMealType());
+        notesField.setText(session.getNotes());
+        favoriteCheckBox.setSelected(session.isFavorite());
+
+        if (session.getSelectedImage() != null) {
+            selectedImageFile = session.getSelectedImage();
+            ImageUtil.setImageFromFile(foodImage, selectedImageFile);
+        }
+    }
+
+    // Update the display of selected foods
+    private void updateFoodsDisplay() {
+        selectedFoodsContainer.getChildren().clear();
+
+        for (Food food : session.getSelectedFoods()) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/foodCard.fxml"));
+                HBox card = loader.load();
+
+                FoodCardController controller = loader.getController();
+                controller.setFood(food);
+                controller.setMealBuilderMode(true); // Show remove button
+                controller.updateView();
+
+                selectedFoodsContainer.getChildren().add(card);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // Helper functions
@@ -131,7 +198,7 @@ public class MealBuilderController extends BaseController {
         // No validation for notes (optional)
 
         // Validate that at least one food item is added
-        if (foodEntries.isEmpty()) {
+        if (session.getSelectedFoods().isEmpty()) {
             showAlert("Please add at least one food item to the meal.");
             isValid = false;
         }
@@ -145,7 +212,7 @@ public class MealBuilderController extends BaseController {
         mealNameField.clear(); // Clear meal name
         notesField.clear(); // Clear notes
         favoriteCheckBox.setSelected(false); // Uncheck favorite
-        foodEntries.clear(); // Clear food entries
+        selectedFoodsContainer.getChildren().clear();
         updateTotals(); // Update totals display
     }
 
@@ -158,7 +225,7 @@ public class MealBuilderController extends BaseController {
     // Update total nutritional values
     private void updateTotals() {
         double totalCalories = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
-        for (Food f : foodEntries) {
+        for (Food f : session.getSelectedFoods()) {
             totalCalories += f.getCalories();
             totalProtein += f.getProtein();
             totalCarbs += f.getCarbs();
@@ -168,5 +235,13 @@ public class MealBuilderController extends BaseController {
         proteinLabel.setText("Protein (g): " + (int) totalProtein);
         carbsLabel.setText("Carbs (g): " + (int) totalCarbs);
         fatLabel.setText("Fats (g): " + (int) totalFat);
+    }
+
+    // Add listeners to form fields to auto-save on changes
+    private void setupAutoSave() {
+        mealNameField.textProperty().addListener((obs, oldVal, newVal) -> saveToSession());
+        mealTypeCombo.valueProperty().addListener((obs, oldVal, newVal) -> saveToSession());
+        notesField.textProperty().addListener((obs, oldVal, newVal) -> saveToSession());
+        favoriteCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> saveToSession());
     }
 }

@@ -65,16 +65,19 @@
 
                     <!-- Add Foods Card -->
                     <VBox spacing="10" styleClass="form-card">
-                        <Label styleClass="section-title" text="Add Foods" />
-
-                        <HBox spacing="10">
-                            <TextField fx:id="searchFoodField" minHeight="-Infinity" promptText="Search/Add Food" HBox.hgrow="ALWAYS" />
-                            <Button onAction="#handleAddFood" styleClass="primary-button" text="Add" />
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Selected Foods:" styleClass="section-title" />
+                            <Button fx:id="selectFoodsButton" text="Browse Food Library"
+                                    onAction="#handleSelectFoods" styleClass="primary-button" />
                         </HBox>
 
-                        <ListView fx:id="foodsListView" prefHeight="200" />
-
-                        <Button onAction="#handleClearFoods" styleClass="secondary-button" text="Clear Foods" />
+                        <ScrollPane fitToWidth="true" prefHeight="200">
+                            <FlowPane fx:id="selectedFoodsContainer" hgap="10" vgap="10">
+                                <padding>
+                                    <Insets top="10" bottom="10" left="10" right="10" />
+                                </padding>
+                            </FlowPane>
+                        </ScrollPane>
                     </VBox>
                 </VBox>
 
