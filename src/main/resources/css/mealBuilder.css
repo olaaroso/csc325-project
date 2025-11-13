@@ -73,7 +73,7 @@
     -fx-border-color: -accent-color-2;
 }
 
-.secondary-button {
+.secondary-button, .add-button {
     -fx-background-color: -background-color-2;
     -fx-border-radius: 8;
     -fx-border-width: 1;
@@ -86,7 +86,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
 }
 
-.secondary-button:hover {
+.secondary-button:hover, .add-button:hover {
     -fx-border-color: -accent-color-1;
     -fx-text-fill: -accent-color-1;
 }

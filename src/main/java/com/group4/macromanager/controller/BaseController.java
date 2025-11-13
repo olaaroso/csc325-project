@@ -7,6 +7,7 @@ import com.group4.macromanager.service.IFoodService;
 import com.group4.macromanager.service.IMealService;
 import com.group4.macromanager.service.InMemoryFoodService;
 import com.group4.macromanager.service.InMemoryMealService;
+import com.group4.macromanager.session.MealBuilderSession;
 import com.group4.macromanager.util.AlertUtil;
 import com.group4.macromanager.util.ImageUtil;
 import com.group4.macromanager.util.TableUtil;
@@ -33,6 +34,9 @@ public abstract class BaseController {
     protected IMealService mealService = new InMemoryMealService();
     protected File selectedImageFile;
 
+    // Session Management
+    protected MealBuilderSession session = MealBuilderSession.getInstance();
+
     // Initialize page with active sidebar highlighting and placeholder image
     protected void initializePage(String activePage) {
         if (sidebarIncludeController != null) {
@@ -41,9 +45,26 @@ public abstract class BaseController {
         if (foodImage != null) {
             ImageUtil.setPlaceholderImage(foodImage);
         }
+
+        // Restore meal builder session image if available
+        if ("mealBuilder".equals(activePage) && session.getSelectedImage() != null) {
+            selectedImageFile = session.getSelectedImage();
+            ImageUtil.setImageFromFile(foodImage, selectedImageFile);
+        }
     }
 
-    // Common meal data loading method
+    // Save current form data to session (override in controllers that need it)
+    protected void saveToSession() {
+        // Default implementation - override in MealBuilderController
+    }
+
+    // Restore form data from session (override in controllers that need it)
+    protected void restoreFromSession() {
+        // Default implementation - override in MealBuilderController
+    }
+
+
+        // Common meal data loading method
     protected List<Meal> loadMealsForDate(LocalDate date) {
         try {
             return mealService.getMealsForDate("123", date);
@@ -102,6 +123,9 @@ public abstract class BaseController {
         selectedImageFile = ImageUtil.selectImageFile();
         if (selectedImageFile != null && foodImage != null) {
             ImageUtil.setImageFromFile(foodImage, selectedImageFile);
+
+            // Save to session if in meal builder
+            saveToSession();
         }
     }
 

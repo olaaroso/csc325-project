@@ -71,4 +71,9 @@ public class SidebarController {
         // This one is temporary, logout logic will be implemented later*
         PageNavigationManager.switchTo("loginPage.fxml");
     }
+
+    // Helper method to save page state before navigation
+    private void saveCurrentPageState() {
+        // Implement state saving logic if needed
+    }
 }
