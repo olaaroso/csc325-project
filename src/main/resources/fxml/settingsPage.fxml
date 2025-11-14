@@ -1,14 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane prefHeight="600" prefWidth="1000"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.group4.macromanager.controller.SettingsController"
+            styleClass="border-pane settings-page"
+            stylesheets="@../css/dashboard.css, @../css/settings.css">
 
-</AnchorPane>
+    <!-- Sidebar -->
+    <left>
+        <VBox alignment="TOP_CENTER" prefWidth="180.0" spacing="20.0" styleClass="sidebar">
+            <Label alignment="CENTER" prefHeight="27.0" prefWidth="192.0" styleClass="app-title" text="MacroManager"/>
+            <Pane VBox.vgrow="ALWAYS"/>
+            <VBox prefWidth="180.0" styleClass="nav-links">
+                <Button prefHeight="36.0" prefWidth="181.0" styleClass="nav-button"         text="Dashboard"/>
+                <Button prefHeight="36.0" prefWidth="181.0" styleClass="nav-button"         text="Food Library"/>
+                <Button prefHeight="36.0" prefWidth="185.0" styleClass="nav-button"         text="Custom Foods"/>
+                <Button prefHeight="36.0" prefWidth="180.0" styleClass="nav-button"         text="Meal Builder"/>
+                <Button prefHeight="36.0" prefWidth="186.0" styleClass="nav-button"         text="History &amp; Reports"/>
+                <Button prefHeight="36.0" prefWidth="182.0" styleClass="nav-button-active"  text="Settings"/>
+            </VBox>
+            <Pane VBox.vgrow="ALWAYS"/>
+            <StackPane alignment="CENTER" prefHeight="60">
+                <Button onAction="#handleLogout" styleClass="profile-button" text="FSC Student"/>
+            </StackPane>
+        </VBox>
+    </left>
+
+    <!-- Main content -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="dashboard-scroll-pane">
+            <VBox spacing="20" styleClass="dashboard-vbox">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                <Label styleClass="page-title" text="Settings"/>
+
+                <!-- Two-column layout -->
+                <GridPane hgap="30" vgap="24">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="58"/>
+                        <ColumnConstraints percentWidth="42"/>
+                    </columnConstraints>
+
+                    <!-- LEFT / Daily Macro Targets -->
+                    <VBox spacing="12" styleClass="card">
+                        <Label styleClass="section-title" text="Daily Macro Targets"/>
+                        <VBox spacing="10">
+                            <TextField fx:id="calorieField" promptText="Calorie Target"  styleClass="input"/>
+                            <TextField fx:id="proteinField" promptText="Protein Target"  styleClass="input"/>
+                            <TextField fx:id="carbField"    promptText="Carb Target"     styleClass="input"/>
+                            <TextField fx:id="fatField"     promptText="Fat Target"      styleClass="input"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- LEFT / Measurement Units -->
+                    <VBox spacing="12" styleClass="card" GridPane.rowIndex="1">
+                        <Label styleClass="section-title" text="Measurement Units"/>
+                        <!-- Two BLUE pill buttons (ToggleGroups are created in controller.initialize()) -->
+                        <HBox spacing="10" styleClass="seg-container">
+                            <ToggleButton fx:id="metricToggle"   text="Metric Units"
+                                          styleClass="pill-blue"/>
+                            <ToggleButton fx:id="imperialToggle" text="Imperial Units"
+                                          styleClass="pill-blue"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- RIGHT / Theme Preferences -->
+                    <VBox spacing="12" styleClass="card" GridPane.columnIndex="1">
+                        <Label styleClass="section-title" text="Theme Preferences"/>
+                        <HBox spacing="10" styleClass="seg-container">
+                            <ToggleButton fx:id="lightToggle" text="Light Mode"
+                                          styleClass="pill-blue"/>
+                            <ToggleButton fx:id="darkToggle"  text="Dark Mode"
+                                          styleClass="pill-purple"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Bottom actions -->
+                    <HBox spacing="12" alignment="CENTER_RIGHT" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                        <Button text="Save Changes" onAction="#handleSaveSettings"
+                                styleClass="pill-blue"/>
+                        <Button text="Cancel" onAction="#handleCancel"
+                                styleClass="pill-white"/>
+                    </HBox>
+
+                </GridPane>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

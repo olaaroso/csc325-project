@@ -44,6 +44,9 @@ public class DashboardController {
 
         barChart.getData().add(calorieSeries);
     }
+    public void goSettings(ActionEvent event) throws IOException {
+        PageNavigationManager.switchTo("settingsPage.fxml");
+    }
 
     // Event handler functions
     public void handleLogout(ActionEvent event) throws IOException {

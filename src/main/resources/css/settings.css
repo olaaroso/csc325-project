@@ -1,0 +1,87 @@
+
+
+/* Cards match dashboard look */
+.settings-page .card {
+    -fx-background-color: #ffffff;
+    -fx-padding: 15;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
+    -fx-border-color: -background-color-2;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+}
+
+.section-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #222;
+}
+
+/* Inputs: rounded with blue focus ring */
+.input, .text-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-border-color: -background-color-2;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-padding: 10 14;
+    -fx-font-size: 13px;
+    -fx-text-fill: -font-color-1;
+}
+.text-field:focused {
+    -fx-border-color: -accent-color-1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 7, 0, 0, 2);
+}
+.text-input > .prompt-text { -fx-fill: -font-color-2; }
+
+/* Container just spaces the phttps://chatgpt.com/gptsills; no box around them */
+.seg-container { -fx-padding: 2 0 0 0; }
+
+
+.pill-blue, .button.pill-blue {
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50;
+    -fx-padding: 10 18;              /* pill size */
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 10, 0, 0, 3);
+
+}
+.pill-blue:hover {
+    -fx-background-color: -accent-color-2;
+}
+
+
+.pill-purple, .button.pill-purple {
+    -fx-background-color: -accent-color-5;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50;
+    -fx-padding: 10 18;              /* pill size */
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 10, 0, 0, 3);
+}
+.pill-purple:hover {
+    -fx-background-color: -accent-color-4;
+}
+/* White pill (Cancel) */
+.pill-white, .button.pill-white {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #303030;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50;
+    -fx-padding: 10 38;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 10, 0, 0, 3);
+}
+.pill-white:hover { -fx-background-color: #f7f8fa; }
+
+
+/* Title matches dashboard */
+.page-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -font-color-1;
+}
+.settings-page .button:hover { -fx-border-color: red; -fx-border-width: 2; }
