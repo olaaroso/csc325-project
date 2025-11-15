@@ -189,7 +189,8 @@ public class HistoryReportsController extends BaseController {
     // Edit selected meal entry
     @FXML
     private void handleEditEntry() {
-        navigateToMealBuilder();
+        Meal selectedMeal = dailyEntriesTable.getSelectionModel().getSelectedItem();
+        navigateToMealBuilderForEdit(selectedMeal);
     }
 
     // Delete selected meal entry with confirmation

@@ -99,7 +99,8 @@ public class DashboardController extends BaseController {
     // Navigation to Meal Builder page to edit selected meal
     @FXML
     private void handleEditEntry() {
-        navigateToMealBuilder();
+        Meal selectedMeal = dailyEntriesTable.getSelectionModel().getSelectedItem();
+        navigateToMealBuilderForEdit(selectedMeal);
     }
 
     // Delete selected meal entry with confirmation
