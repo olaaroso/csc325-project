@@ -11,4 +11,5 @@ public interface IMealService {
     List<Meal> getAllMealsForUser(String userId);
     void deleteMeal(String mealId);
     Meal saveMeal(Meal meal);
+    Meal getMealById(String mealId); // For future api use
 }

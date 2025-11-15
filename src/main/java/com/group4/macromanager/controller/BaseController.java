@@ -108,9 +108,27 @@ public abstract class BaseController {
         }
     }
 
-    // Common navigation to meal builder
+    // Common navigation to meal builder for editing existing meal
+    protected void navigateToMealBuilderForEdit(Meal meal) {
+        if (meal == null) {
+            showAlert("No meal selected for editing.");
+            return;
+        }
+
+        try {
+            // Load meal into session for editing
+            session.loadMealForEditing(meal);
+            PageNavigationManager.switchTo("mealBuilderPage.fxml");
+        } catch (IOException e) {
+            showAlert("Failed to open meal builder: " + e.getMessage());
+        }
+    }
+
+    // Common navigation to meal builder for new meal
     protected void navigateToMealBuilder() {
         try {
+            // Start new meal in session
+            session.startNewMeal();
             PageNavigationManager.switchTo("mealBuilderPage.fxml");
         } catch (IOException e) {
             showAlert("Failed to open meal builder: " + e.getMessage());

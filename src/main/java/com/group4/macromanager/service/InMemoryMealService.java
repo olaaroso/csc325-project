@@ -59,10 +59,23 @@ public class InMemoryMealService implements IMealService{
     @Override
     public Meal saveMeal(Meal meal) {
         if (meal.getId() == null) {
+            // New meal
             meal.setId(generateId());
+            meals.add(meal);
+        } else {
+            // Update existing meal
+            meals.removeIf(m -> meal.getId().equals(m.getId()));
+            meals.add(meal);
         }
-        meals.add(meal);
         return meal;
+    }
+
+    @Override
+    public Meal getMealById(String mealId) {
+        return meals.stream()
+                .filter(meal -> mealId.equals(meal.getId()))
+                .findFirst()
+                .orElse(null);
     }
 
     // Simple ID generator for temporary use

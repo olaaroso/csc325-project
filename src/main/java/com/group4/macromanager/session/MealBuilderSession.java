@@ -1,6 +1,7 @@
 package com.group4.macromanager.session;
 
 import com.group4.macromanager.model.Food;
+import com.group4.macromanager.model.Meal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -18,6 +19,10 @@ public class MealBuilderSession {
     private File selectedImage = null;
     private ObservableList<Food> selectedFoods = FXCollections.observableArrayList();
 
+    // Edit mode tracking
+    private boolean isEditMode = false;
+    private String editingMealId = null;
+
     private MealBuilderSession() {
         // Private constructor to prevent instantiation
     }
@@ -28,6 +33,41 @@ public class MealBuilderSession {
             instance = new MealBuilderSession();
         }
         return instance;
+    }
+
+    // Load existing meal for editing
+    public void loadMealForEditing(Meal meal) {
+        if (meal == null) return;
+
+        // Update edit mode status
+        this.isEditMode = true;
+        this.editingMealId = meal.getId();
+
+        // Load meal data into session
+        this.mealName = meal.getName() != null ? meal.getName() : "";
+        this.mealType = meal.getMealType() != null ? meal.getMealType() : "Breakfast";
+        this.notes = meal.getNotes() != null ? meal.getNotes() : "";
+        this.isFavorite = meal.isFavorite();
+
+        // Handle image loading
+        if (meal.getImageUrl() != null && !meal.getImageUrl().isEmpty()) {
+            this.selectedImage = new File(meal.getImageUrl());
+        } else {
+            this.selectedImage = null;
+        }
+
+        // Load foods
+        this.selectedFoods.clear();
+        if (meal.getFoods() != null) {
+            this.selectedFoods.addAll(meal.getFoods());
+        }
+    }
+
+    // Start creating new meal
+    public void startNewMeal() {
+        this.isEditMode = false;
+        this.editingMealId = null;
+        clearSession();
     }
 
     // Save current form state
@@ -69,4 +109,6 @@ public class MealBuilderSession {
     public boolean isFavorite() { return isFavorite; }
     public File getSelectedImage() { return selectedImage; }
     public ObservableList<Food> getSelectedFoods() { return selectedFoods; }
+    public boolean isEditMode() { return isEditMode; }
+    public String getEditingMealId() { return editingMealId; }
 }
