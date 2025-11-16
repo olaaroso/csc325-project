@@ -61,9 +61,6 @@ public class DashboardController extends BaseController {
                 todaysMeals, editEntryButton, deleteEntryButton
         );
     }
-    public void goSettings(ActionEvent event) throws IOException {
-        PageNavigationManager.switchTo("settingsPage.fxml");
-    }
 
     // Load today's meal data and update UI
     private void loadTodaysData() {

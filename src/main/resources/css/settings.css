@@ -1,87 +1,130 @@
-
-
-/* Cards match dashboard look */
-.settings-page .card {
-    -fx-background-color: #ffffff;
-    -fx-padding: 15;
-    -fx-background-radius: 12;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
-    -fx-border-color: -background-color-2;
-    -fx-border-width: 1;
-    -fx-border-radius: 12;
+/* Main layout - match your other pages */
+.settings-page .border-pane {
+    -fx-background-color: -background-color-2;
 }
 
-.section-title {
-    -fx-font-size: 15px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #222;
+.settings-page .dashboard-scroll-pane {
+    -fx-background-color: -background-color-2;
 }
 
-/* Inputs: rounded with blue focus ring */
-.input, .text-field {
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 10;
-    -fx-border-color: -background-color-2;
-    -fx-border-width: 1;
-    -fx-border-radius: 10;
-    -fx-padding: 10 14;
-    -fx-font-size: 13px;
-    -fx-text-fill: -font-color-1;
-}
-.text-field:focused {
-    -fx-border-color: -accent-color-1;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 7, 0, 0, 2);
-}
-.text-input > .prompt-text { -fx-fill: -font-color-2; }
-
-/* Container just spaces the phttps://chatgpt.com/gptsills; no box around them */
-.seg-container { -fx-padding: 2 0 0 0; }
-
-
-.pill-blue, .button.pill-blue {
-    -fx-background-color: -accent-color-1;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 50;
-    -fx-padding: 10 18;              /* pill size */
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 10, 0, 0, 3);
-
-}
-.pill-blue:hover {
-    -fx-background-color: -accent-color-2;
+.settings-page .dashboard-vbox {
+    -fx-background-color: -background-color-2;
 }
 
-
-.pill-purple, .button.pill-purple {
-    -fx-background-color: -accent-color-5;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 50;
-    -fx-padding: 10 18;              /* pill size */
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 10, 0, 0, 3);
-}
-.pill-purple:hover {
-    -fx-background-color: -accent-color-4;
-}
-/* White pill (Cancel) */
-.pill-white, .button.pill-white {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #303030;
-    -fx-font-weight: bold;
-    -fx-background-radius: 50;
-    -fx-padding: 10 38;
-
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 10, 0, 0, 3);
-}
-.pill-white:hover { -fx-background-color: #f7f8fa; }
-
-
-/* Title matches dashboard */
+/* Page title - consistent with other pages */
 .page-title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: -font-color-1;
 }
-.settings-page .button:hover { -fx-border-color: red; -fx-border-width: 2; }
+
+/* Cards - match dashboard card styling */
+.settings-page .card {
+    -fx-background-color: -background-color-1;
+    -fx-padding: 15;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+/* Section titles - consistent with other pages */
+.section-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -font-color-1;
+}
+
+/* Input fields - follow your form styling pattern */
+.settings-page .input {
+    -fx-pref-height: 38px;
+    -fx-font-size: 14px;
+    -fx-background-color: -background-color-1;
+    -fx-background-radius: 6;
+    -fx-border-color: -font-color-1;
+    -fx-border-radius: 6;
+    -fx-padding: 0 10;
+    -fx-prompt-text-fill: -font-color-2;
+    -fx-text-fill: -font-color-1;
+}
+
+.settings-page .input:focused {
+    -fx-border-color: -accent-color-1;
+    -fx-background-color: -background-color-1;
+}
+
+/* Toggle buttons for units and theme */
+.pill-button {
+    -fx-background-color: -background-color-2;
+    -fx-text-fill: -font-color-1;
+    -fx-font-weight: 600;
+    -fx-background-radius: 20;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+    -fx-border-radius: 20;
+    -fx-border-width: 2;
+    -fx-border-color: transparent;
+}
+
+.pill-button:hover {
+    -fx-border-color: -accent-color-1;
+}
+
+.pill-button:selected {
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+    -fx-border-color: -accent-color-1;
+}
+
+/* Dark mode toggle - purple variant */
+.pill-button-purple {
+    -fx-background-color: -background-color-2;
+    -fx-text-fill: -font-color-1;
+    -fx-font-weight: 600;
+    -fx-background-radius: 20;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+    -fx-border-radius: 20;
+    -fx-border-width: 2;
+    -fx-border-color: transparent;
+}
+
+.pill-button-purple:hover {
+    -fx-border-color: -accent-color-4;
+}
+
+.pill-button-purple:selected {
+    -fx-background-color: -accent-color-4;
+    -fx-text-fill: white;
+    -fx-border-color: -accent-color-4;
+}
+
+/* Action buttons - follow your primary/secondary pattern */
+.settings-save-button {
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-padding: 8 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+.settings-save-button:hover {
+    -fx-background-color: -accent-color-2;
+}
+
+.settings-cancel-button {
+    -fx-background-color: -background-color-2;
+    -fx-text-fill: -font-color-1;
+    -fx-background-radius: 8;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-padding: 8 20;
+    -fx-border-color: -font-color-2;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+}
+
+.settings-cancel-button:hover {
+    -fx-border-color: -accent-color-1;
+    -fx-text-fill: -accent-color-1;
+}+

@@ -42,6 +42,7 @@ public class SettingsController {
     @FXML private void handleSaveSettings() {}
     @FXML private void handleCancel() {}
 
+    /*
     @FXML private void handleToggleDarkMode() {
         if (darkModeCheck != null && darkModeCheck.isSelected()) {
             if (!s.getRoot().getStyleClass().contains("dark")) s.getRoot().getStyleClass().add("dark");
@@ -49,4 +50,6 @@ public class SettingsController {
             s.getRoot().getStyleClass().remove("dark");
         }
     }
+    */
+
 }

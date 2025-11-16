@@ -1,77 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="600" prefWidth="1000"
-            xmlns="http://javafx.com/javafx/21"
+<BorderPane prefHeight="600" prefWidth="1000" styleClass="border-pane,settings-page"
+            stylesheets="@../css/main.css, @../css/settings.css"
+            xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.group4.macromanager.controller.SettingsController"
-            styleClass="border-pane settings-page"
-            stylesheets="@../css/dashboard.css, @../css/settings.css">
+            fx:controller="com.group4.macromanager.controller.SettingsController">
 
     <!-- Sidebar -->
     <left>
-        <fx:include source="./sidebar.fxml" fx:id="sidebarInclude" />
+        <fx:include fx:id="sidebarInclude" source="./sidebar.fxml" />
     </left>
 
     <!-- Main Settings Content -->
     <center>
-        <ScrollPane fitToWidth="true" styleClass="dashboard-scroll-pane">
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="dashboard-scroll-pane">
             <VBox spacing="20" styleClass="dashboard-vbox">
-                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
 
-                <Label styleClass="page-title" text="Settings"/>
+                <Label styleClass="page-title" text="Settings" />
 
                 <!-- Two-column layout -->
-                <GridPane hgap="30" vgap="24">
+                <GridPane hgap="20" vgap="20">
                     <columnConstraints>
-                        <ColumnConstraints percentWidth="58"/>
-                        <ColumnConstraints percentWidth="42"/>
+                        <ColumnConstraints percentWidth="58" />
+                        <ColumnConstraints percentWidth="42" />
                     </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                    </rowConstraints>
 
                     <!-- LEFT / Daily Macro Targets -->
                     <VBox spacing="12" styleClass="card">
-                        <Label styleClass="section-title" text="Daily Macro Targets"/>
-                        <VBox spacing="10">
-                            <TextField fx:id="calorieField" promptText="Calorie Target"  styleClass="input"/>
-                            <TextField fx:id="proteinField" promptText="Protein Target"  styleClass="input"/>
-                            <TextField fx:id="carbField"    promptText="Carb Target"     styleClass="input"/>
-                            <TextField fx:id="fatField"     promptText="Fat Target"      styleClass="input"/>
+                        <Label styleClass="section-title" text="Daily Macro Targets" />
+                        <VBox spacing="8">
+                            <TextField fx:id="calorieField" promptText="Daily Calorie Target (e.g., 2000)" styleClass="input" />
+                            <TextField fx:id="proteinField" promptText="Daily Protein Target (g)" styleClass="input" />
+                            <TextField fx:id="carbField" promptText="Daily Carb Target (g)" styleClass="input" />
+                            <TextField fx:id="fatField" promptText="Daily Fat Target (g)" styleClass="input" />
                         </VBox>
                     </VBox>
 
                     <!-- LEFT / Measurement Units -->
                     <VBox spacing="12" styleClass="card" GridPane.rowIndex="1">
-                        <Label styleClass="section-title" text="Measurement Units"/>
-                        <!-- Two BLUE pill buttons (ToggleGroups are created in controller.initialize()) -->
-                        <HBox spacing="10" styleClass="seg-container">
-                            <ToggleButton fx:id="metricToggle"   text="Metric Units"
-                                          styleClass="pill-blue"/>
-                            <ToggleButton fx:id="imperialToggle" text="Imperial Units"
-                                          styleClass="pill-blue"/>
+                        <Label styleClass="section-title" text="Measurement Units" />
+                        <HBox spacing="8">
+                            <ToggleButton fx:id="metricToggle" styleClass="pill-button" text="Metric" />
+                            <ToggleButton fx:id="imperialToggle" styleClass="pill-button" text="Imperial" />
                         </HBox>
                     </VBox>
 
                     <!-- RIGHT / Theme Preferences -->
                     <VBox spacing="12" styleClass="card" GridPane.columnIndex="1">
-                        <Label styleClass="section-title" text="Theme Preferences"/>
-                        <HBox spacing="10" styleClass="seg-container">
-                            <ToggleButton fx:id="lightToggle" text="Light Mode"
-                                          styleClass="pill-blue"/>
-                            <ToggleButton fx:id="darkToggle"  text="Dark Mode"
-                                          styleClass="pill-purple"/>
+                        <Label styleClass="section-title" text="Theme Preferences" />
+                        <HBox spacing="8">
+                            <ToggleButton fx:id="lightToggle" styleClass="pill-button" text="Light Mode" />
+                            <ToggleButton fx:id="darkToggle" styleClass="pill-button-purple" text="Dark Mode" />
                         </HBox>
                     </VBox>
 
                     <!-- Bottom actions -->
-                    <HBox spacing="12" alignment="CENTER_RIGHT" GridPane.columnSpan="2" GridPane.rowIndex="2">
-                        <Button text="Save Changes" onAction="#handleSaveSettings"
-                                styleClass="pill-blue"/>
-                        <Button text="Cancel" onAction="#handleCancel"
-                                styleClass="pill-white"/>
+                    <HBox alignment="CENTER_RIGHT" spacing="12" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                        <Button onAction="#handleSaveSettings" styleClass="settings-save-button" text="Save Changes" />
+                        <Button onAction="#handleCancel" styleClass="settings-cancel-button" text="Cancel" />
                     </HBox>
 
                 </GridPane>
