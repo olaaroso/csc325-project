@@ -35,7 +35,9 @@ public abstract class BaseController {
     protected File selectedImageFile;
 
     // Session Management
-    protected MealBuilderSession session = MealBuilderSession.getInstance();
+    protected MealBuilderSession mealSession = MealBuilderSession.getInstance();
+
+    // -------------------- Initialization --------------------
 
     // Initialize page with active sidebar highlighting and placeholder image
     protected void initializePage(String activePage) {
@@ -47,24 +49,27 @@ public abstract class BaseController {
         }
 
         // Restore meal builder session image if available
-        if ("mealBuilder".equals(activePage) && session.getSelectedImage() != null) {
-            selectedImageFile = session.getSelectedImage();
+        if ("mealBuilder".equals(activePage) && mealSession.getSelectedImage() != null) {
+            selectedImageFile = mealSession.getSelectedImage();
             ImageUtil.setImageFromFile(foodImage, selectedImageFile);
         }
     }
 
+    // -------------------- Common Methods --------------------
+
     // Save current form data to session (override in controllers that need it)
     protected void saveToSession() {
-        // Default implementation - override in MealBuilderController
+        // Default implementation - override in MealBuilderController, CustomFoodController
     }
 
     // Restore form data from session (override in controllers that need it)
     protected void restoreFromSession() {
-        // Default implementation - override in MealBuilderController
+        // Default implementation - override in MealBuilderController, CustomFoodController
     }
 
+    // -------------------- Meal Methods --------------------
 
-        // Common meal data loading method
+    // Common meal data loading method
     protected List<Meal> loadMealsForDate(LocalDate date) {
         try {
             return mealService.getMealsForDate("123", date);
@@ -117,7 +122,7 @@ public abstract class BaseController {
 
         try {
             // Load meal into session for editing
-            session.loadMealForEditing(meal);
+            mealSession.loadMealForEditing(meal);
             PageNavigationManager.switchTo("mealBuilderPage.fxml");
         } catch (IOException e) {
             showAlert("Failed to open meal builder: " + e.getMessage());
@@ -128,12 +133,14 @@ public abstract class BaseController {
     protected void navigateToMealBuilder() {
         try {
             // Start new meal in session
-            session.startNewMeal();
+            mealSession.startNewMeal();
             PageNavigationManager.switchTo("mealBuilderPage.fxml");
         } catch (IOException e) {
             showAlert("Failed to open meal builder: " + e.getMessage());
         }
     }
+
+    // -------------------- Image Handling --------------------
 
     // HandleUpload - handles uploaded pictures
     @FXML
@@ -146,6 +153,8 @@ public abstract class BaseController {
             saveToSession();
         }
     }
+
+    // -------------------- Utility Methods --------------------
 
     // Alert utilities
     protected void showAlert(String message) {
