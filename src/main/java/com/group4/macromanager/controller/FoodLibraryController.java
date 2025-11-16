@@ -119,22 +119,78 @@ public class FoodLibraryController extends BaseController {
 
     // Loader functions - fetches food data for each category
     private void loadCustomFoods() {
-        List<Food> customFoodEntries = foodService.getCustomFoods("123"); // Temporary userId
-        renderFoods(customFoodEntries, customFoodsContainer);
+        List<Food> customFoodEntries = foodService.getCustomFoods("123");
+        renderFoods(customFoodEntries, customFoodsContainer, true); // Enable edit/delete
+    }
+
+    private void loadFavorites() {
+        List<Food> favs = foodService.getFavorites("123");
+        renderFoods(favs, favoritesContainer, true); // Enable edit/delete
     }
 
     private void loadRecommendations() {
         List<Food> recs = foodService.getRecommendations();
-        renderFoods(recs, recommendationsContainer);
+        renderFoods(recs, recommendationsContainer, false); // No edit/delete
     }
 
-    private void loadFavorites() {
-        List<Food> favs = foodService.getFavorites("123"); // Temporary userId
-        renderFoods(favs, favoritesContainer);
+    // Handlers for edit and delete actions
+    private void handleEditFood(Food food) {
+        // Navigate to custom food form with edit mode
+        try {
+            // You'll need to implement edit mode in CustomFoodFormController
+            // For now, just navigate to the form
+            PageNavigationManager.switchTo("customFoodFormPage.fxml");
+        } catch (IOException e) {
+            showAlert("Failed to navigate to edit form: " + e.getMessage());
+        }
+    }
+
+    private void handleDeleteFood(Food food, FlowPane container) {
+        // Show confirmation dialog
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Food");
+        alert.setHeaderText("Delete " + food.getName() + "?");
+        alert.setContentText("This action cannot be undone.");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    foodService.deleteFood(food.getId());
+                    showSuccessAlert("Food deleted successfully!");
+                    // Refresh the current tab
+                    refreshCurrentTab();
+                } catch (Exception e) {
+                    showAlert("Failed to delete food: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    // Refresh the currently selected tab
+    private void refreshCurrentTab() {
+        // Refresh the currently selected tab
+        Tab selectedTab = foodTabPane.getSelectionModel().getSelectedItem();
+        if (selectedTab != null) {
+            switch (selectedTab.getText()) {
+                case "Custom Foods":
+                    loadCustomFoods();
+                    break;
+                case "Favorites":
+                    loadFavorites();
+                    break;
+                case "Recommendations":
+                    loadRecommendations();
+                    break;
+            }
+        }
     }
 
     // Render functions - renders each food item as a foodCard and dynamically adds them to their respective container
     private void renderFoods(List<Food> foodEntries, FlowPane container) {
+        renderFoods(foodEntries, container, false);
+    }
+
+    private void renderFoods(List<Food> foodEntries, FlowPane container, boolean showEditDelete) {
         container.getChildren().clear();
         for (Food food : foodEntries) {
             try {
@@ -143,13 +199,18 @@ public class FoodLibraryController extends BaseController {
 
                 FoodCardController controller = loader.getController();
                 controller.setFood(food);
-                controller.updateView();
 
+                if (showEditDelete) {
+                    controller.setEditDeleteMode(true,
+                            () -> handleEditFood(food),
+                            () -> handleDeleteFood(food, container));
+                }
+
+                controller.updateView();
                 container.getChildren().add(card);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-
 }

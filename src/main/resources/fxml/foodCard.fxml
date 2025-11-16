@@ -18,5 +18,9 @@
         <Label fx:id="foodMacros" styleClass="food-macros" />
     </VBox>
     <Pane HBox.hgrow="ALWAYS" />
-    <Button fx:id="addButton" text="Add" styleClass="add-button" />
+    <HBox fx:id="buttonContainer" spacing="5" alignment="CENTER_RIGHT">
+        <Button fx:id="addButton" text="Add" styleClass="add-button" />
+        <Button fx:id="editButton" text="Edit" styleClass="edit-button" visible="false" />
+        <Button fx:id="deleteButton" text="Delete" styleClass="delete-button" visible="false" />
+    </HBox>
 </HBox>

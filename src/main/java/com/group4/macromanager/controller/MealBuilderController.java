@@ -47,7 +47,7 @@ public class MealBuilderController extends BaseController {
         restoreFromSession();
 
         // If not in edit mode and no session data, set defaults
-        if (!session.isEditMode() && (mealTypeCombo.getValue() == null || mealTypeCombo.getValue().isEmpty())) {
+        if (!mealSession.isEditMode() && (mealTypeCombo.getValue() == null || mealTypeCombo.getValue().isEmpty())) {
             mealTypeCombo.setValue("Breakfast");
         }
 
@@ -59,7 +59,7 @@ public class MealBuilderController extends BaseController {
         setupAutoSave();
 
         // Listen for changes to selected foods
-        session.getSelectedFoods().addListener((javafx.collections.ListChangeListener<Food>) change -> {
+        mealSession.getSelectedFoods().addListener((javafx.collections.ListChangeListener<Food>) change -> {
             updateFoodsDisplay();
             updateTotals();
         });
@@ -104,14 +104,14 @@ public class MealBuilderController extends BaseController {
         }
 
         Meal meal;
-        if (session.isEditMode()) {
+        if (mealSession.isEditMode()) {
             // Update existing meal
             meal = new Meal(
-                    session.getEditingMealId(), // Use existing ID
+                    mealSession.getEditingMealId(), // Use existing ID
                     mealNameField.getText(),
                     mealTypeCombo.getValue(),
                     notesField.getText(),
-                    new ArrayList<>(session.getSelectedFoods()),
+                    new ArrayList<>(mealSession.getSelectedFoods()),
                     favoriteCheckBox.isSelected(),
                     imagePath
             );
@@ -122,7 +122,7 @@ public class MealBuilderController extends BaseController {
                     mealNameField.getText(),
                     mealTypeCombo.getValue(),
                     notesField.getText(),
-                    new ArrayList<>(session.getSelectedFoods()),
+                    new ArrayList<>(mealSession.getSelectedFoods()),
                     favoriteCheckBox.isSelected(),
                     imagePath
             );
@@ -130,7 +130,7 @@ public class MealBuilderController extends BaseController {
 
         try {
             mealService.saveMeal(meal);
-            showSuccessAlert(session.isEditMode() ? "Meal updated successfully!" : "Meal saved successfully!");
+            showSuccessAlert(mealSession.isEditMode() ? "Meal updated successfully!" : "Meal saved successfully!");
             handleCancel(); // Clear form after saving
         }
         catch (Exception e) {
@@ -141,14 +141,14 @@ public class MealBuilderController extends BaseController {
     // HandleCancel - handler for when the user cancels the entered data
     @FXML
     private void handleCancel() {
-        session.clearSession(); // Clear session data
+        mealSession.clearSession(); // Clear session data
         clearForm(); // Clear form fields
         resetImageToPlaceholder(); // from BaseController
     }
 
     // Ui update method for edit mode
     private void updateUiForEditMode() {
-        if (session.isEditMode()) {
+        if (mealSession.isEditMode()) {
             // Update UI elements if needed for edit mode
             // e.g., change button text from "Save" to "Update"
         }
@@ -157,7 +157,7 @@ public class MealBuilderController extends BaseController {
     // Save current form data to session
     @Override
     protected void saveToSession() {
-        session.saveFormData(
+        mealSession.saveFormData(
                 mealNameField.getText(),
                 mealTypeCombo.getValue(),
                 notesField.getText(),
@@ -169,13 +169,13 @@ public class MealBuilderController extends BaseController {
     // Restore form data from session
     @Override
     protected void restoreFromSession() {
-        mealNameField.setText(session.getMealName());
-        mealTypeCombo.setValue(session.getMealType());
-        notesField.setText(session.getNotes());
-        favoriteCheckBox.setSelected(session.isFavorite());
+        mealNameField.setText(mealSession.getMealName());
+        mealTypeCombo.setValue(mealSession.getMealType());
+        notesField.setText(mealSession.getNotes());
+        favoriteCheckBox.setSelected(mealSession.isFavorite());
 
-        if (session.getSelectedImage() != null) {
-            selectedImageFile = session.getSelectedImage();
+        if (mealSession.getSelectedImage() != null) {
+            selectedImageFile = mealSession.getSelectedImage();
             ImageUtil.setImageFromFile(foodImage, selectedImageFile);
         }
     }
@@ -184,7 +184,7 @@ public class MealBuilderController extends BaseController {
     private void updateFoodsDisplay() {
         selectedFoodsContainer.getChildren().clear();
 
-        for (Food food : session.getSelectedFoods()) {
+        for (Food food : mealSession.getSelectedFoods()) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/foodCard.fxml"));
                 HBox card = loader.load();
@@ -220,7 +220,7 @@ public class MealBuilderController extends BaseController {
         // No validation for notes (optional)
 
         // Validate that at least one food item is added
-        if (session.getSelectedFoods().isEmpty()) {
+        if (mealSession.getSelectedFoods().isEmpty()) {
             showAlert("Please add at least one food item to the meal.");
             isValid = false;
         }
@@ -247,7 +247,7 @@ public class MealBuilderController extends BaseController {
     // Update total nutritional values
     private void updateTotals() {
         double totalCalories = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
-        for (Food f : session.getSelectedFoods()) {
+        for (Food f : mealSession.getSelectedFoods()) {
             totalCalories += f.getCalories();
             totalProtein += f.getProtein();
             totalCarbs += f.getCarbs();

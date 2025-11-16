@@ -10,4 +10,6 @@ public interface IFoodService {
     List<Food> getRecommendations();
     List<Food> getFavorites(String userId);
     List<Food> searchFoods(String query, String mealType);
+    void deleteFood(String foodId);
+    Food getFoodById(String foodId);
 }

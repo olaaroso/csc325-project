@@ -7,19 +7,46 @@ import java.util.List;
 
 public class InMemoryFoodService implements IFoodService {
 
+    // Temporary in-memory storage for custom foods
+    private List<Food> customFoods = new ArrayList<>();
+
+    // Initial foods
+    public InMemoryFoodService() {
+        // Add some initial custom foods for testing
+        customFoods.add(new Food("1", "Chicken Breast", 6, "ounces", 280, 33, 0, 6, null, "Lunch", false));
+        customFoods.add(new Food("2", "Brown Rice", 1, "cup", 215, 5, 45, 1.6, null, "Dinner", false));
+    }
+
     @Override
     public Food saveCustomFood(Food food) {
-        food.setId(generateId());
-        // persist later to Firestore; for now return with generated id
+        if (food.getId() == null) {
+            // New food
+            food.setId(generateId());
+            customFoods.add(food);
+        } else {
+            // Update existing
+            customFoods.removeIf(f -> food.getId().equals(f.getId()));
+            customFoods.add(food);
+        }
         return food;
     }
 
     @Override
+    public void deleteFood(String foodId) {
+        customFoods.removeIf(food -> foodId.equals(food.getId()));
+    }
+
+    @Override
+    public Food getFoodById(String foodId) {
+        return customFoods.stream()
+                .filter(food -> foodId.equals(food.getId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
     public List<Food> getCustomFoods(String userId) {
-        List<Food> custom = new ArrayList<>();
-        custom.add(new Food("1", "Grilled Chicken Breast", 4, "ounces", 165, 31, 0, 3.6, null, "Lunch", false));
-        custom.add(new Food("2", "Greek Yogurt", 6, "ounces", 140, 13, 8, 4, "/images/hero-img.png", "Breakfast", false));
-        return custom;
+        return new ArrayList<>(customFoods); // Return actual custom foods
     }
 
     @Override

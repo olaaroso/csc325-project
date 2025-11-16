@@ -20,12 +20,22 @@ public class FoodCardController {
     @FXML private Label foodName;
     @FXML private Label foodMacros;
     @FXML private Button addButton;
+    @FXML private Button editButton;
+    @FXML private Button deleteButton;
+    @FXML private HBox buttonContainer;
 
     // Food data model
     private Food food;
 
     // flag to indicate if in meal builder context
     private boolean isInMealBuilder = false;
+
+    // flag to control visibility of edit/delete buttons
+    private boolean showEditDeleteButtons = false;
+
+    // Callbacks for edit/delete actions
+    private Runnable onEditCallback;
+    private Runnable onDeleteCallback;
 
     // Set food data
     public void setFood(Food food) {
@@ -37,10 +47,16 @@ public class FoodCardController {
         // Update internal flag
         this.isInMealBuilder = isInMealBuilder;
 
-        // Update button text based on mode
-        if (addButton != null) {
-            addButton.setText(isInMealBuilder ? "Remove" : "Add");
-        }
+        // Update button visibility
+        updateButtonVisibility();
+    }
+
+    // Set edit/delete button visibility
+    public void setEditDeleteMode(boolean showEditDelete, Runnable onEdit, Runnable onDelete) {
+        this.showEditDeleteButtons = showEditDelete;
+        this.onEditCallback = onEdit;
+        this.onDeleteCallback = onDelete;
+        updateButtonVisibility();
     }
 
     // Handle add/remove button action
@@ -49,9 +65,77 @@ public class FoodCardController {
         if (addButton != null) {
             addButton.setOnAction(e -> handleAddButton());
         }
+        if (editButton != null) {
+            editButton.setOnAction(e -> handleEditButton());
+        }
+        if (deleteButton != null) {
+            deleteButton.setOnAction(e -> handleDeleteButton());
+        }
+        updateButtonVisibility();
     }
 
-    @FXML
+    // Update button visibility based on mode
+    private void updateButtonVisibility() {
+        if (addButton == null) return;
+
+        if (isInMealBuilder) {
+            // Meal builder mode: replace add with remove
+            addButton.setVisible(true);
+            addButton.setText("Remove");
+            if (editButton != null) editButton.setVisible(false);
+            if (deleteButton != null) deleteButton.setVisible(false);
+        }
+        else if (showEditDeleteButtons) {
+            // Edit/delete mode for custom/favorite foods
+            addButton.setVisible(true);
+            addButton.setText("Add");
+            if (editButton != null) editButton.setVisible(true);
+            if (deleteButton != null) deleteButton.setVisible(true);
+        }
+        else {
+            // Default mode: only show add button
+            addButton.setVisible(true);
+            addButton.setText("Add");
+            if (editButton != null) editButton.setVisible(false);
+            if (deleteButton != null) deleteButton.setVisible(false);
+        }
+    }
+
+    // Button action handlers
+
+    // Handle add/remove button logic
+    private void handleAddButton() {
+        if (isInMealBuilder) {
+            // Remove food from meal builder session
+            MealBuilderSession.getInstance().removeFood(food);
+        }
+        else {
+            // Add to meal builder and navigate back
+            MealBuilderSession.getInstance().addFood(food);
+            try {
+                PageNavigationManager.switchTo("mealBuilderPage.fxml");
+            }
+            catch (IOException e) {
+                AlertUtil.showWarning("Failed to return to meal builder: " + e.getMessage());
+            }
+        }
+    }
+
+    // Handle edit button logic
+    private void handleEditButton() {
+        if (onEditCallback != null) {
+            onEditCallback.run();
+        }
+    }
+
+    // Handle delete button logic
+    private void handleDeleteButton() {
+        if (onDeleteCallback != null) {
+            onDeleteCallback.run();
+        }
+    }
+
+            @FXML
     public void updateView() {
         if (food == null) return;
 
@@ -96,24 +180,6 @@ public class FoodCardController {
 
         // Apply the image
         foodImage.setImage(image);
-    }
-
-    // Handle add/remove button logic
-    private void handleAddButton() {
-        if (isInMealBuilder) {
-            // Remove food from meal builder session
-            MealBuilderSession.getInstance().removeFood(food);
-        }
-        else {
-            // Add to meal builder and navigate back
-            MealBuilderSession.getInstance().addFood(food);
-            try {
-                PageNavigationManager.switchTo("mealBuilderPage.fxml");
-            }
-            catch (IOException e) {
-                AlertUtil.showWarning("Failed to return to meal builder: " + e.getMessage());
-            }
-        }
     }
 
     public HBox getView() {
