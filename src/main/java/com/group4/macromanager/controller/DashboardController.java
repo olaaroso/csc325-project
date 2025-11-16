@@ -1,58 +1,115 @@
 package com.group4.macromanager.controller;
 
-import javafx.event.ActionEvent;
+import com.group4.macromanager.model.Meal;
+import com.group4.macromanager.service.InMemoryMealService;
+import com.group4.macromanager.util.ChartUtil;
+import com.group4.macromanager.util.TableUtil;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 
-import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 
-public class DashboardController {
+public class DashboardController extends BaseController {
 
-    // FXML elements
-    @FXML private ListView<String> recentEntries;
+    // UI Components
+    @FXML private Label totalCaloriesLabel;
+    @FXML private Label totalProteinLabel;
+    @FXML private Label totalCarbsLabel;
+    @FXML private Label totalFatLabel;
     @FXML private PieChart macroPieChart;
     @FXML private BarChart<String, Number> barChart;
+    @FXML private TableView<Meal> dailyEntriesTable;
+    @FXML private TableColumn<Meal, String> foodNameColumn;
+    @FXML private TableColumn<Meal, String> mealTypeColumn;
+    @FXML private TableColumn<Meal, Integer> servingColumn;
+    @FXML private TableColumn<Meal, Double> caloriesColumn;
+    @FXML private TableColumn<Meal, Double> proteinColumn;
+    @FXML private TableColumn<Meal, Double> carbsColumn;
+    @FXML private TableColumn<Meal, Double> fatColumn;
+    @FXML private Button editEntryButton;
+    @FXML private Button deleteEntryButton;
 
+    // Data
+    private ObservableList<Meal> todaysMeals = FXCollections.observableArrayList();
+
+    // Initialization
     @FXML
     public void initialize() {
-        // Placeholder recent entries
-        recentEntries.getItems().addAll("Protein Shake", "Grilled Chicken", "Rice", "Broccoli");
+        // initialize page
+        initializePage("dashboard");
 
-        // Placeholder Pie Chart Data
-        macroPieChart.getData().addAll(
-                new PieChart.Data("Protein", 56),
-                new PieChart.Data("Carbs", 175),
-                new PieChart.Data("Fats", 31)
+        // Load sample data if using in-memory service
+        if (mealService instanceof InMemoryMealService) {
+            ((InMemoryMealService) mealService).addSampleMeals();
+        }
+
+        // Setup table and load data
+        setupTable();
+        loadTodaysData();
+    }
+
+    // Setup table columns and bindings
+    private void setupTable() {
+        TableUtil.setupMealTableColumns(
+                foodNameColumn, mealTypeColumn, servingColumn, caloriesColumn,
+                proteinColumn, carbsColumn, fatColumn, dailyEntriesTable,
+                todaysMeals, editEntryButton, deleteEntryButton
         );
-
-        // Placeholder Bar Chart data
-        XYChart.Series<String, Number> calorieSeries = new XYChart.Series<>();
-        calorieSeries.setName("Calories");
-
-        calorieSeries.getData().add(new XYChart.Data<>("Sun", 2000));
-        calorieSeries.getData().add(new XYChart.Data<>("Mon", 2350));
-        calorieSeries.getData().add(new XYChart.Data<>("Tue", 1775));
-        calorieSeries.getData().add(new XYChart.Data<>("Wed", 1950));
-        calorieSeries.getData().add(new XYChart.Data<>("Thu", 2075));
-        calorieSeries.getData().add(new XYChart.Data<>("Fri", 2320));
-        calorieSeries.getData().add(new XYChart.Data<>("Sat", 1950));
-
-        barChart.getData().add(calorieSeries);
     }
     public void goSettings(ActionEvent event) throws IOException {
         PageNavigationManager.switchTo("settingsPage.fxml");
     }
 
-    // Event handler functions
-    public void handleLogout(ActionEvent event) throws IOException {
-        // This handler will contain logout functionality
+    // Load today's meal data and update UI
+    private void loadTodaysData() {
+        List<Meal> meals = loadMealsForDate(LocalDate.now());
+        todaysMeals.setAll(meals);
+        updateSummaryLabels(meals, totalCaloriesLabel, totalProteinLabel,
+                totalCarbsLabel, totalFatLabel);
+        updateMacroPieChart(meals);
+        updateWeeklyChart();
+    }
 
-        // FOR NOW: redirects straight to the login page
-        PageNavigationManager.switchTo("loginPage.fxml");
+    // Update macro distribution pie chart
+    private void updateMacroPieChart(List<Meal> meals) {
+        TableUtil.NutritionalSummary summary = TableUtil.calculateDailySummary(meals);
+        ChartUtil.setupMacroPieChart(macroPieChart, summary.protein, summary.carbs, summary.fat);
+    }
+
+    // Update weekly calorie bar chart
+    private void updateWeeklyChart() {
+        try {
+            double[] weeklyCalories = new double[7];
+            LocalDate startDate = LocalDate.now().minusDays(6);
+
+            for (int i = 0; i < 7; i++) {
+                LocalDate date = startDate.plusDays(i);
+                List<Meal> dayMeals = loadMealsForDate(date);
+                weeklyCalories[i] = TableUtil.calculateDailySummary(dayMeals).calories;
+            }
+
+            ChartUtil.setupWeeklyCalorieChart(barChart, weeklyCalories);
+        } catch (Exception e) {
+            showAlert("Failed to load weekly chart: " + e.getMessage());
+        }
+    }
+
+    // Navigation to Meal Builder page to edit selected meal
+    @FXML
+    private void handleEditEntry() {
+        Meal selectedMeal = dailyEntriesTable.getSelectionModel().getSelectedItem();
+        navigateToMealBuilderForEdit(selectedMeal);
+    }
+
+    // Delete selected meal entry with confirmation
+    @FXML
+    private void handleDeleteEntry() {
+        Meal selectedMeal = dailyEntriesTable.getSelectionModel().getSelectedItem();
+        deleteMealWithConfirmation(selectedMeal, todaysMeals, this::loadTodaysData);
     }
 }

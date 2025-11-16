@@ -14,6 +14,8 @@ module csc.project.csc325_project {
     requires google.cloud.firestore;
     requires google.cloud.core;
     requires com.google.api.apicommon;
+    requires javafx.graphics;
+    requires javafx.base;
 
     opens com.group4.macromanager to javafx.fxml;
     exports com.group4.macromanager;
