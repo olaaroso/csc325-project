@@ -1,14 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane prefHeight="600" prefWidth="1000" styleClass="border-pane,settings-page"
+            stylesheets="@../css/main.css, @../css/settings.css"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.group4.macromanager.controller.SettingsController">
 
-</AnchorPane>
+    <!-- Sidebar -->
+    <left>
+        <fx:include fx:id="sidebarInclude" source="./sidebar.fxml" />
+    </left>
+
+    <!-- Main Settings Content -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="dashboard-scroll-pane">
+            <VBox spacing="20" styleClass="dashboard-vbox">
+                <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
+
+                <Label styleClass="page-title" text="Settings" />
+
+                <!-- Two-column layout -->
+                <GridPane hgap="20" vgap="20">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="58" />
+                        <ColumnConstraints percentWidth="42" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                    </rowConstraints>
+
+                    <!-- LEFT / Daily Macro Targets -->
+                    <VBox spacing="12" styleClass="card">
+                        <Label styleClass="section-title" text="Daily Macro Targets" />
+                        <VBox spacing="8">
+                            <TextField fx:id="calorieField" promptText="Daily Calorie Target (e.g., 2000)" styleClass="input" />
+                            <TextField fx:id="proteinField" promptText="Daily Protein Target (g)" styleClass="input" />
+                            <TextField fx:id="carbField" promptText="Daily Carb Target (g)" styleClass="input" />
+                            <TextField fx:id="fatField" promptText="Daily Fat Target (g)" styleClass="input" />
+                        </VBox>
+                    </VBox>
+
+                    <!-- LEFT / Measurement Units -->
+                    <VBox spacing="12" styleClass="card" GridPane.rowIndex="1">
+                        <Label styleClass="section-title" text="Measurement Units" />
+                        <HBox spacing="8">
+                            <ToggleButton fx:id="metricToggle" styleClass="pill-button" text="Metric" />
+                            <ToggleButton fx:id="imperialToggle" styleClass="pill-button" text="Imperial" />
+                        </HBox>
+                    </VBox>
+
+                    <!-- RIGHT / Theme Preferences -->
+                    <VBox spacing="12" styleClass="card" GridPane.columnIndex="1">
+                        <Label styleClass="section-title" text="Theme Preferences" />
+                        <HBox spacing="8">
+                            <ToggleButton fx:id="lightToggle" styleClass="pill-button" text="Light Mode" />
+                            <ToggleButton fx:id="darkToggle" styleClass="pill-button-purple" text="Dark Mode" />
+                        </HBox>
+                    </VBox>
+
+                    <!-- Bottom actions -->
+                    <HBox alignment="CENTER_RIGHT" spacing="12" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                        <Button onAction="#handleSaveSettings" styleClass="settings-save-button" text="Save Changes" />
+                        <Button onAction="#handleCancel" styleClass="settings-cancel-button" text="Cancel" />
+                    </HBox>
+
+                </GridPane>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

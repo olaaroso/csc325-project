@@ -10,13 +10,15 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 
-public class LoginController {
+public class LoginController extends BaseController {
 
     // FXML elements
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
     @FXML private Button loginButton;
     @FXML private Hyperlink signupLink;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
 
     // AuthManager placeholder
     private AuthManager authManager;

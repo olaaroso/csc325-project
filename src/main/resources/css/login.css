@@ -44,6 +44,11 @@
     -fx-padding: 10;
 }
 
+.text-input:focused {
+    -fx-border-color: -accent-color-1;
+    -fx-background-color: -background-color-1;
+}
+
 .login-button {
     -fx-background-color: -accent-color-1;
     -fx-text-fill: white;

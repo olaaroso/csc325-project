@@ -18,6 +18,9 @@ public class SignupController {
     @FXML private PasswordField confirmPasswordField;
     @FXML private Button signupButton;
     @FXML private Hyperlink loginLink;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private PasswordField confirmPasswordField;
 
     // AuthManager placeholder
     private AuthManager authManager;
