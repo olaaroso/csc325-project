@@ -15,13 +15,13 @@ public class Main extends Application {
 
     public static Firestore firestore;
     public static FirebaseAuth firebaseAuth;
-    private final FirestoreContext firestoreContext = new FirestoreContext();
 
     @Override
     public void start(Stage stage) throws IOException {
 
         // Initialize firestore and firebaseAuth
-        firestore = firestoreContext.firebase();
+        FirestoreContext.initialize();
+        firestore = FirestoreContext.getDb();
         firebaseAuth = FirebaseAuth.getInstance();
 
         // Init fxml loader
