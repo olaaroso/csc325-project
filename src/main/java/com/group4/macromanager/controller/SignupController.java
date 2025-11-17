@@ -10,7 +10,7 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 
-public class SignupController {
+public class SignupController extends BaseController {
 
     // FXML elements
     @FXML private TextField emailField;
@@ -18,9 +18,6 @@ public class SignupController {
     @FXML private PasswordField confirmPasswordField;
     @FXML private Button signupButton;
     @FXML private Hyperlink loginLink;
-    @FXML private TextField emailField;
-    @FXML private PasswordField passwordField;
-    @FXML private PasswordField confirmPasswordField;
 
     // AuthManager placeholder
     private AuthManager authManager;
@@ -34,7 +31,7 @@ public class SignupController {
             authManager = new AuthManager();
         }
         catch (Exception e) {
-            showAlert("Initialization Error", "Failed to initialize Firestore Context: " + e.getMessage());
+            showAlert("Failed to initialize Firestore Context: " + e.getMessage());
         }
 
         // Initialize the loginLink's setOnAction handler
@@ -63,12 +60,12 @@ public class SignupController {
         // Simple validation
         // Guard clause to prevent submission without filling all fields
         if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            showAlert("Missing fields", "Please fill out all fields.");
+            showAlert("Please fill out all fields.");
             return;
         }
         // Guard clause to check if password doesn't equal confirmPassword
         if (!password.equals(confirmPassword)) {
-            showAlert("Password mismatch", "Passwords don't match.");
+            showAlert("Passwords don't match.");
             return;
         }
 
@@ -85,7 +82,7 @@ public class SignupController {
                 // Use runLater() method because only the JavaFX thread can modify the UI
                 // This means: once the background thread is done, schedule this UI update to run on JavaFX thread
                 Platform.runLater(() -> {
-                    showAlert("Success", "Redirecting to login...");
+                    showSuccessAlert("Redirecting to login...");
 
                     // DO NOT Set session, the user will be redirected to log in first
                     // SessionManager.setCurrentSession(session);
@@ -105,7 +102,7 @@ public class SignupController {
             catch (Exception ex) {
                Platform.runLater(() -> {
                    // Alert the user that there was an error
-                   showAlert("Signup Error", ex.getMessage());
+                   showAlert("Signup Error: " + ex.getMessage());
                    System.out.println("Signup Error: " + ex.getMessage());
                    // Re-enable signup button and set text back to 'Create Account'
                    signupButton.setDisable(false);
@@ -113,15 +110,5 @@ public class SignupController {
                });
             }
         }).start();
-    }
-
-    // Private helper methods
-    private void showAlert(String title, String message) {
-        // This method is used to show pop up alerts after an event occurs
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

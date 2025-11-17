@@ -17,8 +17,6 @@ public class LoginController extends BaseController {
     @FXML private PasswordField passwordField;
     @FXML private Button loginButton;
     @FXML private Hyperlink signupLink;
-    @FXML private TextField emailField;
-    @FXML private PasswordField passwordField;
 
     // AuthManager placeholder
     private AuthManager authManager;
@@ -32,7 +30,7 @@ public class LoginController extends BaseController {
             authManager = new AuthManager();
         }
         catch (Exception e) {
-            showAlert("Initialization Error", "Failed to Initialize Firestore Context.\n" + e.getMessage());
+            showAlert("Failed to Initialize Firestore Context.\n" + e.getMessage());
         }
 
         // Initialize the signupLink's setOnAction handler
@@ -59,7 +57,7 @@ public class LoginController extends BaseController {
 
         // Guard clause to prevent submission without filling out both fields
         if (email.isEmpty() || password.isEmpty()) {
-            showAlert("Missing fields", "Please enter your email and password.");
+            showAlert("Please enter your email and password.");
             return;
         }
 
@@ -76,7 +74,7 @@ public class LoginController extends BaseController {
                 // Use runLater() method because only the JavaFX thread can modify the UI
                 // This means: once the background thread is done, schedule this UI update to run on JavaFX thread
                 Platform.runLater(() -> {
-                    showAlert("Success", "Logged in as " + session.email);
+                    showSuccessAlert("Logged in as " + session.email);
 
                     // Set session
                     SessionManager.setCurrentSession(session);
@@ -96,7 +94,7 @@ public class LoginController extends BaseController {
             catch (Exception ex) {
                 Platform.runLater(() -> {
                     // Alert the user that there was an error
-                    showAlert("Login failed", ex.getMessage());
+                    showAlert("Login failed: " +  ex.getMessage());
                     // Re-enable login button and set text back to 'Login'
                     loginButton.setDisable(false);
                     loginButton.setText("Login");
@@ -105,13 +103,4 @@ public class LoginController extends BaseController {
         }).start();
     }
 
-    // Private helper methods
-    private void showAlert(String title, String message) {
-        // This method is used to show pop up alerts after an event occurs
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }
