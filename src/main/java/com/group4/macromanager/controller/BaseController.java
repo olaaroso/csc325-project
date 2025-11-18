@@ -3,10 +3,12 @@ package com.group4.macromanager.controller;
 // This is a base controller class for shared functionality among controllers.
 
 import com.group4.macromanager.model.Meal;
+import com.group4.macromanager.model.User;
 import com.group4.macromanager.service.IFoodService;
 import com.group4.macromanager.service.IMealService;
 import com.group4.macromanager.service.InMemoryFoodService;
 import com.group4.macromanager.service.InMemoryMealService;
+import com.group4.macromanager.session.AuthSessionManager;
 import com.group4.macromanager.session.MealBuilderSession;
 import com.group4.macromanager.util.AlertUtil;
 import com.group4.macromanager.util.ImageUtil;
@@ -55,6 +57,23 @@ public abstract class BaseController {
         }
     }
 
+    // -------------------- Auth Session Methods --------------------
+
+    // Get current user ID from auth session
+    protected String getCurrentUserId() {
+        return AuthSessionManager.getInstance().getCurrentUserId();
+    }
+
+    // Get current user from auth session
+    protected User getCurrentUser() {
+        return AuthSessionManager.getInstance().getCurrentUser();
+    }
+
+    // Check if user is logged in
+    protected boolean isUserLoggedIn() {
+        return AuthSessionManager.getInstance().isLoggedIn();
+    }
+
     // -------------------- Common Methods --------------------
 
     // Save current form data to session (override in controllers that need it)
@@ -72,7 +91,18 @@ public abstract class BaseController {
     // Common meal data loading method
     protected List<Meal> loadMealsForDate(LocalDate date) {
         try {
-            return mealService.getMealsForDate("123", date);
+            // Get current user ID
+            String userId = getCurrentUserId();
+
+            // If not logged in, return empty list
+            if (userId == null) {
+                showAlert("User not logged in.");
+                return List.of();
+            }
+
+            // Load meals for the specified date
+            return mealService.getMealsForDate(userId, date);
+
         } catch (Exception e) {
             showAlert("Failed to load meals for " + date + ": " + e.getMessage());
             return List.of();

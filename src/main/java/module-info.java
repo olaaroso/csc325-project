@@ -24,5 +24,7 @@ module csc.project.csc325_project {
     opens com.group4.macromanager to javafx.fxml;
     opens com.group4.macromanager.controller to javafx.fxml;
     opens com.group4.macromanager.model;
+    exports com.group4.macromanager.session;
+    opens com.group4.macromanager.session;
     // opens com.group4.macromanager.model to com.google.gson, com.google.cloud.firestore;
 }

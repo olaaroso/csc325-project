@@ -7,6 +7,7 @@ import com.google.cloud.firestore.DocumentSnapshot;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.group4.macromanager.session.AuthSessionManager;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -67,6 +68,28 @@ public class AuthManager {
         @SerializedName("email") String email;
     }
 
+    // Get current user
+    public User getCurrentUser() {
+        if (currentSession == null) return null;
+
+        try {
+            // Fetch user document from Firestore
+            Firestore db = FirestoreContext.getDb();
+            DocumentSnapshot snapshot = db.collection("users").document(currentSession.uid).get().get();
+
+            // Return user object if exists
+            if (snapshot.exists()) {
+                return snapshot.toObject(User.class);
+            }
+            // User not found
+            return null;
+        }
+        catch (Exception e) {
+            System.err.println("Failed to fetch current user: " + e.getMessage());
+            return null;
+        }
+    }
+
     // Sign Up URL
     private String signUpUrl() {
         return "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + apiKey;
@@ -104,7 +127,9 @@ public class AuthManager {
             User newUser = new User(response.localId,  response.email);
             userRef.set(newUser).get(); // Waits fore Firestore to complete
 
-            // DEBUG PRINT: System.out.println("Registered user: " + response.email);
+            // Set session in AuthSessionManager
+            AuthSessionManager.getInstance().setSession(currentSession, newUser);
+
             return currentSession;
         }
         else {
@@ -135,15 +160,15 @@ public class AuthManager {
             Firestore db = FirestoreContext.getDb();
             DocumentSnapshot snapshot = db.collection("users").document(response.localId).get().get();
 
+            User user = null;
             if (snapshot.exists()) {
-                User user = snapshot.toObject(User.class);
+                user = snapshot.toObject(User.class);
                 System.out.println("Fetched user: " + user);
             }
-            else {
-                System.out.println("Fetched user not found for " + response.email);
-            }
 
-            // DEBUG PRINT: System.out.println("Logged In: " + response.email);
+            // Set session in AuthSessionManager
+            AuthSessionManager.getInstance().setSession(currentSession, user);
+
             return currentSession;
         }
         else {
@@ -154,7 +179,7 @@ public class AuthManager {
     // Logout
     public void logout() {
         currentSession = null; // Set session to null
-        // DEBUG PRINT: System.out.println("Logged out");
+        AuthSessionManager.getInstance().clearSession();
     }
 }
 

@@ -2,7 +2,7 @@ package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.AuthManager;
 import com.group4.macromanager.model.FirestoreContext;
-import com.group4.macromanager.model.SessionManager;
+import com.group4.macromanager.session.AuthSessionManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

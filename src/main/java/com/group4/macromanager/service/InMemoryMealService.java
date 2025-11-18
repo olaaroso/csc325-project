@@ -2,6 +2,7 @@ package com.group4.macromanager.service;
 
 import com.group4.macromanager.model.Food;
 import com.group4.macromanager.model.Meal;
+import com.group4.macromanager.session.AuthSessionManager;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class InMemoryMealService implements IMealService{
 
         Meal breakfastMeal = new Meal("meal1", "Morning Breakfast", "Breakfast", "Healthy start",
                 breakfastFoods, false, null);
-        breakfastMeal.setUserId("123");
+        breakfastMeal.setUserId(AuthSessionManager.getInstance().getCurrentUserId());
 
         meals.add(breakfastMeal);
 
@@ -51,7 +52,7 @@ public class InMemoryMealService implements IMealService{
 
         Meal lunchMeal = new Meal("meal2", "Power Lunch", "Lunch", "High protein meal",
                 lunchFoods, true, null);
-        lunchMeal.setUserId("123");
+        lunchMeal.setUserId(AuthSessionManager.getInstance().getCurrentUserId());
 
         meals.add(lunchMeal);
     }
