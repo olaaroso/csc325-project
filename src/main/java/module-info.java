@@ -16,6 +16,9 @@ module csc.project.csc325_project {
     requires com.google.api.apicommon;
     requires java.net.http;
     requires com.google.gson;
+    requires google.api.client;
+    requires java.desktop;
+    requires jdk.httpserver;
 
     exports com.group4.macromanager;
     exports com.group4.macromanager.controller;

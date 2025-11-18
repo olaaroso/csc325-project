@@ -4,6 +4,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.auth.FirebaseAuth;
 import com.group4.macromanager.controller.PageNavigationManager;
 import com.group4.macromanager.model.FirestoreContext;
+import com.group4.macromanager.model.GoogleOAuthManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -23,6 +24,9 @@ public class Main extends Application {
         FirestoreContext.initialize();
         firestore = FirestoreContext.getDb();
         firebaseAuth = FirebaseAuth.getInstance();
+
+        // Provide HostServices to GoogleOAuthManager
+        GoogleOAuthManager.setHostServices(getHostServices());
 
         // Init fxml loader
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/loginPage.fxml"));

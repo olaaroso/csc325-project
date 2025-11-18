@@ -18,6 +18,7 @@ public class SignupController extends BaseController {
     @FXML private PasswordField confirmPasswordField;
     @FXML private Button signupButton;
     @FXML private Hyperlink loginLink;
+    @FXML private Button googleButton;
 
     // AuthManager placeholder
     private AuthManager authManager;
@@ -44,6 +45,9 @@ public class SignupController extends BaseController {
                 ex.printStackTrace();
             }
         });
+
+        // Set up Google button handler
+        googleButton.setOnAction(this::handleGoogleSignup);
     }
 
     // onAction handler methods
@@ -108,6 +112,39 @@ public class SignupController extends BaseController {
                    signupButton.setDisable(false);
                    signupButton.setText("Create Account");
                });
+            }
+        }).start();
+    }
+
+    // Google signup handler
+    @FXML
+    private void handleGoogleSignup(ActionEvent event) {
+        googleButton.setDisable(true);
+        googleButton.setText("Opening browser...");
+
+        new Thread(() -> {
+            try {
+                var session = authManager.signInWithGoogle();
+
+                Platform.runLater(() -> {
+                    showSuccessAlert("Signed up with Google as " + session.email);
+
+                    try {
+                        PageNavigationManager.switchTo("dashboardPage.fxml");
+                    } catch (IOException e) {
+                        showAlert("Failed to navigate to dashboard: " + e.getMessage());
+                    }
+
+                    googleButton.setDisable(false);
+                    googleButton.setText("Sign up with Google");
+                });
+
+            } catch (Exception e) {
+                Platform.runLater(() -> {
+                    showAlert("Google signup failed: " + e.getMessage());
+                    googleButton.setDisable(false);
+                    googleButton.setText("Sign up with Google");
+                });
             }
         }).start();
     }
