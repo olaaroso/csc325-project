@@ -34,6 +34,6 @@
     <Pane VBox.vgrow="ALWAYS"/>
 
     <StackPane alignment="CENTER" prefHeight="60">
-        <Button fx:id="profileButton" text="FSC Student" styleClass="profile-button" onAction="#handleLogout"/>
+        <Button fx:id="profileButton" text="FSC Student" styleClass="profile-button" onAction="#handleProfileClick" />
     </StackPane>
 </VBox>

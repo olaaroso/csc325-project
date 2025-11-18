@@ -2,7 +2,7 @@ package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.AuthManager;
 import com.group4.macromanager.model.FirestoreContext;
-import com.group4.macromanager.model.SessionManager;
+import com.group4.macromanager.session.AuthSessionManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -75,9 +75,6 @@ public class LoginController extends BaseController {
                 // This means: once the background thread is done, schedule this UI update to run on JavaFX thread
                 Platform.runLater(() -> {
                     showSuccessAlert("Logged in as " + session.email);
-
-                    // Set session
-                    SessionManager.setCurrentSession(session);
 
                     // Navigate to dashboard
                     try {

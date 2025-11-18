@@ -119,13 +119,23 @@ public class FoodLibraryController extends BaseController {
 
     // Loader functions - fetches food data for each category
     private void loadCustomFoods() {
-        List<Food> customFoodEntries = foodService.getCustomFoods("123");
-        renderFoods(customFoodEntries, customFoodsContainer, true); // Enable edit/delete
+
+        // Only load custom foods if user is logged in
+        String userId = getCurrentUserId();
+        if (userId != null) {
+            List<Food> customFoodEntries = foodService.getCustomFoods(userId);
+            renderFoods(customFoodEntries, customFoodsContainer, true);
+        }
     }
 
     private void loadFavorites() {
-        List<Food> favs = foodService.getFavorites("123");
-        renderFoods(favs, favoritesContainer, true); // Enable edit/delete
+
+        // Only load favorite foods if user is logged in
+        String userId = getCurrentUserId();
+        if (userId != null) {
+            List<Food> favs = foodService.getCustomFoods(userId);
+            renderFoods(favs, favoritesContainer, true);
+        }
     }
 
     private void loadRecommendations() {
