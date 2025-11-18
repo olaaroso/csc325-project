@@ -4,6 +4,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.auth.FirebaseAuth;
 import com.group4.macromanager.controller.PageNavigationManager;
 import com.group4.macromanager.model.FirestoreContext;
+import com.group4.macromanager.service.FirestoreFoodService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -23,6 +24,10 @@ public class Main extends Application {
         FirestoreContext.initialize();
         firestore = FirestoreContext.getDb();
         firebaseAuth = FirebaseAuth.getInstance();
+
+        // Initialize food recommendatios
+        FirestoreFoodService foodService = new FirestoreFoodService();
+        foodService.initializeRecommendations();
 
         // Init fxml loader
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/loginPage.fxml"));

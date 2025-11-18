@@ -133,7 +133,7 @@ public class FoodLibraryController extends BaseController {
         // Only load favorite foods if user is logged in
         String userId = getCurrentUserId();
         if (userId != null) {
-            List<Food> favs = foodService.getCustomFoods(userId);
+            List<Food> favs = foodService.getFavorites(userId);
             renderFoods(favs, favoritesContainer, true);
         }
     }

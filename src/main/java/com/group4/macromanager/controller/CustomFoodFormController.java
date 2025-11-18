@@ -137,6 +137,9 @@ public class CustomFoodFormController extends BaseController {
 
     // Create Food object from form data
     private Food createFoodFromForm() {
+        // Get current user ID
+        String userId = getCurrentUserId();
+
         return new Food(
                 null,
                 nameField.getText().trim(),
