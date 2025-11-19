@@ -51,6 +51,10 @@ public class CustomFoodFormController extends BaseController {
     // Override the saveToSession method
     @Override
     protected void saveToSession() {
+        // Ensure session instance exists
+        if (foodSession == null) return;
+
+        // Save current form data to session
         foodSession.saveFormData(
                 nameField.getText(),
                 mealTypeComboBox.getValue(),
@@ -97,6 +101,12 @@ public class CustomFoodFormController extends BaseController {
             return;
         }
 
+        // Validate image file exists if one was selected
+        if (selectedImageFile != null && !selectedImageFile.exists()) {
+            showAlert("Selected image file is not available. Please select a new image.");
+            return;
+        }
+
         try {
             Food food = createFoodFromForm();
             Food saved;
@@ -123,7 +133,6 @@ public class CustomFoodFormController extends BaseController {
     private void handleCancel() {
         foodSession.clearSession(); // Clear session data
         clearForm(); // Clear form fields
-        resetImageToPlaceholder(); // from BaseController
 
         // Navigate back to food library
         try {
@@ -185,6 +194,9 @@ public class CustomFoodFormController extends BaseController {
         // Get current user ID
         String userId = getCurrentUserId();
 
+        // Convert file path to resource path for storage
+        String imageResourcePath = ImageUtil.getResourcePath(selectedImageFile);
+
         return new Food(
                 null,
                 nameField.getText().trim(),
@@ -194,7 +206,7 @@ public class CustomFoodFormController extends BaseController {
                 Double.parseDouble(proteinField.getText().trim()),
                 Double.parseDouble(carbsField.getText().trim()),
                 Double.parseDouble(fatField.getText().trim()),
-                selectedImageFile != null ? selectedImageFile.toURI().toString() : null,
+                imageResourcePath, // stores /uploads/filename.ext
                 mealTypeComboBox.getValue(),
                 favoriteCheckBox.isSelected()
         );
@@ -211,6 +223,10 @@ public class CustomFoodFormController extends BaseController {
         carbsField.clear();
         fatField.clear();
         favoriteCheckBox.setSelected(false);
+
+        // Reset image
+        selectedImageFile = null;
+        resetImageToPlaceholder();
     }
 
     // Reset field styles

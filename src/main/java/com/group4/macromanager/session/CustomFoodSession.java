@@ -45,6 +45,7 @@ public class CustomFoodSession {
     public void loadFoodForEditing(Food food) {
         if (food == null) return;
 
+        // Set edit mode and food ID
         this.isEditMode = true;
         this.editingFoodId = food.getId();
 
@@ -60,8 +61,15 @@ public class CustomFoodSession {
         this.isFavorite = food.isFavorite();
 
         // Handle image URL if it exists
-        if (food.getImageUrl() != null && !food.getImageUrl().isEmpty()) {
-            this.selectedImage = new File(food.getImageUrl());
+        if (food.getImageUrl() != null && food.getImageUrl().startsWith("file:uploads/")) {
+            String fileName = food.getImageUrl().substring("file:uploads/".length());
+            // Use runtime uploads directory (not in src/main/resources)
+            File uploadFile = new File("uploads/" + fileName);
+            if (uploadFile.exists()) {
+                this.selectedImage = uploadFile;
+            } else {
+                this.selectedImage = null;
+            }
         } else {
             this.selectedImage = null;
         }

@@ -4,6 +4,7 @@ import com.google.cloud.firestore.*;
 import com.group4.macromanager.model.FirestoreContext;
 import com.group4.macromanager.model.Food;
 import com.group4.macromanager.session.AuthSessionManager;
+import com.group4.macromanager.util.ImageUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -168,9 +169,25 @@ public class FirestoreFoodService implements IFoodService {
     @Override
     public void deleteFood(String foodId) {
         try {
-            foodsCollection.document(foodId).delete().get();
-        }
-        catch (InterruptedException | ExecutionException e) {
+            // First, get the food to check if it has an uploaded image
+            DocumentSnapshot document = foodsCollection.document(foodId).get().get();
+
+            if (document.exists()) {
+                String imageUrl = document.getString("imageUrl");
+
+                // Delete the food from Firestore
+                foodsCollection.document(foodId).delete().get();
+
+                // Clean up the image file if it's an uploaded image
+                if (imageUrl != null && imageUrl.startsWith("file:uploads/")) {
+                    ImageUtil.deleteUploadedImage(imageUrl);
+                }
+            } else {
+                // Food doesn't exist, just try to delete anyway
+                foodsCollection.document(foodId).delete().get();
+            }
+
+        } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException("Failed to delete food: " + e.getMessage(), e);
         }
     }
