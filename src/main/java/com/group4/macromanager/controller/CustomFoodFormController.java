@@ -3,7 +3,9 @@ package com.group4.macromanager.controller;
 import com.group4.macromanager.model.Food;
 import com.group4.macromanager.service.IFoodService;
 import com.group4.macromanager.service.InMemoryFoodService;
+import com.group4.macromanager.session.CustomFoodSession;
 import com.group4.macromanager.util.ValidationUtil;
+import com.group4.macromanager.util.ImageUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -33,13 +35,53 @@ public class CustomFoodFormController extends BaseController {
         // Highlight current page in the sidebar
         initializePage("customFoods"); // from BaseController
 
-        // Default placeholder image
-        // BaseController handles this:
-        // foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm()));
+        // Restore form data from session
+        restoreFromSession();
 
-        // Set default values for combo boxes
-        mealTypeComboBox.setValue("Breakfast");
-        unitComboBox.setValue("grams");
+        // If not in edit mode and no session data, set defaults
+        if (!foodSession.isEditMode() && (mealTypeComboBox.getValue() == null || mealTypeComboBox.getValue().isEmpty())) {
+            mealTypeComboBox.setValue("Breakfast");
+            unitComboBox.setValue("grams");
+        }
+
+        // Setup auto-save on form changes
+        setupAutoSave();
+    }
+
+    // Override the saveToSession method
+    @Override
+    protected void saveToSession() {
+        foodSession.saveFormData(
+                nameField.getText(),
+                mealTypeComboBox.getValue(),
+                servingField.getText(),
+                unitComboBox.getValue(),
+                caloriesField.getText(),
+                proteinField.getText(),
+                carbsField.getText(),
+                fatField.getText(),
+                favoriteCheckBox.isSelected(),
+                selectedImageFile
+        );
+    }
+
+    // Override the restoreFromSession method
+    @Override
+    protected void restoreFromSession() {
+        nameField.setText(foodSession.getFoodName());
+        mealTypeComboBox.setValue(foodSession.getMealType());
+        servingField.setText(foodSession.getServingSize());
+        unitComboBox.setValue(foodSession.getServingUnit());
+        caloriesField.setText(foodSession.getCalories());
+        proteinField.setText(foodSession.getProtein());
+        carbsField.setText(foodSession.getCarbs());
+        fatField.setText(foodSession.getFat());
+        favoriteCheckBox.setSelected(foodSession.isFavorite());
+
+        if (foodSession.getSelectedImage() != null) {
+            selectedImageFile = foodSession.getSelectedImage();
+            ImageUtil.setImageFromFile(foodImage, selectedImageFile);
+        }
     }
 
     // Handler functions
@@ -56,27 +98,22 @@ public class CustomFoodFormController extends BaseController {
         }
 
         try {
-            Food created = createFoodFromForm();
-            Food saved = foodService.saveCustomFood(created);
+            Food food = createFoodFromForm();
+            Food saved;
 
-            System.out.println(
-                    "Saved custom food: " + saved.getName() + " ID: " + saved.getId()
-                    + "\nServing Size: " + saved.getServingSize() + " " + saved.getServingUnit()
-                    + "\nCalories: " + saved.getCalories()
-                    + "\nProtein: " + saved.getProtein()
-                    + "\nCarbs: " + saved.getCarbs()
-                    + "\nFat: " + saved.getFat()
-                    + "\nMeal Type: " + saved.getMealType()
-                    + "\nFavorite: " + saved.isFavorite()
-                    + "\nImage URL: " + saved.getImageUrl()
-            );
-            showSuccessAlert("Custom food saved successfully!");
+            if (foodSession.isEditMode()) {
+                // Update existing food
+                food.setId(foodSession.getEditingFoodId());
+                saved = foodService.updateFood(food);
+                showSuccessAlert("Food updated successfully!");
+            } else {
+                // Create new food
+                saved = foodService.saveCustomFood(food);
+                showSuccessAlert("Custom food saved successfully!");
+            }
+
             handleCancel();
-        }
-        catch (NumberFormatException e) {
-            showAlert("Please fill in all required fields correctly.");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             showAlert("Error saving food: " + e.getMessage());
         }
     }
@@ -84,8 +121,16 @@ public class CustomFoodFormController extends BaseController {
     // HandleCancel - handler for when the user cancels the entered data
     @FXML
     private void handleCancel() {
+        foodSession.clearSession(); // Clear session data
         clearForm(); // Clear form fields
         resetImageToPlaceholder(); // from BaseController
+
+        // Navigate back to food library
+        try {
+            PageNavigationManager.switchTo("foodLibraryPage.fxml");
+        } catch (Exception e) {
+            showAlert("Failed to navigate back: " + e.getMessage());
+        }
     }
 
     // Helper functions
@@ -172,5 +217,18 @@ public class CustomFoodFormController extends BaseController {
     private void resetFieldStyles() {
         ValidationUtil.resetFieldStyles(nameField, servingField, caloriesField, proteinField, carbsField, fatField);
         ValidationUtil.resetFieldStyles(mealTypeComboBox, unitComboBox);
+    }
+
+    // auto-save setup method
+    private void setupAutoSave() {
+        nameField.textProperty().addListener((obs, oldVal, newVal) -> saveToSession());
+        mealTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> saveToSession());
+        servingField.textProperty().addListener((obs, oldVal, newVal) -> saveToSession());
+        unitComboBox.valueProperty().addListener((obs, oldVal, newVal) -> saveToSession());
+        caloriesField.textProperty().addListener((obs, oldVal, newVal) -> saveToSession());
+        proteinField.textProperty().addListener((obs, oldVal, newVal) -> saveToSession());
+        carbsField.textProperty().addListener((obs, oldVal, newVal) -> saveToSession());
+        fatField.textProperty().addListener((obs, oldVal, newVal) -> saveToSession());
+        favoriteCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> saveToSession());
     }
 }

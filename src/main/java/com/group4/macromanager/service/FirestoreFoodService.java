@@ -3,6 +3,7 @@ package com.group4.macromanager.service;
 import com.google.cloud.firestore.*;
 import com.group4.macromanager.model.FirestoreContext;
 import com.group4.macromanager.model.Food;
+import com.group4.macromanager.session.AuthSessionManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +46,32 @@ public class FirestoreFoodService implements IFoodService {
         }
         catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException("Failed to save food: " + e.getMessage(), e);
+        }
+    }
+
+    // Update existing food method
+    @Override
+    public Food updateFood(Food food) {
+        try {
+            String userId = AuthSessionManager.getInstance().getCurrentUserId();
+            if (userId == null) {
+                throw new RuntimeException("User not logged in");
+            }
+
+            if (food.getId() == null) {
+                throw new RuntimeException("Food ID is required for update");
+            }
+
+            Map<String, Object> foodData = foodToMap(food);
+
+            DocumentReference docRef = foodsCollection.document(food.getId());
+            docRef.set(foodData).get();
+
+            food.setId(food.getId());
+            return food;
+
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("Failed to update food: " + e.getMessage(), e);
         }
     }
 

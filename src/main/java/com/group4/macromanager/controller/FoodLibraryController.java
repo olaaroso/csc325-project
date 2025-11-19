@@ -1,6 +1,7 @@
 package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.Food;
+import com.group4.macromanager.session.CustomFoodSession;
 import com.group4.macromanager.util.ValidationUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -110,10 +111,11 @@ public class FoodLibraryController extends BaseController {
     @FXML
     private void handleAddNewFood() {
         try {
+            // Start new food creation
+            CustomFoodSession.getInstance().startNewFood();
             PageNavigationManager.switchTo("customFoodFormPage.fxml");
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            showAlert("Failed to navigate to food form: " + e.getMessage());
         }
     }
 
@@ -145,10 +147,24 @@ public class FoodLibraryController extends BaseController {
 
     // Handlers for edit and delete actions
     private void handleEditFood(Food food) {
-        // Navigate to custom food form with edit mode
         try {
-            // You'll need to implement edit mode in CustomFoodFormController
-            // For now, just navigate to the form
+            // Fetch the complete food object from the service to ensure we have all data
+            Food completeFood = foodService.getFoodById(food.getId());
+
+            if (completeFood == null) {
+                showAlert("Food not found. It may have been deleted.");
+                return;
+            }
+
+            // Get current user ID
+            String userId = getCurrentUserId();
+            if (userId == null) {
+                showAlert("User not logged in.");
+                return;
+            }
+
+            // Load food into session for editing
+            CustomFoodSession.getInstance().loadFoodForEditing(food);
             PageNavigationManager.switchTo("customFoodFormPage.fxml");
         } catch (IOException e) {
             showAlert("Failed to navigate to edit form: " + e.getMessage());

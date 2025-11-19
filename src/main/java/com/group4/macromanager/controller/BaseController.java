@@ -6,6 +6,7 @@ import com.group4.macromanager.model.Meal;
 import com.group4.macromanager.model.User;
 import com.group4.macromanager.service.*;
 import com.group4.macromanager.session.AuthSessionManager;
+import com.group4.macromanager.session.CustomFoodSession;
 import com.group4.macromanager.session.MealBuilderSession;
 import com.group4.macromanager.util.AlertUtil;
 import com.group4.macromanager.util.ImageUtil;
@@ -40,6 +41,7 @@ public abstract class BaseController {
 
     // Session Management
     protected MealBuilderSession mealSession = MealBuilderSession.getInstance();
+    protected CustomFoodSession foodSession = CustomFoodSession.getInstance();
 
     // -------------------- Initialization --------------------
 
@@ -55,6 +57,12 @@ public abstract class BaseController {
         // Restore meal builder session image if available
         if ("mealBuilder".equals(activePage) && mealSession.getSelectedImage() != null) {
             selectedImageFile = mealSession.getSelectedImage();
+            ImageUtil.setImageFromFile(foodImage, selectedImageFile);
+        }
+
+        // Restore custom food session image if available
+        if ("customFoods".equals(activePage) && foodSession.getSelectedImage() != null) {
+            selectedImageFile = foodSession.getSelectedImage();
             ImageUtil.setImageFromFile(foodImage, selectedImageFile);
         }
     }
