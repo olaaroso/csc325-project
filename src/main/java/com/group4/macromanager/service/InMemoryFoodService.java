@@ -32,6 +32,12 @@ public class InMemoryFoodService implements IFoodService {
     }
 
     @Override
+    public Food updateFood(Food food) {
+        // Not implemented in this in-memory version
+        return null;
+    }
+
+    @Override
     public void deleteFood(String foodId) {
         customFoods.removeIf(food -> foodId.equals(food.getId()));
     }

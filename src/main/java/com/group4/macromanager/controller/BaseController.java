@@ -4,11 +4,9 @@ package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.Meal;
 import com.group4.macromanager.model.User;
-import com.group4.macromanager.service.IFoodService;
-import com.group4.macromanager.service.IMealService;
-import com.group4.macromanager.service.InMemoryFoodService;
-import com.group4.macromanager.service.InMemoryMealService;
+import com.group4.macromanager.service.*;
 import com.group4.macromanager.session.AuthSessionManager;
+import com.group4.macromanager.session.CustomFoodSession;
 import com.group4.macromanager.session.MealBuilderSession;
 import com.group4.macromanager.util.AlertUtil;
 import com.group4.macromanager.util.ImageUtil;
@@ -31,13 +29,19 @@ public abstract class BaseController {
     @FXML protected SidebarController sidebarIncludeController;
     @FXML protected ImageView foodImage;
 
-    // Services
-    protected IFoodService foodService = new InMemoryFoodService();
+    // -------------------- Services --------------------
+
+    // Use FirestoreFoodService for persistent storage, InMemoryFoodService for testing
+    // protected IFoodService foodService = new InMemoryFoodService();
+    protected IFoodService foodService = new FirestoreFoodService();
+
+
     protected IMealService mealService = new InMemoryMealService();
     protected File selectedImageFile;
 
     // Session Management
     protected MealBuilderSession mealSession = MealBuilderSession.getInstance();
+    protected CustomFoodSession foodSession = CustomFoodSession.getInstance();
 
     // -------------------- Initialization --------------------
 
@@ -53,6 +57,12 @@ public abstract class BaseController {
         // Restore meal builder session image if available
         if ("mealBuilder".equals(activePage) && mealSession.getSelectedImage() != null) {
             selectedImageFile = mealSession.getSelectedImage();
+            ImageUtil.setImageFromFile(foodImage, selectedImageFile);
+        }
+
+        // Restore custom food session image if available
+        if ("customFoods".equals(activePage) && foodSession.getSelectedImage() != null) {
+            selectedImageFile = foodSession.getSelectedImage();
             ImageUtil.setImageFromFile(foodImage, selectedImageFile);
         }
     }
