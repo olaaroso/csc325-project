@@ -5,6 +5,7 @@ import com.group4.macromanager.model.FirestoreContext;
 import com.group4.macromanager.model.Food;
 import com.group4.macromanager.session.AuthSessionManager;
 import com.group4.macromanager.util.ImageUtil;
+import com.group4.macromanager.util.UserValidationUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +31,8 @@ public class FirestoreFoodService implements IFoodService {
     // Save custom food method
     @Override
     public Food saveCustomFood(Food food) {
+        String userId = UserValidationUtil.validateUserAccess();
+
         try {
             // Generate ID if creating a new food
             if (food.getId() == null || food.getId().isEmpty()) {
@@ -38,7 +41,7 @@ public class FirestoreFoodService implements IFoodService {
             }
 
             // Convert Food to Map for Firestore (key-value pairs)
-            Map<String, Object> foodData = foodToMap(food);
+            Map<String, Object> foodData = foodToMap(food, userId);
 
             // Save to Firestore
             foodsCollection.document(food.getId()).set(foodData).get();
@@ -53,17 +56,14 @@ public class FirestoreFoodService implements IFoodService {
     // Update existing food method
     @Override
     public Food updateFood(Food food) {
-        try {
-            String userId = AuthSessionManager.getInstance().getCurrentUserId();
-            if (userId == null) {
-                throw new RuntimeException("User not logged in");
-            }
+        String userId = UserValidationUtil.validateUserAccess();
 
+        try {
             if (food.getId() == null) {
                 throw new RuntimeException("Food ID is required for update");
             }
 
-            Map<String, Object> foodData = foodToMap(food);
+            Map<String, Object> foodData = foodToMap(food, userId);
 
             DocumentReference docRef = foodsCollection.document(food.getId());
             docRef.set(foodData).get();
@@ -78,11 +78,13 @@ public class FirestoreFoodService implements IFoodService {
 
     // Get list of custom foods for a user
     @Override
-    public List<Food> getCustomFoods(String userId) {
+    public List<Food> getCustomFoods(String requestedUserId) {
+        String currentUserId = UserValidationUtil.validateUserAccess(requestedUserId);
+
         try {
             // Query for foods where userId matches and isCustom is true
             Query query = foodsCollection
-                    .whereEqualTo("userId", userId)
+                    .whereEqualTo("userId", currentUserId)
                     .whereEqualTo("isCustom", true);
 
             QuerySnapshot querySnapshot = query.get().get();
@@ -100,6 +102,8 @@ public class FirestoreFoodService implements IFoodService {
     // Get recommendations (predefined foods)
     @Override
     public List<Food> getRecommendations() {
+        String userId = UserValidationUtil.validateUserAccess();
+
         try {
             // Query for foods where isRecommendation is true, limit to 20
             Query query = foodsCollection
@@ -120,11 +124,12 @@ public class FirestoreFoodService implements IFoodService {
 
     // Get favorite foods for a user
     @Override
-    public List<Food> getFavorites(String userId) {
+    public List<Food> getFavorites(String requestedUserId) {
+        String currentUserId = UserValidationUtil.validateUserAccess(requestedUserId);
         try {
             // Query for foods where userId matches and isFavorite is true
             Query query = foodsCollection
-                    .whereEqualTo("userId", userId)
+                    .whereEqualTo("userId", currentUserId)
                     .whereEqualTo("isFavorite", true);
 
             QuerySnapshot querySnapshot = query.get().get();
@@ -142,6 +147,8 @@ public class FirestoreFoodService implements IFoodService {
     // Search foods by query and meal type
     @Override
     public List<Food> searchFoods(String query, String mealType) {
+        String userId = UserValidationUtil.validateUserAccess();
+
         try {
             // Start with base query
             Query firestoreQuery = foodsCollection;
@@ -168,11 +175,18 @@ public class FirestoreFoodService implements IFoodService {
     // Delete food by ID
     @Override
     public void deleteFood(String foodId) {
+        String userId = UserValidationUtil.validateUserAccess();
         try {
             // First, get the food to check if it has an uploaded image
             DocumentSnapshot document = foodsCollection.document(foodId).get().get();
 
             if (document.exists()) {
+                // Verify ownership
+                String foodUserId = document.getString("userId");
+                if (!userId.equals(foodUserId)) {
+                    throw new SecurityException("Cannot delete food owned by another user");
+                }
+
                 String imageUrl = document.getString("imageUrl");
 
                 // Delete the food from Firestore
@@ -195,6 +209,8 @@ public class FirestoreFoodService implements IFoodService {
     // Get food by ID
     @Override
     public Food getFoodById(String foodId) {
+        String userId = UserValidationUtil.validateUserAccess();
+
         try {
             // Fetch document by ID
             DocumentSnapshot document = foodsCollection.document(foodId).get().get();
@@ -215,7 +231,7 @@ public class FirestoreFoodService implements IFoodService {
     // -------------------- Helper Methods --------------------
 
     // Helper method to convert Food object to Firestore Map
-    private Map<String, Object> foodToMap(Food food) {
+    private Map<String, Object> foodToMap(Food food, String userId) {
         Map<String, Object> data = new HashMap<>();
         data.put("name", food.getName());
         data.put("servingSize", food.getServingSize());
@@ -229,7 +245,7 @@ public class FirestoreFoodService implements IFoodService {
         data.put("isFavorite", food.isFavorite());
 
         // Add metadata fields
-        data.put("userId", getCurrentUserId());
+        data.put("userId", userId);
         data.put("isCustom", true);
         data.put("isRecommendation", false);
         data.put("createdAt", FieldValue.serverTimestamp());
@@ -252,15 +268,6 @@ public class FirestoreFoodService implements IFoodService {
                 document.getString("mealType"),
                 Boolean.TRUE.equals(document.getBoolean("isFavorite"))
         );
-    }
-
-    // Helper method to get current user ID
-    private String getCurrentUserId() {
-        // You'll need to implement this based on your auth system
-        // For now, returning a placeholder
-        com.group4.macromanager.session.AuthSessionManager auth =
-                com.group4.macromanager.session.AuthSessionManager.getInstance();
-        return auth.getCurrentUserId();
     }
 
     // Method to initialize sample recommendation foods
