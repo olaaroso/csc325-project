@@ -183,8 +183,9 @@ public class FoodLibraryController extends BaseController {
                 try {
                     foodService.deleteFood(food.getId());
                     showSuccessAlert("Food deleted successfully!");
-                    // Refresh the current tab
-                    refreshCurrentTab();
+
+                    // Refresh all tabs to reflect deletion
+                    refreshAllTabs();
                 } catch (Exception e) {
                     showAlert("Failed to delete food: " + e.getMessage());
                 }
@@ -192,22 +193,30 @@ public class FoodLibraryController extends BaseController {
         });
     }
 
-    // Refresh the currently selected tab
-    private void refreshCurrentTab() {
-        // Refresh the currently selected tab
+    // refreshAllTabs method to refresh all tabs after deletion
+    private void refreshAllTabs() {
+        // Store currently selected tab to restore selection after refresh
         Tab selectedTab = foodTabPane.getSelectionModel().getSelectedItem();
+
+        // Refresh all tabs that could contain the deleted food
+        loadCustomFoods();
+        loadFavorites();
+        loadRecommendations();
+
+        // Also refresh search results if the search tab exists
+        Tab searchTab = foodTabPane.getTabs().stream()
+                .filter(tab -> "Search Results".equals(tab.getText()))
+                .findFirst()
+                .orElse(null);
+
+        if (searchTab != null) {
+            // Re-run the search to update results
+            handleSearch();
+        }
+
+        // Restore the previously selected tab
         if (selectedTab != null) {
-            switch (selectedTab.getText()) {
-                case "Custom Foods":
-                    loadCustomFoods();
-                    break;
-                case "Favorites":
-                    loadFavorites();
-                    break;
-                case "Recommendations":
-                    loadRecommendations();
-                    break;
-            }
+            foodTabPane.getSelectionModel().select(selectedTab);
         }
     }
 
