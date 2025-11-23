@@ -150,8 +150,9 @@ public class FirestoreFoodService implements IFoodService {
         String userId = UserValidationUtil.validateUserAccess();
 
         try {
-            // Start with base query
-            Query firestoreQuery = foodsCollection;
+            // Start with base query filtered by user
+            Query firestoreQuery = foodsCollection
+                    .whereEqualTo("userId", userId);
 
             // Apply meal type filter if not "All"
             if (mealType != null && !mealType.equals("All")) {
