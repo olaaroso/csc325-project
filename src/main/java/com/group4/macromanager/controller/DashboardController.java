@@ -1,6 +1,7 @@
 package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.Meal;
+import com.group4.macromanager.service.FirestoreMealService;
 import com.group4.macromanager.service.InMemoryMealService;
 import com.group4.macromanager.util.ChartUtil;
 import com.group4.macromanager.util.TableUtil;
@@ -42,11 +43,6 @@ public class DashboardController extends BaseController {
     public void initialize() {
         // initialize page
         initializePage("dashboard");
-
-        // Load sample data if using in-memory service
-        if (mealService instanceof InMemoryMealService) {
-            ((InMemoryMealService) mealService).addSampleMeals();
-        }
 
         // Setup table and load data
         setupTable();
@@ -93,6 +89,7 @@ public class DashboardController extends BaseController {
             ChartUtil.setupWeeklyCalorieChart(barChart, weeklyCalories);
         } catch (Exception e) {
             showAlert("Failed to load weekly chart: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 

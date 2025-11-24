@@ -49,9 +49,16 @@ public class MealBuilderSession {
         this.notes = meal.getNotes() != null ? meal.getNotes() : "";
         this.isFavorite = meal.isFavorite();
 
-        // Handle image loading
-        if (meal.getImageUrl() != null && !meal.getImageUrl().isEmpty()) {
-            this.selectedImage = new File(meal.getImageUrl());
+        // Handle image URL if it exists
+        if (meal.getImageUrl() != null && meal.getImageUrl().startsWith("file:uploads/")) {
+            String fileName = meal.getImageUrl().substring("file:uploads/".length());
+            // Use runtime uploads directory (not in src/main/resources)
+            File uploadFile = new File("uploads/" + fileName);
+            if (uploadFile.exists()) {
+                this.selectedImage = uploadFile;
+            } else {
+                this.selectedImage = null;
+            }
         } else {
             this.selectedImage = null;
         }
@@ -100,6 +107,9 @@ public class MealBuilderSession {
         isFavorite = false;
         selectedImage = null;
         selectedFoods.clear();
+
+        editingMealId = null;
+        isEditMode = false;
     }
 
     // Getters

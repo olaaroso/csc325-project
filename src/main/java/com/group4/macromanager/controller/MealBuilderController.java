@@ -51,10 +51,6 @@ public class MealBuilderController extends BaseController {
             mealTypeCombo.setValue("Breakfast");
         }
 
-        // Default placeholder image
-        // BaseController handles this:
-        // foodImage.setImage(new Image(getClass().getResource("/images/placeholder.png").toExternalForm()));
-
         // Setup auto-save on form changes
         setupAutoSave();
 
@@ -97,43 +93,58 @@ public class MealBuilderController extends BaseController {
             return;
         }
 
-        // Get image path safely - handle null case
-        String imagePath = null;
-        if (selectedImageFile != null) {
-            imagePath = selectedImageFile.getAbsolutePath();
+        // Get current user ID
+        String userId = getCurrentUserId();
+        if (userId == null) {
+            showAlert("User not logged in. Please log in to save meals.");
+            return;
         }
 
-        Meal meal;
-        if (mealSession.isEditMode()) {
-            // Update existing meal
-            meal = new Meal(
-                    mealSession.getEditingMealId(), // Use existing ID
-                    mealNameField.getText(),
-                    mealTypeCombo.getValue(),
-                    notesField.getText(),
-                    new ArrayList<>(mealSession.getSelectedFoods()),
-                    favoriteCheckBox.isSelected(),
-                    imagePath
-            );
-        } else {
-            // Create new meal
-            meal = new Meal(
-                    null, // ID will be generated
-                    mealNameField.getText(),
-                    mealTypeCombo.getValue(),
-                    notesField.getText(),
-                    new ArrayList<>(mealSession.getSelectedFoods()),
-                    favoriteCheckBox.isSelected(),
-                    imagePath
-            );
+        // Validate image file exists if one was selected
+        if (selectedImageFile != null && !selectedImageFile.exists()) {
+            showAlert("Selected image file is not available. Please select a new image.");
+            return;
         }
 
         try {
-            mealService.saveMeal(meal);
+            // Handle image upload and get resource path
+            String imagePath = null;
+            if (selectedImageFile != null) {
+                imagePath = ImageUtil.getResourcePath(selectedImageFile);
+            }
+
+            Meal meal;
+            if (mealSession.isEditMode()) {
+                // Update existing meal
+                meal = new Meal(
+                        mealSession.getEditingMealId(), // Use existing ID
+                        mealNameField.getText(),
+                        mealTypeCombo.getValue(),
+                        notesField.getText(),
+                        new ArrayList<>(mealSession.getSelectedFoods()),
+                        favoriteCheckBox.isSelected(),
+                        imagePath
+                );
+            } else {
+                // Create new meal
+                meal = new Meal(
+                        null, // ID will be generated
+                        mealNameField.getText(),
+                        mealTypeCombo.getValue(),
+                        notesField.getText(),
+                        new ArrayList<>(mealSession.getSelectedFoods()),
+                        favoriteCheckBox.isSelected(),
+                        imagePath
+                );
+            }
+
+            // Save meal using the service
+            Meal savedMeal = mealService.saveMeal(meal);
+
             showSuccessAlert(mealSession.isEditMode() ? "Meal updated successfully!" : "Meal saved successfully!");
             handleCancel(); // Clear form after saving
-        }
-        catch (Exception e) {
+
+        } catch (Exception e) {
             showAlert("Failed to save meal: " + e.getMessage());
         }
     }

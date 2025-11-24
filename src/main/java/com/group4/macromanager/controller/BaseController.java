@@ -36,7 +36,7 @@ public abstract class BaseController {
     protected IFoodService foodService = new FirestoreFoodService();
 
 
-    protected IMealService mealService = new InMemoryMealService();
+    protected IMealService mealService = new FirestoreMealService();
     protected File selectedImageFile;
 
     // Session Management
@@ -115,6 +115,7 @@ public abstract class BaseController {
 
         } catch (Exception e) {
             showAlert("Failed to load meals for " + date + ": " + e.getMessage());
+            System.out.println("Error loading meals: " + e.getMessage());
             return List.of();
         }
     }
