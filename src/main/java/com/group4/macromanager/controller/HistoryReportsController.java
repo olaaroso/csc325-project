@@ -62,11 +62,6 @@ public class HistoryReportsController extends BaseController {
         // initialize page
         initializePage("history");
 
-        // Load sample data if using in-memory service
-        if (mealService instanceof InMemoryMealService) {
-            ((InMemoryMealService) mealService).addSampleMeals();
-        }
-
         // Setup UI components
         setupTable();
         setupDatePicker();

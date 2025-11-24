@@ -25,7 +25,7 @@ public class Main extends Application {
         firestore = FirestoreContext.getDb();
         firebaseAuth = FirebaseAuth.getInstance();
 
-        // Initialize food recommendatios
+        // Initialize food recommendations
         FirestoreFoodService foodService = new FirestoreFoodService();
         foodService.initializeRecommendations();
 
