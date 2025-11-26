@@ -30,11 +30,7 @@
                 <padding>
                     <Insets bottom="20" left="20" right="20" top="20" />
                 </padding>
-                <Label styleClass="page-title" text="Dashboard">
-                    <font>
-                        <Font name="System Bold" size="24.0" />
-                    </font>
-                </Label>
+                <Label styleClass="page-title" text="Dashboard" />
 
                 <!-- Top Stats Grid -->
                 <GridPane hgap="20.0" vgap="15.0">

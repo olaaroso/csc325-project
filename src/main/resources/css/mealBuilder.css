@@ -8,6 +8,11 @@
     -fx-text-fill: -font-color-1;
 }
 
+.macro-total {
+    -fx-font-size: 12px;
+    -fx-text-fill: -font-color-1;
+}
+
 /* Cards */
 .form-card, .side-card {
     -fx-background-color: -background-color-1;
