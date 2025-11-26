@@ -18,8 +18,6 @@ public class SettingsController extends BaseController {
     @FXML private TextField fatField;
     @FXML private ToggleButton lightToggle;
     @FXML private ToggleButton darkToggle;
-    @FXML private ToggleButton metricToggle;
-    @FXML private ToggleButton imperialToggle;
 
     @FXML
     public void initialize() {
@@ -38,18 +36,6 @@ public class SettingsController extends BaseController {
         darkToggle.setOnAction(e -> {
             if (darkToggle.isSelected()) {
                 lightToggle.setSelected(false);
-            }
-        });
-
-        // Unit toggles - only one can be selected
-        metricToggle.setOnAction(e -> {
-            if (metricToggle.isSelected()) {
-                imperialToggle.setSelected(false);
-            }
-        });
-        imperialToggle.setOnAction(e -> {
-            if (imperialToggle.isSelected()) {
-                metricToggle.setSelected(false);
             }
         });
     }
@@ -71,15 +57,6 @@ public class SettingsController extends BaseController {
                 lightToggle.setSelected(true);
                 darkToggle.setSelected(false);
             }
-
-            // Set unit toggles
-            if ("imperial".equals(settings.getMeasurementUnit())) {
-                imperialToggle.setSelected(true);
-                metricToggle.setSelected(false);
-            } else {
-                metricToggle.setSelected(true);
-                imperialToggle.setSelected(false);
-            }
         }
     }
 
@@ -92,7 +69,6 @@ public class SettingsController extends BaseController {
 
         try {
             String theme = darkToggle.isSelected() ? "dark" : "light";
-            String unit = imperialToggle.isSelected() ? "imperial" : "metric";
 
             UserSettings settings = new UserSettings(
                     getCurrentUserId(),
@@ -100,8 +76,7 @@ public class SettingsController extends BaseController {
                     Double.parseDouble(proteinField.getText()),
                     Double.parseDouble(carbField.getText()),
                     Double.parseDouble(fatField.getText()),
-                    theme,
-                    unit
+                    theme
             );
 
             SettingsManager.getInstance().saveSettings(settings);

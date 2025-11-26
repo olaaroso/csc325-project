@@ -46,15 +46,6 @@
                         </VBox>
                     </VBox>
 
-                    <!-- LEFT / Measurement Units -->
-                    <VBox spacing="12" styleClass="card" GridPane.rowIndex="1">
-                        <Label styleClass="section-title" text="Measurement Units" />
-                        <HBox spacing="8">
-                            <ToggleButton fx:id="metricToggle" styleClass="pill-button" text="Metric" />
-                            <ToggleButton fx:id="imperialToggle" styleClass="pill-button" text="Imperial" />
-                        </HBox>
-                    </VBox>
-
                     <!-- RIGHT / Theme Preferences -->
                     <VBox spacing="12" styleClass="card" GridPane.columnIndex="1">
                         <Label styleClass="section-title" text="Theme Preferences" />

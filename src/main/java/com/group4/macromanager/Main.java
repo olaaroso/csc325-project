@@ -32,7 +32,7 @@ public class Main extends Application {
 
         // Init fxml loader
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/loginPage.fxml"));
-        primaryScene = new Scene(fxmlLoader.load(), 1000, 600);
+        primaryScene = new Scene(fxmlLoader.load());
 
         // Apply light theme by default
         applyLightTheme();

@@ -7,18 +7,16 @@ public class UserSettings {
     private double carbTarget;
     private double fatTarget;
     private String theme;
-    private String measurementUnit;
 
     // Constructor
     public UserSettings(String userId, double calorieTarget, double proteinTarget,
-                        double carbTarget, double fatTarget, String theme, String measurementUnit) {
+                        double carbTarget, double fatTarget, String theme) {
         this.userId = userId;
         this.calorieTarget = calorieTarget;
         this.proteinTarget = proteinTarget;
         this.carbTarget = carbTarget;
         this.fatTarget = fatTarget;
         this.theme = theme != null ? theme : "light";
-        this.measurementUnit = measurementUnit != null ? measurementUnit : "metric";
     }
 
     // Default constructor with sensible defaults
@@ -28,7 +26,6 @@ public class UserSettings {
         this.carbTarget = 250.0;
         this.fatTarget = 67.0;
         this.theme = "light";
-        this.measurementUnit = "metric";
     }
 
     // Getters and setters
@@ -50,6 +47,4 @@ public class UserSettings {
     public String getTheme() { return theme; }
     public void setTheme(String theme) { this.theme = theme; }
 
-    public String getMeasurementUnit() { return measurementUnit; }
-    public void setMeasurementUnit(String measurementUnit) { this.measurementUnit = measurementUnit; }
 }

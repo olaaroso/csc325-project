@@ -78,7 +78,6 @@ public class FirestoreSettingsService implements ISettingsService {
         data.put("carbTarget", settings.getCarbTarget());
         data.put("fatTarget", settings.getFatTarget());
         data.put("theme", settings.getTheme());
-        data.put("measurementUnit", settings.getMeasurementUnit());
         data.put("updatedAt", FieldValue.serverTimestamp());
         return data;
     }
@@ -91,8 +90,7 @@ public class FirestoreSettingsService implements ISettingsService {
                 document.getDouble("proteinTarget") != null ? document.getDouble("proteinTarget") : 150.0,
                 document.getDouble("carbTarget") != null ? document.getDouble("carbTarget") : 250.0,
                 document.getDouble("fatTarget") != null ? document.getDouble("fatTarget") : 67.0,
-                document.getString("theme") != null ? document.getString("theme") : "light",
-                document.getString("measurementUnit") != null ? document.getString("measurementUnit") : "metric"
+                document.getString("theme") != null ? document.getString("theme") : "light"
         );
     }
 }
