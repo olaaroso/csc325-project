@@ -1,6 +1,7 @@
 package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.Meal;
+import com.group4.macromanager.model.UserSettings;
 import com.group4.macromanager.service.FirestoreMealService;
 import com.group4.macromanager.service.InMemoryMealService;
 import com.group4.macromanager.util.ChartUtil;
@@ -22,6 +23,10 @@ public class DashboardController extends BaseController {
     @FXML private Label totalProteinLabel;
     @FXML private Label totalCarbsLabel;
     @FXML private Label totalFatLabel;
+    @FXML private Label calorieTargetLabel;
+    @FXML private Label proteinTargetLabel;
+    @FXML private Label carbTargetLabel;
+    @FXML private Label fatTargetLabel;
     @FXML private PieChart macroPieChart;
     @FXML private BarChart<String, Number> barChart;
     @FXML private TableView<Meal> dailyEntriesTable;
@@ -47,6 +52,31 @@ public class DashboardController extends BaseController {
         // Setup table and load data
         setupTable();
         loadTodaysData();
+
+        // Update macro targets
+        updateMacroTargets();
+    }
+
+
+    // method to update the target displays
+    private void updateMacroTargets() {
+        UserSettings settings = getCurrentUserSettings();
+        if (settings != null) {
+            // Update the sublabels in your dashboard FXML
+            // You'll need to update your FXML to have fx:id for these labels
+            if (calorieTargetLabel != null) {
+                calorieTargetLabel.setText("/ " + (int)settings.getCalorieTarget());
+            }
+            if (proteinTargetLabel != null) {
+                proteinTargetLabel.setText("/ " + (int)settings.getProteinTarget() + "g");
+            }
+            if (carbTargetLabel != null) {
+                carbTargetLabel.setText("/ " + (int)settings.getCarbTarget() + "g");
+            }
+            if (fatTargetLabel != null) {
+                fatTargetLabel.setText("/ " + (int)settings.getFatTarget() + "g");
+            }
+        }
     }
 
     // Setup table columns and bindings

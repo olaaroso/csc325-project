@@ -4,10 +4,12 @@ package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.Meal;
 import com.group4.macromanager.model.User;
+import com.group4.macromanager.model.UserSettings;
 import com.group4.macromanager.service.*;
 import com.group4.macromanager.session.AuthSessionManager;
 import com.group4.macromanager.session.CustomFoodSession;
 import com.group4.macromanager.session.MealBuilderSession;
+import com.group4.macromanager.session.SettingsManager;
 import com.group4.macromanager.util.AlertUtil;
 import com.group4.macromanager.util.ImageUtil;
 import com.group4.macromanager.util.TableUtil;
@@ -35,13 +37,21 @@ public abstract class BaseController {
     // protected IFoodService foodService = new InMemoryFoodService();
     protected IFoodService foodService = new FirestoreFoodService();
 
-
+    // Use FirestoreMealService for persistent storage, InMemoryMealService for testing
+    // protected IMealService mealService = new InMemoryMealService();
     protected IMealService mealService = new FirestoreMealService();
+
+    // Use FirestoreSettingsService for persistent storage, InMemorySettingsService for testing
+    // protected ISettingsService settingsService = new InMemorySettingsService();
+    protected ISettingsService settingsService = new FirestoreSettingsService();
+
+    // Image file selected by user
     protected File selectedImageFile;
 
     // Session Management
     protected MealBuilderSession mealSession = MealBuilderSession.getInstance();
     protected CustomFoodSession foodSession = CustomFoodSession.getInstance();
+    protected SettingsManager settingsManager = SettingsManager.getInstance();
 
     // -------------------- Initialization --------------------
 
@@ -94,6 +104,17 @@ public abstract class BaseController {
     // Restore form data from session (override in controllers that need it)
     protected void restoreFromSession() {
         // Default implementation - override in MealBuilderController, CustomFoodController
+    }
+
+    // -------------------- Settings Methods --------------------
+
+    // Load user settings
+    protected UserSettings getCurrentUserSettings() {
+        String userId = getCurrentUserId();
+        if (userId != null) {
+            return settingsManager.getCurrentSettings();
+        }
+        return new UserSettings(); // Return defaults if not logged in
     }
 
     // -------------------- Meal Methods --------------------

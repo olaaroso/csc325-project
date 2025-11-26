@@ -16,6 +16,7 @@ public class Main extends Application {
 
     public static Firestore firestore;
     public static FirebaseAuth firebaseAuth;
+    private static Scene primaryScene;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -31,19 +32,42 @@ public class Main extends Application {
 
         // Init fxml loader
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/loginPage.fxml"));
+        primaryScene = new Scene(fxmlLoader.load(), 1000, 600);
 
-        // Init the scene
-        Scene scene = new Scene(fxmlLoader.load());
-
-        // Add main.css and sidebar.css to the scene (root css files)
-        scene.getStylesheets().add(getClass().getResource("/css/main.css").toExternalForm());
+        // Apply light theme by default
+        applyLightTheme();
 
         stage.setTitle("MacroManager");
-        stage.setScene(scene);
+        stage.setScene(primaryScene);
         stage.show();
 
         // Make stage available to PageNavigationManager
         PageNavigationManager.setStage(stage);
+    }
+
+    private void applyLightTheme() {
+        primaryScene.getStylesheets().clear();
+        primaryScene.getStylesheets().add(getClass().getResource("/css/main.css").toExternalForm());
+        primaryScene.getStylesheets().add(getClass().getResource("/css/light-theme.css").toExternalForm());
+    }
+
+    // Static method to get the primary scene for theme switching
+    public static Scene getPrimaryScene() {
+        return primaryScene;
+    }
+
+    // Static method to apply theme changes globally
+    public static void applyTheme(String theme) {
+        if (primaryScene != null) {
+            primaryScene.getStylesheets().clear();
+            primaryScene.getStylesheets().add(Main.class.getResource("/css/main.css").toExternalForm());
+
+            if ("dark".equals(theme)) {
+                primaryScene.getStylesheets().add(Main.class.getResource("/css/dark-theme.css").toExternalForm());
+            } else {
+                primaryScene.getStylesheets().add(Main.class.getResource("/css/light-theme.css").toExternalForm());
+            }
+        }
     }
 
     public static void main(String[] args) {

@@ -25,6 +25,11 @@ public class AuthSessionManager {
     public void setSession(AuthManager.Session session, User user) {
         this.currentSession = session;
         this.currentUser = user;
+
+        // Load user settings when session is set
+        if (session != null) {
+            SettingsManager.getInstance().loadUserSettings(session.uid);
+        }
     }
 
     // Get current session
@@ -61,5 +66,6 @@ public class AuthSessionManager {
     public void clearSession() {
         this.currentSession = null;
         this.currentUser = null;
+        SettingsManager.getInstance().clearSettings();
     }
 }

@@ -1,0 +1,52 @@
+.root {
+    /* Accent color variables */
+    -accent-color-1: #7DB6F6;
+    -accent-color-2: #659fea;
+    -accent-color-3: #6694ce;
+
+    /* Background color variables */
+    -background-color-1: #fff;
+    -background-color-2: #E8E8E8;
+
+    /* Font color variables */
+    -font-color-1: #303030;
+    -font-color-2: #9F9F9F;
+
+    /* Apply base text color */
+    -fx-text-fill: -font-color-1;
+}
+
+/* Main styles using variables */
+.sidebar {
+    -fx-background-color: -background-color-1;
+    -fx-border-color: #ddd;
+}
+
+.app-title {
+    -fx-text-fill: -accent-color-1;
+}
+
+.nav-button {
+    -fx-text-fill: -font-color-1;
+}
+
+.nav-button:hover {
+    -fx-background-color: -background-color-2;
+}
+
+.nav-button-active {
+    -fx-text-fill: -accent-color-1;
+    -fx-border-color: -accent-color-1;
+}
+
+.nav-button-active:hover {
+    -fx-background-color: -background-color-2;
+}
+
+.profile-button {
+    -fx-background-color: -accent-color-1;
+}
+
+.profile-button:hover {
+    -fx-background-color: -accent-color-2;
+}

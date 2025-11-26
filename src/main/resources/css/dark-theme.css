@@ -1,0 +1,50 @@
+.root {
+    /* Override main.css variables for dark theme */
+    -accent-color-1: #7A26E3;
+    -accent-color-2: #8D7DF6;
+    -accent-color-3: #8556D3;
+
+    -background-color-1: #2d2d2d;
+    -background-color-2: #404040;
+
+    -font-color-1: #ffffff;
+    -font-color-2: #cccccc;
+
+    /* Apply base text color */
+    -fx-text-fill: -font-color-1;
+}
+
+/* Main styles using dark variables */
+.sidebar {
+    -fx-background-color: -background-color-1;
+    -fx-border-color: #555;
+}
+
+.app-title {
+    -fx-text-fill: -accent-color-1;
+}
+
+.nav-button {
+    -fx-text-fill: -font-color-1;
+}
+
+.nav-button:hover {
+    -fx-background-color: -background-color-2;
+}
+
+.nav-button-active {
+    -fx-text-fill: -accent-color-1;
+    -fx-border-color: -accent-color-1;
+}
+
+.nav-button-active:hover {
+    -fx-background-color: -background-color-2;
+}
+
+.profile-button {
+    -fx-background-color: -accent-color-1;
+}
+
+.profile-button:hover {
+    -fx-background-color: -accent-color-2;
+}

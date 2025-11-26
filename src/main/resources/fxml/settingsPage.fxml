@@ -66,7 +66,7 @@
 
                     <!-- Bottom actions -->
                     <HBox alignment="CENTER_RIGHT" spacing="12" GridPane.columnSpan="2" GridPane.rowIndex="2">
-                        <Button onAction="#handleSaveSettings" styleClass="settings-save-button" text="Save Changes" />
+                        <Button onAction="#handleSave" styleClass="settings-save-button" text="Save Changes" />
                         <Button onAction="#handleCancel" styleClass="settings-cancel-button" text="Cancel" />
                     </HBox>
 
