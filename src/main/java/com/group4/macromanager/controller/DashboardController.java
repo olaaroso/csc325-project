@@ -86,7 +86,7 @@ public class DashboardController extends BaseController {
                 weeklyCalories[i] = TableUtil.calculateDailySummary(dayMeals).calories;
             }
 
-            ChartUtil.setupWeeklyCalorieChart(barChart, weeklyCalories);
+            ChartUtil.setupWeeklyCalorieChart(barChart, weeklyCalories, startDate, LocalDate.now());
         } catch (Exception e) {
             showAlert("Failed to load weekly chart: " + e.getMessage());
             System.out.println(e.getMessage());
