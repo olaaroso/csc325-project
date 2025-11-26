@@ -1,5 +1,6 @@
 package com.group4.macromanager.controller;
 
+import com.group4.macromanager.Main;
 import com.group4.macromanager.model.UserSettings;
 import com.group4.macromanager.session.SettingsManager;
 import com.group4.macromanager.util.ValidationUtil;
@@ -56,6 +57,7 @@ public class SettingsController extends BaseController {
     private void loadCurrentSettings() {
         UserSettings settings = getCurrentUserSettings();
         if (settings != null) {
+
             calorieField.setText(String.valueOf((int)settings.getCalorieTarget()));
             proteinField.setText(String.valueOf((int)settings.getProteinTarget()));
             carbField.setText(String.valueOf((int)settings.getCarbTarget()));
@@ -104,6 +106,9 @@ public class SettingsController extends BaseController {
 
             SettingsManager.getInstance().saveSettings(settings);
             showSuccessAlert("Settings saved successfully!");
+
+            // Navigate back to dashboard
+            PageNavigationManager.switchTo("dashboardPage.fxml");
 
         } catch (Exception e) {
             showAlert("Failed to save settings: " + e.getMessage());
