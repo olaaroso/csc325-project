@@ -42,7 +42,7 @@ The goal of our project is to create something that feels easy to use while stil
 - Custom Food Form – Add custom foods with fields for name, serving size, units, calories, protein, carbohydrates, fat, and optional photo
 - Meal Builder – Combine multiple foods into a single meal with quantity adjustments and automatic macro totals
 - History and Reports – Calendar/date picker for past entries, detailed daily views, weekly summary charts, and CSV export
-- Settings – Options for measurement units (metric/imperial), daily calorie and macro targets, and theme preferences (light/dark mode)
+- Settings – Daily calorie and macro targets, and theme preferences (light/dark mode)
 
 ## Program and Hardware:
 - Java and JavaFX for the main application 
