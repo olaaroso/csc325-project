@@ -30,11 +30,7 @@
                 <padding>
                     <Insets bottom="20" left="20" right="20" top="20" />
                 </padding>
-                <Label styleClass="page-title" text="Dashboard">
-                    <font>
-                        <Font name="System Bold" size="24.0" />
-                    </font>
-                </Label>
+                <Label styleClass="page-title" text="Dashboard" />
 
                 <!-- Top Stats Grid -->
                 <GridPane hgap="20.0" vgap="15.0">
@@ -49,7 +45,7 @@
                         <VBox alignment="CENTER">
                             <Label styleClass="stat-label" text="Today's Calories" />
                             <Label fx:id="totalCaloriesLabel" styleClass="stat-value" text="0" />
-                            <Label styleClass="stat-sub" text="/ 2000" />
+                            <Label fx:id="calorieTargetLabel" styleClass="stat-sub" text="/ 2000" />
                         </VBox>
                     </StackPane>
 
@@ -57,7 +53,7 @@
                         <VBox alignment="CENTER">
                             <Label styleClass="stat-label" text="Today's Protein" />
                             <Label fx:id="totalProteinLabel" styleClass="stat-value" text="0g" />
-                            <Label styleClass="stat-sub" text="/ 140g" />
+                            <Label fx:id="proteinTargetLabel" styleClass="stat-sub" text="/ 140g" />
                         </VBox>
                     </StackPane>
 
@@ -65,7 +61,7 @@
                         <VBox alignment="CENTER">
                             <Label styleClass="stat-label" text="Today's Carbs" />
                             <Label fx:id="totalCarbsLabel" styleClass="stat-value" text="0g" />
-                            <Label styleClass="stat-sub" text="/ 210g" />
+                            <Label fx:id="carbTargetLabel" styleClass="stat-sub" text="/ 210g" />
                         </VBox>
                     </StackPane>
 
@@ -73,7 +69,7 @@
                         <VBox alignment="CENTER">
                             <Label styleClass="stat-label" text="Today's Fats" />
                             <Label fx:id="totalFatLabel" styleClass="stat-value" text="0g" />
-                            <Label styleClass="stat-sub" text="/ 56g" />
+                            <Label fx:id="fatTargetLabel" styleClass="stat-sub" text="/ 56g" />
                         </VBox>
                     </StackPane>
                     <rowConstraints>

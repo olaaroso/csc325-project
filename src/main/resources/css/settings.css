@@ -88,13 +88,13 @@
 }
 
 .pill-button-purple:hover {
-    -fx-border-color: -accent-color-4;
+    -fx-border-color: -accent-color-1;
 }
 
 .pill-button-purple:selected {
-    -fx-background-color: -accent-color-4;
+    -fx-background-color: -accent-color-1;
     -fx-text-fill: white;
-    -fx-border-color: -accent-color-4;
+    -fx-border-color: -accent-color-1;
 }
 
 /* Action buttons - follow your primary/secondary pattern */

@@ -23,10 +23,7 @@
             </padding>
 
             <!-- Page Title -->
-            <Label prefWidth="481.0" styleClass="page-title" text="Add Custom Food">
-            <font>
-               <Font name="System Bold" size="24.0" />
-            </font></Label>
+            <Label prefWidth="481.0" styleClass="page-title" text="Add Custom Food" />
 
             <!-- Two column layout -->
             <HBox alignment="TOP_LEFT" spacing="20">

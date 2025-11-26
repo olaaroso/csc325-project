@@ -87,10 +87,10 @@
                     <!-- Macro Totals Card -->
                     <VBox spacing="10" styleClass="side-card">
                         <Label styleClass="section-title" text="Macro Totals" />
-                        <Label fx:id="caloriesLabel" text="Calories: 0" />
-                        <Label fx:id="proteinLabel" text="Protein (g): 0" />
-                        <Label fx:id="carbsLabel" text="Carbs (g): 0" />
-                        <Label fx:id="fatLabel" text="Fats (g): 0" />
+                        <Label styleClass="macro-total" fx:id="caloriesLabel" text="Calories: 0" />
+                        <Label styleClass="macro-total" fx:id="proteinLabel" text="Protein (g): 0" />
+                        <Label styleClass="macro-total" fx:id="carbsLabel" text="Carbs (g): 0" />
+                        <Label styleClass="macro-total" fx:id="fatLabel" text="Fats (g): 0" />
                     </VBox>
 
                     <!-- Additional Info Card -->

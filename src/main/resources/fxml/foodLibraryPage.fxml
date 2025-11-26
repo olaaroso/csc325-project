@@ -26,10 +26,7 @@
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
-            <Label prefHeight="35.0" prefWidth="833.0" styleClass="page-title" text="Food Library">
-                <font>
-                    <Font name="System Bold" size="24.0" />
-                </font></Label>
+            <Label prefHeight="35.0" prefWidth="833.0" styleClass="page-title" text="Food Library" />
 
             <!-- Search & Filter Bar -->
             <HBox fx:id="searchBar" alignment="CENTER" spacing="0" styleClass="search-bar" HBox.hgrow="ALWAYS">

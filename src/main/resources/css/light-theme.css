@@ -1,0 +1,217 @@
+.root {
+    /* Accent color variables */
+    -accent-color-1: #7DB6F6;
+    -accent-color-2: #659fea;
+    -accent-color-3: #6694ce;
+
+    /* Background color variables */
+    -background-color-1: #fff;
+    -background-color-2: #E8E8E8;
+
+    /* Font color variables */
+    -font-color-1: #303030;
+    -font-color-2: #9F9F9F;
+
+    /* Apply base text color */
+    -fx-text-fill: -font-color-1;
+}
+
+/* Main styles using variables */
+.sidebar {
+    -fx-background-color: -background-color-1;
+    -fx-border-color: #ddd;
+}
+
+.app-title {
+    -fx-text-fill: -accent-color-1;
+}
+
+.nav-button {
+    -fx-text-fill: -font-color-1;
+}
+
+.nav-button:hover {
+    -fx-background-color: -background-color-2;
+}
+
+.nav-button-active {
+    -fx-text-fill: -accent-color-1;
+    -fx-border-color: -accent-color-1;
+}
+
+.nav-button-active:hover {
+    -fx-background-color: -background-color-2;
+}
+
+.profile-button {
+    -fx-background-color: -accent-color-1;
+}
+
+.profile-button:hover {
+    -fx-background-color: -accent-color-2;
+}
+
+/* TableView styles */
+.table-view {
+    -fx-background-color: -background-color-1;
+    -fx-control-inner-background: -background-color-1;
+    -fx-control-inner-background-alt: -background-color-2;
+    -fx-table-cell-border-color: #ddd;
+    -fx-border-color: #ddd;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: -background-color-2;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: -font-color-1;
+    -fx-font-weight: bold;
+    -fx-border-color: #ddd;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: -font-color-1;
+    -fx-border-color: transparent;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: -background-color-1;
+    -fx-table-cell-border-color: transparent;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: -background-color-1;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+}
+
+.table-view .table-row-cell:selected .table-cell {
+    -fx-text-fill: white;
+}
+
+/* DatePicker styles */
+.date-picker {
+    -fx-background-color: -background-color-1;
+    -fx-text-fill: -font-color-1;
+}
+
+.date-picker .text-field {
+    -fx-background-color: -background-color-1;
+    -fx-text-fill: -font-color-1;
+    -fx-border-color: #ddd;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: -background-color-2;
+}
+
+/* ScrollPane styles */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: -background-color-2;
+}
+
+.scroll-bar {
+    -fx-background-color: -background-color-2;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: -font-color-2;
+    -fx-background-radius: 5;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: -accent-color-1;
+}
+
+/* TextField styles */
+.text-field {
+    -fx-background-color: -background-color-1;
+    -fx-text-fill: -font-color-1;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-prompt-text-fill: -font-color-2;
+}
+
+.text-field:focused {
+    -fx-border-color: -accent-color-1;
+}
+
+/* FlowPane and container styles */
+.flow-pane {
+    -fx-background-color: -background-color-1;
+}
+
+/* CheckBox styles */
+.check-box {
+    -fx-text-fill: -font-color-1;
+}
+
+.check-box .box {
+    -fx-background-color: -background-color-1;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+.check-box:selected .box {
+    -fx-background-color: -accent-color-1;
+    -fx-border-color: -accent-color-1;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+/* Button styles for specific form buttons */
+.primary-button {
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.primary-button:hover {
+    -fx-background-color: -accent-color-2;
+}
+
+.secondary-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -font-color-1;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.secondary-button:hover {
+    -fx-background-color: -background-color-2;
+}
+
+.upload-button {
+    -fx-background-color: -background-color-2;
+    -fx-text-fill: -font-color-1;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 6 12;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+}
+
+.upload-button:hover {
+    -fx-background-color: -accent-color-1;
+    -fx-text-fill: white;
+}
