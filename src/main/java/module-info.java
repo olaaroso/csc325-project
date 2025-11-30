@@ -19,6 +19,7 @@ module csc.project.csc325_project {
     requires google.api.client;
     requires java.desktop;
     requires jdk.httpserver;
+    requires javafx.graphics;
 
     exports com.group4.macromanager;
     exports com.group4.macromanager.controller;

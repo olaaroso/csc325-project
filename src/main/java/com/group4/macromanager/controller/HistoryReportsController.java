@@ -62,11 +62,6 @@ public class HistoryReportsController extends BaseController {
         // initialize page
         initializePage("history");
 
-        // Load sample data if using in-memory service
-        if (mealService instanceof InMemoryMealService) {
-            ((InMemoryMealService) mealService).addSampleMeals();
-        }
-
         // Setup UI components
         setupTable();
         setupDatePicker();
@@ -91,6 +86,7 @@ public class HistoryReportsController extends BaseController {
         datePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
             if (newDate != null) {
                 loadDataForDate(newDate);
+                loadWeeklyChart(newDate);
             }
         });
     }
@@ -101,7 +97,7 @@ public class HistoryReportsController extends BaseController {
         yAxis.setLabel("Calories");
         weeklyChart.setTitle("Weekly Calorie Intake");
         weeklyChart.setLegendVisible(false);
-        loadWeeklyChart();
+        loadWeeklyChart(datePicker.getValue());
     }
 
     // Load today's meal data and update UI
@@ -118,10 +114,13 @@ public class HistoryReportsController extends BaseController {
     }
 
     // Load weekly chart data
-    private void loadWeeklyChart() {
+    private void loadWeeklyChart(LocalDate referenceDate) {
         try {
+            if (referenceDate == null) referenceDate = LocalDate.now();
             double[] weeklyCalories = new double[7];
-            LocalDate startDate = LocalDate.now().minusDays(6);
+            LocalDate startDate = referenceDate != null
+                    ? referenceDate.minusDays(6)
+                    : LocalDate.now().minusDays(6);
 
             for (int i = 0; i < 7; i++) {
                 LocalDate date = startDate.plusDays(i);
@@ -129,7 +128,7 @@ public class HistoryReportsController extends BaseController {
                 weeklyCalories[i] = dayMeals.stream().mapToDouble(Meal::getTotalCalories).sum();
             }
 
-            ChartUtil.setupWeeklyCalorieChart(weeklyChart, weeklyCalories);
+            ChartUtil.setupWeeklyCalorieChart(weeklyChart, weeklyCalories, startDate, referenceDate);
         } catch (Exception e) {
             showAlert("Failed to load weekly chart data: " + e.getMessage());
         }
@@ -158,10 +157,12 @@ public class HistoryReportsController extends BaseController {
 
     // Export data to CSV file
     private void exportDataToCsv(File file) {
+        String userId = getCurrentUserId();
+
         try (FileWriter writer = new FileWriter(file)) {
             writer.append("Date,Meal Name,Meal Type,Foods,Total Calories,Total Protein,Total Carbs,Total Fat\n");
 
-            List<Meal> allMeals = mealService.getAllMealsForUser("123");
+            List<Meal> allMeals = mealService.getAllMealsForUser(userId);
 
             for (Meal meal : allMeals) {
                 String foodNames = meal.getFoods() != null ?
@@ -203,6 +204,6 @@ public class HistoryReportsController extends BaseController {
     // Refresh current view after deletion or updates
     private void refreshCurrentView() {
         loadDataForDate(datePicker.getValue());
-        loadWeeklyChart();
+        loadWeeklyChart(datePicker.getValue());
     }
 }

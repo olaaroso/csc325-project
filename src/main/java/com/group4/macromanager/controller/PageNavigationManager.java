@@ -10,9 +10,18 @@ import java.io.IOException;
 
 public class PageNavigationManager {
     private static Stage stage;
+    private static String currentTheme = "light"; // Track current theme
 
     public static void setStage(Stage s) {
         stage = s;
+    }
+
+    public static void setCurrentTheme(String theme) {
+        currentTheme = theme;
+    }
+
+    public static String getCurrentTheme() {
+        return currentTheme;
     }
 
     // Method for switching fxml pages
@@ -21,8 +30,14 @@ public class PageNavigationManager {
         FXMLLoader loader = new FXMLLoader(PageNavigationManager.class.getResource("/fxml/" + fxml));
         Scene scene = new Scene(loader.load());
 
-        // Add main.css to the new scene (root css file)
+        // Apply stylesheets using the same logic as Main.applyTheme()
         scene.getStylesheets().add(PageNavigationManager.class.getResource("/css/main.css").toExternalForm());
+
+        if ("dark".equals(currentTheme)) {
+            scene.getStylesheets().add(PageNavigationManager.class.getResource("/css/dark-theme.css").toExternalForm());
+        } else {
+            scene.getStylesheets().add(PageNavigationManager.class.getResource("/css/light-theme.css").toExternalForm());
+        }
 
         stage.setScene(scene);
         stage.show();

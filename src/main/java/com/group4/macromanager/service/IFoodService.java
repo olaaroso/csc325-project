@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface IFoodService {
     Food saveCustomFood(Food food);
+    Food updateFood(Food food);
     List<Food> getCustomFoods(String userId);
     List<Food> getRecommendations();
     List<Food> getFavorites(String userId);

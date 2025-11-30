@@ -2,6 +2,12 @@
     -fx-background-color: -background-color-2;
 }
 
+.page-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -font-color-1;
+}
+
 .dashboard-scroll-pane {
     -fx-background-color: -background-color-2;
 }

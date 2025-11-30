@@ -1,6 +1,7 @@
 package com.group4.macromanager.controller;
 
 import com.group4.macromanager.model.Food;
+import com.group4.macromanager.session.CustomFoodSession;
 import com.group4.macromanager.util.ValidationUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -110,10 +111,11 @@ public class FoodLibraryController extends BaseController {
     @FXML
     private void handleAddNewFood() {
         try {
+            // Start new food creation
+            CustomFoodSession.getInstance().startNewFood();
             PageNavigationManager.switchTo("customFoodFormPage.fxml");
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            showAlert("Failed to navigate to food form: " + e.getMessage());
         }
     }
 
@@ -133,7 +135,7 @@ public class FoodLibraryController extends BaseController {
         // Only load favorite foods if user is logged in
         String userId = getCurrentUserId();
         if (userId != null) {
-            List<Food> favs = foodService.getCustomFoods(userId);
+            List<Food> favs = foodService.getFavorites(userId);
             renderFoods(favs, favoritesContainer, true);
         }
     }
@@ -145,10 +147,24 @@ public class FoodLibraryController extends BaseController {
 
     // Handlers for edit and delete actions
     private void handleEditFood(Food food) {
-        // Navigate to custom food form with edit mode
         try {
-            // You'll need to implement edit mode in CustomFoodFormController
-            // For now, just navigate to the form
+            // Fetch the complete food object from the service to ensure we have all data
+            Food completeFood = foodService.getFoodById(food.getId());
+
+            if (completeFood == null) {
+                showAlert("Food not found. It may have been deleted.");
+                return;
+            }
+
+            // Get current user ID
+            String userId = getCurrentUserId();
+            if (userId == null) {
+                showAlert("User not logged in.");
+                return;
+            }
+
+            // Load food into session for editing
+            CustomFoodSession.getInstance().loadFoodForEditing(food);
             PageNavigationManager.switchTo("customFoodFormPage.fxml");
         } catch (IOException e) {
             showAlert("Failed to navigate to edit form: " + e.getMessage());
@@ -167,8 +183,9 @@ public class FoodLibraryController extends BaseController {
                 try {
                     foodService.deleteFood(food.getId());
                     showSuccessAlert("Food deleted successfully!");
-                    // Refresh the current tab
-                    refreshCurrentTab();
+
+                    // Refresh all tabs to reflect deletion
+                    refreshAllTabs();
                 } catch (Exception e) {
                     showAlert("Failed to delete food: " + e.getMessage());
                 }
@@ -176,22 +193,30 @@ public class FoodLibraryController extends BaseController {
         });
     }
 
-    // Refresh the currently selected tab
-    private void refreshCurrentTab() {
-        // Refresh the currently selected tab
+    // refreshAllTabs method to refresh all tabs after deletion
+    private void refreshAllTabs() {
+        // Store currently selected tab to restore selection after refresh
         Tab selectedTab = foodTabPane.getSelectionModel().getSelectedItem();
+
+        // Refresh all tabs that could contain the deleted food
+        loadCustomFoods();
+        loadFavorites();
+        loadRecommendations();
+
+        // Also refresh search results if the search tab exists
+        Tab searchTab = foodTabPane.getTabs().stream()
+                .filter(tab -> "Search Results".equals(tab.getText()))
+                .findFirst()
+                .orElse(null);
+
+        if (searchTab != null) {
+            // Re-run the search to update results
+            handleSearch();
+        }
+
+        // Restore the previously selected tab
         if (selectedTab != null) {
-            switch (selectedTab.getText()) {
-                case "Custom Foods":
-                    loadCustomFoods();
-                    break;
-                case "Favorites":
-                    loadFavorites();
-                    break;
-                case "Recommendations":
-                    loadRecommendations();
-                    break;
-            }
+            foodTabPane.getSelectionModel().select(selectedTab);
         }
     }
 

@@ -141,7 +141,7 @@ public class FoodCardController {
 
         // Set basic info
         foodName.setText(food.getName());
-        foodMacros.setText(String.format("%.0f cal | P: %.0fg | C: %.0fg | F: %.0fg",
+        foodMacros.setText(String.format("%.1f cals | Protein: %.1fg | Carbs: %.1fg | Fats: %.1fg",
                 food.getCalories(), food.getProtein(), food.getCarbs(), food.getFat()));
 
         // Handle image with fallbacks

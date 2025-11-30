@@ -1,6 +1,7 @@
 package com.group4.macromanager.controller;
 
 import com.group4.macromanager.session.AuthSessionManager;
+import com.group4.macromanager.session.CustomFoodSession;
 import com.group4.macromanager.util.AlertUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SidebarController {
+public class SidebarController extends BaseController {
 
     // FXML elements
     @FXML private VBox navLinks;
@@ -109,6 +110,7 @@ public class SidebarController {
     }
 
     @FXML private void goToCustomFoods() throws IOException {
+        foodSession.clearSession(); // Clear any existing session data
         PageNavigationManager.switchTo("customFoodFormPage.fxml");
     }
 
