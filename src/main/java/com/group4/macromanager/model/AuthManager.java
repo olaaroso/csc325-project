@@ -31,7 +31,7 @@ public class AuthManager {
         public final String uid;
         public final String email;
 
-        Session(String idToken, String refreshToken, String uid, String email) {
+        public Session(String idToken, String refreshToken, String uid, String email) {
             this.idToken = idToken;
             this.refreshToken = refreshToken;
             this.uid = uid;
