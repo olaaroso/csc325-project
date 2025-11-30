@@ -15,12 +15,14 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
 
 public class AuthManager {
     private final String apiKey;
     private final HttpClient http = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
     private Session currentSession;
+    private GoogleOAuthManager googleOAuth;
 
     // Session represents the currently signed-in user session
     public static class Session {
@@ -50,6 +52,9 @@ public class AuthManager {
         if (this.apiKey == null || this.apiKey.isEmpty()) {
             throw new RuntimeException("FIREBASE_API_KEY is not set");
         }
+
+        // Initialize GoogleOAuthManager
+        this.googleOAuth = new GoogleOAuthManager();
     }
 
     // Sign Request Class
@@ -174,6 +179,42 @@ public class AuthManager {
         else {
             throw new RuntimeException("Failed to login: " + res.body());
         }
+    }
+
+    // Google sign-in method
+    public Session signInWithGoogle() throws Exception {
+        CompletableFuture<GoogleOAuthManager.GoogleTokenResponse> future = googleOAuth.signInWithGoogle();
+
+        // Wait for OAuth completion
+        GoogleOAuthManager.GoogleTokenResponse tokenResponse = future.get();
+
+        // Get user info from Google
+        GoogleOAuthManager.GoogleUserInfo userInfo = googleOAuth.getUserInfo(tokenResponse.accessToken);
+
+        // Create or get user in Firestore
+        Firestore db = FirestoreContext.getDb();
+        DocumentSnapshot userDoc = db.collection("users").document(userInfo.id).get().get();
+
+        User user;
+        if (!userDoc.exists()) {
+            // Create new user
+            user = new User(userInfo.id, userInfo.email);
+            if (userInfo.name != null && !userInfo.name.isEmpty()) {
+                user.setUsername(userInfo.name);
+            }
+            db.collection("users").document(userInfo.id).set(user).get();
+        } else {
+            // User exists, fetch user data
+            user = userDoc.toObject(User.class);
+        }
+
+        // Create session
+        currentSession = new Session(tokenResponse.idToken, tokenResponse.refreshToken, userInfo.id, userInfo.email);
+
+        // Set session in AuthSessionManager
+        AuthSessionManager.getInstance().setSession(currentSession, user);
+
+        return currentSession;
     }
 
     // Logout

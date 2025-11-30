@@ -4,6 +4,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.auth.FirebaseAuth;
 import com.group4.macromanager.controller.PageNavigationManager;
 import com.group4.macromanager.model.FirestoreContext;
+import com.group4.macromanager.model.GoogleOAuthManager;
 import com.group4.macromanager.service.FirestoreFoodService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +27,8 @@ public class Main extends Application {
         firestore = FirestoreContext.getDb();
         firebaseAuth = FirebaseAuth.getInstance();
 
+        // Provide HostServices to GoogleOAuthManager
+        GoogleOAuthManager.setHostServices(getHostServices());
         // Initialize food recommendations
         FirestoreFoodService foodService = new FirestoreFoodService();
         foodService.initializeRecommendations();

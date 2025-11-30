@@ -17,6 +17,7 @@ public class LoginController extends BaseController {
     @FXML private PasswordField passwordField;
     @FXML private Button loginButton;
     @FXML private Hyperlink signupLink;
+    @FXML private Button googleButton;
 
     // AuthManager placeholder
     private AuthManager authManager;
@@ -43,9 +44,47 @@ public class LoginController extends BaseController {
                 ex.printStackTrace();
             }
         });
+
+        // Set up Google button handler
+        googleButton.setOnAction(this::handleGoogleLogin);
     }
 
     // onAction handler methods
+
+    // Google login handler
+    @FXML
+    private void handleGoogleLogin(ActionEvent event) {
+        googleButton.setDisable(true);
+        googleButton.setText("Opening browser...");
+
+        new Thread(() -> {
+            try {
+                var session = authManager.signInWithGoogle();
+
+                Platform.runLater(() -> {
+                    showSuccessAlert("Logged in with Google as " + session.email);
+
+                    try {
+                        PageNavigationManager.switchTo("dashboardPage.fxml");
+                    } catch (IOException e) {
+                        showAlert("Failed to navigate to dashboard: " + e.getMessage());
+                    }
+
+                    googleButton.setDisable(false);
+                    googleButton.setText("Login with Google");
+                });
+
+            } catch (Exception e) {
+                Platform.runLater(() -> {
+                    showAlert("Google login failed: " + e.getMessage());
+                    googleButton.setDisable(false);
+                    googleButton.setText("Login with Google");
+                });
+            }
+        }).start();
+    }
+
+    // Login button handler
     @FXML
     public void handleLoginButtonClick(ActionEvent event) throws IOException {
         // This handler will process the login
