@@ -33,7 +33,7 @@ public class AuthSessionManager {
     }
 
     // Get current session
-    private AuthManager.Session getCurrentSession() {
+    public AuthManager.Session getCurrentSession() {
         return currentSession;
     }
 
